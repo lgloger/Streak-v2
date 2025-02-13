@@ -4,9 +4,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "start": "expo start --dev-client",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web"
   },
   "dependencies": {
@@ -14,16 +14,17 @@
     "@react-navigation/native": "^7.0.14",
     "@react-navigation/stack": "^7.1.1",
     "expo": "~52.0.33",
+    "expo-asset": "^11.0.3",
     "expo-linear-gradient": "~14.0.2",
     "expo-navigation-bar": "~4.0.8",
     "expo-shimmer-placeholder": "^3.0.0",
+    "expo-splash-screen": "~0.29.21",
     "expo-status-bar": "~2.0.1",
     "firebase": "^11.3.1",
     "react": "18.3.1",
     "react-native": "0.76.7",
     "react-native-raw-bottom-sheet": "^3.0.0",
-    "react-native-shadow-2": "^7.1.1",
-    "expo-splash-screen": "~0.29.21"
+    "react-native-shadow-2": "^7.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
