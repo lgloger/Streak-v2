@@ -14,7 +14,6 @@
     "@react-navigation/native": "^7.0.14",
     "@react-navigation/stack": "^7.1.1",
     "expo": "~52.0.33",
-    "expo-asset": "^11.0.3",
     "expo-linear-gradient": "~14.0.2",
     "expo-navigation-bar": "~4.0.8",
     "expo-shimmer-placeholder": "^3.0.0",
