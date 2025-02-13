@@ -1,8 +1,11 @@
 import React, { useCallback } from "react";
 import { StyleSheet, Text, TouchableOpacity, Image, View } from "react-native";
 import * as NavigationBar from "expo-navigation-bar";
+import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import AppNavigator from "./AppNavigator";
+
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -11,20 +14,23 @@ export default function App() {
     "Poppins-Bold": require("./assets/fonts/Poppins-Bold.ttf"),
     "Poppins-SemiBold": require("./assets/fonts/Poppins-SemiBold.ttf"),
   });
-  const onLayoutRootView = useCallback(async () => {
+
+  useEffect(() => {
     if (fontsLoaded) {
-      await SplashScreen.hideAsync();
+      SplashScreen.hideAsync();
     }
   }, [fontsLoaded]);
 
-  if (!fontsLoaded) {
-    return null;
-  }
-
-  NavigationBar.setBackgroundColorAsync("#E8E8E8");
+  useEffect(() => {
+    NavigationBar.setBackgroundColorAsync("#E8E8E8");
+  }, []);
 
   if (!fontsLoaded) {
-    return <Text>Loading</Text>;
+    return (
+      <View style={styles.container}>
+        <Text>Loading...</Text>
+      </View>
+    );
   }
 
   return (
