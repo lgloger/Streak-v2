@@ -13,7 +13,7 @@ import {
 import { addHabitViewModel } from "../js/dataManger";
 import RBSheet from "react-native-raw-bottom-sheet";
 
-const addHabitScreen = ({ navigation }) => {
+const AddHabitScreen = ({ navigation }) => {
   const { selectedIcon, setSelectedIcon, title, setTitle, addHabit } =
     addHabitViewModel(navigation);
 
@@ -305,4 +305,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default addHabitScreen;
+export default AddHabitScreen;
