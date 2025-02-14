@@ -7,7 +7,7 @@ import ResetPasswordScreen from "./screens/ResetPasswordScreen";
 import EmailSentScreen from "./screens/EmailSentScreen";
 import HomeScreen from "./screens/HomeScreen";
 import SettingsScreen from "./screens/SettingsScreen";
-import AddHabitScreen from "./screens/AddHabitScreen";
+import AddHabitScreen from "./screens/addHabitScreen";
 import { auth } from "./js/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 import { StyleSheet, ActivityIndicator, View, Text } from "react-native";
