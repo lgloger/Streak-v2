@@ -86,7 +86,7 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.streakv2"
+    namespace 'com.lucagloger.Streak'
     defaultConfig {
         applicationId 'com.lucagloger.Streak'
         minSdkVersion rootProject.ext.minSdkVersion

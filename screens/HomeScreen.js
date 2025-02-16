@@ -69,8 +69,13 @@ const HomeScreen = ({ navigation }) => {
     food_blue: require("../assets/icons/food.png"),
   };
 
+  const Container = Platform.select({
+    web: View,
+    default: SafeAreaView,
+  });
+
   return (
-    <SafeAreaView style={styles.container}>
+    <Container style={styles.container}>
       <View style={styles.firstHeader}>
         <TouchableOpacity
           style={styles.headerButton}
@@ -100,7 +105,12 @@ const HomeScreen = ({ navigation }) => {
       ) : (
         <View style={styles.mainContainer}>
           {habits.map((habit) => (
-            <View style={styles.habitContainer} key={habit.id}>
+            <TouchableOpacity
+              style={styles.habitContainer}
+              key={habit.id}
+              onPress={() => navigation.navigate("HabitDetail", { habitId: habit.id })}
+              activeOpacity={0.6}
+            >
               <View style={styles.habitConHeader}>
                 <View style={styles.firstHabitConHeader}>
                   <Image
@@ -158,7 +168,7 @@ const HomeScreen = ({ navigation }) => {
                   date ? renderDay(date, habit.completedDates) : null
                 )}
               </View>
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
       )}
@@ -182,7 +192,7 @@ const HomeScreen = ({ navigation }) => {
         </Shadow>
       </View>
       <StatusBar style="auto" />
-    </SafeAreaView>
+    </Container>
   );
 };
 
@@ -236,6 +246,7 @@ const styles = StyleSheet.create({
   shimmerContainer: {
     height: "auto",
     width: "100%",
+    maxWidth: 450,
     alignItems: "center",
     justifyContent: "flex-start",
     gap: 15,
@@ -249,6 +260,7 @@ const styles = StyleSheet.create({
 
   mainContainer: {
     flex: 1,
+    width: "100%",
     alignItems: "center",
     justifyContent: "flex-start",
     gap: 15,
@@ -257,6 +269,7 @@ const styles = StyleSheet.create({
   habitContainer: {
     height: "auto",
     width: "100%",
+    maxWidth: 450,
     backgroundColor: "#ffffff",
     borderRadius: 25,
     padding: 15,
@@ -408,7 +421,10 @@ const styles = StyleSheet.create({
   fabContainer: {
     position: "absolute",
     bottom: 20,
-    left: 20,
+    left: Platform.select({
+      web: 0,
+      default: 20,
+    }),
     height: "auto",
     width: "100%",
     alignItems: "center",

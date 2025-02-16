@@ -3,13 +3,19 @@ import {
   View,
   Text,
   TouchableOpacity,
+  SafeAreaView,
   StatusBar as RNStatusBar,
   Platform,
 } from "react-native";
 
 const EmailSentScreen = ({ navigation }) => {
+  const Container = Platform.select({
+    web: View,
+    default: SafeAreaView,
+  });
+
   return (
-    <View style={styles.container}>
+    <Container style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Email sent</Text>
       </View>
@@ -30,7 +36,7 @@ const EmailSentScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </Container>
   );
 };
 
@@ -63,6 +69,7 @@ const styles = StyleSheet.create({
 
   mainContainer: {
     flex: 1,
+    width: "100%",
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-start",
@@ -72,6 +79,7 @@ const styles = StyleSheet.create({
   textContainer: {
     height: "auto",
     width: "100%",
+    maxWidth: 450,
     backgroundColor: "#ffffff",
     borderRadius: 25,
     padding: 15,

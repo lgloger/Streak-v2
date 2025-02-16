@@ -6,6 +6,7 @@ import SignupScreen from "./screens/SignupScreen";
 import ResetPasswordScreen from "./screens/ResetPasswordScreen";
 import EmailSentScreen from "./screens/EmailSentScreen";
 import HomeScreen from "./screens/HomeScreen";
+import HabitDetailScreen from './screens/HabitDetailScreen';
 import SettingsScreen from "./screens/SettingsScreen";
 import AddHabitScreen from "./screens/AddHabitScreen";
 import { auth } from "./js/firebaseConfig";
@@ -62,6 +63,11 @@ const AppNavigator = () => {
         <Stack.Screen
           name="Home"
           component={HomeScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="HabitDetail"
+          component={HabitDetailScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen

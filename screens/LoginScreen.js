@@ -5,6 +5,7 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
+  SafeAreaView,
   StatusBar as RNStatusBar,
   Platform,
 } from "react-native";
@@ -15,8 +16,13 @@ const LoginScreen = ({ navigation }) => {
   const { email, setEmail, password, setPassword, handleSignin } =
     SigninViewModel(navigation);
 
+  const Container = Platform.select({
+    web: View,
+    default: SafeAreaView,
+  });
+
   return (
-    <View style={styles.container}>
+    <Container style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Sign In</Text>
       </View>
@@ -82,7 +88,7 @@ const LoginScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </Container>
   );
 };
 
@@ -115,6 +121,7 @@ const styles = StyleSheet.create({
 
   mainContainer: {
     flex: 1,
+    width: "100%",
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-start",
@@ -124,6 +131,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     height: 60,
     width: "100%",
+    maxWidth: 450,
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#FFFFFF",

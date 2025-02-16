@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import { auth, db } from "../js/firebaseConfig";
 import {
   collection,
-  getDocs,
   query,
   doc,
   updateDoc,
+  onSnapshot,
 } from "firebase/firestore";
 
 const homeViewModel = () => {
@@ -13,18 +13,18 @@ const homeViewModel = () => {
   const [loading, setLoading] = useState(true);
   const userId = auth.currentUser?.uid;
 
-  const fetchHabits = async () => {
+  const fetchHabits = (userId) => {
     try {
       const q = query(collection(db, "users", userId, "habits"));
-      const querySnapshot = await getDocs(q);
-
-      const habitsData = [];
-      querySnapshot.forEach((doc) => {
-        habitsData.push({ id: doc.id, ...doc.data() });
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const habitsData = [];
+        querySnapshot.forEach((doc) => {
+          habitsData.push({ id: doc.id, ...doc.data() });
+        });
+        setHabits(habitsData);
+        setLoading(false);
       });
-
-      setHabits(habitsData);
-      setLoading(false);
+      return unsubscribe;
     } catch (error) {
       console.error("Error fetching habits:", error);
       setLoading(false);
@@ -45,7 +45,6 @@ const homeViewModel = () => {
       completedDates: newDates,
       streak,
     });
-    fetchHabits();
   };
 
   const calculateStreak = (dates) => {
@@ -82,8 +81,10 @@ const homeViewModel = () => {
   };
 
   useEffect(() => {
-    fetchHabits();
-  }, []);
+    if (!userId) return;
+    const unsubscribe = fetchHabits(userId);
+    return () => unsubscribe();
+  }, [userId]);
 
   return { habits, loading, fetchHabits, getCurrentWeek, toggleDay };
 };

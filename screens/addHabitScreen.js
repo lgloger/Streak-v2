@@ -37,8 +37,13 @@ const AddHabitScreen = ({ navigation }) => {
     food_blue: require("../assets/icons/food_blue.png"),
   };
 
+  const Container = Platform.select({
+    web: View,
+    default: SafeAreaView,
+  });
+
   return (
-    <SafeAreaView style={styles.container}>
+    <Container style={styles.container}>
       <View style={styles.firstHeader}>
         <TouchableOpacity
           style={styles.headerButton}
@@ -106,61 +111,91 @@ const AddHabitScreen = ({ navigation }) => {
       >
         <View style={styles.modalContent}>
           <View style={styles.manualDragHandle} />
-          <TouchableOpacity onPress={() => handleIconSelect("sport_blue")} activeOpacity={0.6}>
+          <TouchableOpacity
+            onPress={() => handleIconSelect("sport_blue")}
+            activeOpacity={0.6}
+          >
             <Image
               style={styles.modalIcon}
               source={require("../assets/icons/sport_blue.png")}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleIconSelect("hiking_blue")} activeOpacity={0.6}>
+          <TouchableOpacity
+            onPress={() => handleIconSelect("hiking_blue")}
+            activeOpacity={0.6}
+          >
             <Image
               style={styles.modalIcon}
               source={require("../assets/icons/hiking_blue.png")}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleIconSelect("yoga_blue")} activeOpacity={0.6}>
+          <TouchableOpacity
+            onPress={() => handleIconSelect("yoga_blue")}
+            activeOpacity={0.6}
+          >
             <Image
               style={styles.modalIcon}
               source={require("../assets/icons/yoga_blue.png")}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleIconSelect("soccer_blue")} activeOpacity={0.6}>
+          <TouchableOpacity
+            onPress={() => handleIconSelect("soccer_blue")}
+            activeOpacity={0.6}
+          >
             <Image
               style={styles.modalIcon}
               source={require("../assets/icons/soccer_blue.png")}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleIconSelect("school_blue")} activeOpacity={0.6}>
+          <TouchableOpacity
+            onPress={() => handleIconSelect("school_blue")}
+            activeOpacity={0.6}
+          >
             <Image
               style={styles.modalIcon}
               source={require("../assets/icons/school_blue.png")}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleIconSelect("book_blue")} activeOpacity={0.6}>
+          <TouchableOpacity
+            onPress={() => handleIconSelect("book_blue")}
+            activeOpacity={0.6}
+          >
             <Image
               style={styles.modalIcon}
               source={require("../assets/icons/book_blue.png")}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleIconSelect("code_blue")} activeOpacity={0.6}>
+          <TouchableOpacity
+            onPress={() => handleIconSelect("code_blue")}
+            activeOpacity={0.6}
+          >
             <Image
               style={styles.modalIcon}
               source={require("../assets/icons/code_blue.png")}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleIconSelect("star_blue")} activeOpacity={0.6}>
+          <TouchableOpacity
+            onPress={() => handleIconSelect("star_blue")}
+            activeOpacity={0.6}
+          >
             <Image
               style={styles.modalIcon}
               source={require("../assets/icons/star_blue.png")}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleIconSelect("park_blue")} activeOpacity={0.6}>
+          <TouchableOpacity
+            onPress={() => handleIconSelect("park_blue")}
+            activeOpacity={0.6}
+          >
             <Image
               style={styles.modalIcon}
               source={require("../assets/icons/park_blue.png")}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleIconSelect("food_blue")} activeOpacity={0.6}>
+          <TouchableOpacity
+            onPress={() => handleIconSelect("food_blue")}
+            activeOpacity={0.6}
+          >
             <Image
               style={styles.modalIcon}
               source={require("../assets/icons/food_blue.png")}
@@ -168,7 +203,7 @@ const AddHabitScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </RBSheet>
-    </SafeAreaView>
+    </Container>
   );
 };
 
@@ -216,6 +251,8 @@ const styles = StyleSheet.create({
 
   mainContainer: {
     flex: 1,
+    width: "100%",
+    maxWidth: 450,
     alignItems: "center",
     justifyContent: "flex-start",
     gap: 15,
@@ -258,7 +295,7 @@ const styles = StyleSheet.create({
 
   placeholder: {
     position: "absolute",
-    top: 7,
+    top: 8,
     left: 54,
     fontSize: 22,
     fontFamily: "Poppins-Bold",

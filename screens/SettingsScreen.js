@@ -28,8 +28,13 @@ const SettingsScreenScreen = ({ navigation }) => {
     }
   }, []);
 
+  const Container = Platform.select({
+    web: View,
+    default: SafeAreaView,
+  });
+
   return (
-    <SafeAreaView style={styles.container}>
+    <Container style={styles.container}>
       <View style={styles.firstHeader}>
         <TouchableOpacity
           style={styles.headerButton}
@@ -100,7 +105,7 @@ const SettingsScreenScreen = ({ navigation }) => {
         onDelete={(password) => handleDeleteAccount(password)}
         email={email}
       />
-    </SafeAreaView>
+    </Container>
   );
 };
 
@@ -163,6 +168,7 @@ const styles = StyleSheet.create({
 
   mainContainer: {
     flex: 1,
+    width: "100%",
     alignItems: "center",
     justifyContent: "flex-start",
     gap: 15,
