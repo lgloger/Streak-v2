@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   StyleSheet,
   View,
@@ -11,7 +11,8 @@ import {
   Platform,
 } from "react-native";
 import { addHabitViewModel } from "../js/dataManger";
-import RBSheet from "react-native-raw-bottom-sheet";
+import IconPickerModal from "../components/IconPickerModal";
+import { iconMapping } from "../components/IconPickerModal";
 
 const AddHabitScreen = ({ navigation }) => {
   const { selectedIcon, setSelectedIcon, title, setTitle, addHabit } =
@@ -22,19 +23,6 @@ const AddHabitScreen = ({ navigation }) => {
   const handleIconSelect = (icon) => {
     setSelectedIcon(icon);
     refRBSheet.current.close();
-  };
-
-  const iconMapping = {
-    sport_blue: require("../assets/icons/sport_blue.png"),
-    book_blue: require("../assets/icons/book_blue.png"),
-    school_blue: require("../assets/icons/school_blue.png"),
-    star_blue: require("../assets/icons/star_blue.png"),
-    soccer_blue: require("../assets/icons/soccer_blue.png"),
-    yoga_blue: require("../assets/icons/yoga_blue.png"),
-    hiking_blue: require("../assets/icons/hiking_blue.png"),
-    code_blue: require("../assets/icons/code_blue.png"),
-    park_blue: require("../assets/icons/park_blue.png"),
-    food_blue: require("../assets/icons/food_blue.png"),
   };
 
   const Container = Platform.select({
@@ -70,7 +58,7 @@ const AddHabitScreen = ({ navigation }) => {
       <View style={styles.mainContainer}>
         <View style={styles.habitContainer}>
           <View style={styles.habitActivityCon}>
-            {Array.from({ length: 100 }).map((_, index) => (
+            {Array.from({ length: 150 }).map((_, index) => (
               <View key={index} style={styles.habitActivity}></View>
             ))}
           </View>
@@ -83,7 +71,7 @@ const AddHabitScreen = ({ navigation }) => {
           >
             <Image
               style={styles.headerButtonIcon}
-              source={iconMapping[selectedIcon]}
+              source={iconMapping[selectedIcon] || iconMapping["star_blue"]}
             />
           </TouchableOpacity>
           {title === "" && <Text style={styles.placeholder}>Untitled</Text>}
@@ -99,110 +87,7 @@ const AddHabitScreen = ({ navigation }) => {
           />
         </View>
       </View>
-      <RBSheet
-        ref={refRBSheet}
-        closeOnDragDown={true}
-        height={300}
-        customStyles={{
-          container: styles.bottomSheetContainer,
-          wrapper: { backgroundColor: "rgba(0, 0, 0, 0.15)" },
-          draggableIcon: { height: 0 },
-        }}
-      >
-        <View style={styles.modalContent}>
-          <View style={styles.manualDragHandle} />
-          <TouchableOpacity
-            onPress={() => handleIconSelect("sport_blue")}
-            activeOpacity={0.6}
-          >
-            <Image
-              style={styles.modalIcon}
-              source={require("../assets/icons/sport_blue.png")}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleIconSelect("hiking_blue")}
-            activeOpacity={0.6}
-          >
-            <Image
-              style={styles.modalIcon}
-              source={require("../assets/icons/hiking_blue.png")}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleIconSelect("yoga_blue")}
-            activeOpacity={0.6}
-          >
-            <Image
-              style={styles.modalIcon}
-              source={require("../assets/icons/yoga_blue.png")}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleIconSelect("soccer_blue")}
-            activeOpacity={0.6}
-          >
-            <Image
-              style={styles.modalIcon}
-              source={require("../assets/icons/soccer_blue.png")}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleIconSelect("school_blue")}
-            activeOpacity={0.6}
-          >
-            <Image
-              style={styles.modalIcon}
-              source={require("../assets/icons/school_blue.png")}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleIconSelect("book_blue")}
-            activeOpacity={0.6}
-          >
-            <Image
-              style={styles.modalIcon}
-              source={require("../assets/icons/book_blue.png")}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleIconSelect("code_blue")}
-            activeOpacity={0.6}
-          >
-            <Image
-              style={styles.modalIcon}
-              source={require("../assets/icons/code_blue.png")}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleIconSelect("star_blue")}
-            activeOpacity={0.6}
-          >
-            <Image
-              style={styles.modalIcon}
-              source={require("../assets/icons/star_blue.png")}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleIconSelect("park_blue")}
-            activeOpacity={0.6}
-          >
-            <Image
-              style={styles.modalIcon}
-              source={require("../assets/icons/park_blue.png")}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleIconSelect("food_blue")}
-            activeOpacity={0.6}
-          >
-            <Image
-              style={styles.modalIcon}
-              source={require("../assets/icons/food_blue.png")}
-            />
-          </TouchableOpacity>
-        </View>
-      </RBSheet>
+      <IconPickerModal ref={refRBSheet} onIconSelect={handleIconSelect} />
     </Container>
   );
 };
@@ -309,36 +194,6 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-Bold",
     color: "#000000",
     includeFontPadding: false,
-  },
-
-  bottomSheetContainer: {
-    backgroundColor: "white",
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-    paddingTop: 35,
-  },
-
-  modalContent: {
-    justifyContent: "space-evenly",
-    flexDirection: "row",
-    paddingHorizontal: 20,
-    flexWrap: "wrap",
-    gap: 20,
-  },
-
-  manualDragHandle: {
-    width: 43,
-    height: 5,
-    position: "absolute",
-    top: -20,
-    left: "49.5%",
-    backgroundColor: "#E8E8E8",
-    borderRadius: 3,
-  },
-
-  modalIcon: {
-    height: 40,
-    width: 40,
   },
 });
 

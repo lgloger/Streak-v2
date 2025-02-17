@@ -39,7 +39,7 @@ const SignUpScreen = ({ navigation }) => {
             value={email}
             placeholder="Email"
             placeholderTextColor="#000000"
-            keyboardType="email-adress"
+            keyboardType="email-address"
             selectionColor="#FFFFFF"
             cursorColor="#000000"
             caretHidden={false}

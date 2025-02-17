@@ -169,6 +169,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     width: "100%",
+    maxWidth: 450,
     alignItems: "center",
     justifyContent: "flex-start",
     gap: 15,
