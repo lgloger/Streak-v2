@@ -31,34 +31,52 @@ const homeViewModel = () => {
     }
   };
 
-  const toggleDay = async (habitId, completedDates) => {
+  const toggleDay = async (habitId, completedDates, lastValidStreak) => {
     const today = new Date().toISOString().split("T")[0];
     const habitRef = doc(db, "users", userId, "habits", habitId);
-
-    const newDates = completedDates.includes(today)
-      ? completedDates.filter((d) => d !== today)
-      : [...completedDates, today];
-
-    const streak = calculateStreak(newDates);
-
+  
+    let newDates;
+    let newStreak;
+  
+    if (completedDates.includes(today)) {
+      newDates = completedDates.filter((d) => d !== today);
+  
+      const tempStreak = calculateStreak(newDates);
+  
+      newStreak = tempStreak < lastValidStreak ? lastValidStreak : tempStreak;
+    } else {
+      newDates = [...completedDates, today];
+  
+     
+      newStreak = calculateStreak(newDates);
+    }
+  
     await updateDoc(habitRef, {
       completedDates: newDates,
-      streak,
+      streak: newStreak,
     });
   };
-
+  
   const calculateStreak = (dates) => {
-    const sorted = [...dates].sort();
-    let streak = 0;
-    let prevDate = new Date();
-
-    for (let i = sorted.length - 1; i >= 0; i--) {
-      const currDate = new Date(sorted[i]);
-      if ((prevDate - currDate) / (1000 * 3600 * 24) <= 1) {
+    if (dates.length === 0) return 0;
+  
+    const sorted = dates.map((d) => new Date(d)).sort((a, b) => b - a);
+    let streak = 1;
+    let prevDate = sorted[0];
+  
+    for (let i = 1; i < sorted.length; i++) {
+      const currDate = sorted[i];
+      const diffDays = (prevDate - currDate) / (1000 * 3600 * 24);
+  
+      if (diffDays === 1) {
         streak++;
-        prevDate = currDate;
-      } else break;
+      } else if (diffDays > 1) {
+        break;
+      }
+  
+      prevDate = currDate;
     }
+  
     return streak;
   };
 

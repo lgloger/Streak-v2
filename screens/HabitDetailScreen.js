@@ -9,6 +9,7 @@ import {
   TextInput,
   StatusBar as RNStatusBar,
   Platform,
+  ScrollView,
 } from "react-native";
 import { habitDetailViewModel } from "../js/habitDetailViewModel";
 
@@ -45,6 +46,48 @@ const HabitDetailScreen = ({ route, navigation }) => {
     default: SafeAreaView,
   });
 
+  const getDaysInCurrentYear = () => {
+    const year = new Date().getFullYear();
+    return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0 ? 366 : 365;
+  };
+
+  const getDateForDay = (dayOfYear) => {
+    const date = new Date(new Date().getFullYear(), 0);
+    date.setDate(dayOfYear);
+    return date.toISOString().split("T")[0];
+  };
+
+  const renderHabitActivities = () => {
+    const totalDays = getDaysInCurrentYear();
+    const daysPerRow = 7;
+    const rows = Math.ceil(totalDays / daysPerRow);
+
+    return Array.from({ length: rows }).map((_, rowIndex) => (
+      <View key={rowIndex} style={styles.habitActivityRow}>
+        {Array.from({ length: daysPerRow }).map((_, dayIndex) => {
+          const dayOfYear = rowIndex * daysPerRow + dayIndex + 1;
+          if (dayOfYear > totalDays) return null;
+
+          const date = getDateForDay(dayOfYear);
+          const isCompleted = habit.completedDates.includes(date);
+
+          return (
+            <View
+              key={dayOfYear}
+              style={[
+                styles.habitActivity,
+                isCompleted && styles.habitActivityCompleted,
+              ]}
+            />
+          );
+        })}
+      </View>
+    ));
+  };
+
+  const today = new Date().toISOString().split("T")[0];
+  const isTodayCompleted = habit.completedDates?.includes(today);
+
   return (
     <Container style={styles.container}>
       <View style={styles.firstHeader}>
@@ -69,11 +112,9 @@ const HabitDetailScreen = ({ route, navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={styles.habitContainer}>
-        <View style={styles.habitActivityCon}>
-          {Array.from({ length: 150 }).map((_, index) => (
-            <View key={index} style={styles.habitActivity}></View>
-          ))}
-        </View>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          <View style={styles.habitActivityCon}>{renderHabitActivities()}</View>
+        </ScrollView>
       </View>
       <View style={styles.secondHeader}>
         <View style={styles.secHeaderfirstCon}>
@@ -85,10 +126,16 @@ const HabitDetailScreen = ({ route, navigation }) => {
           </View>
           <Text style={styles.headerTitle}>{habit.title}</Text>
         </View>
-        <View style={styles.secondHeaderConStreak}>
+        <View
+          style={
+            isTodayCompleted
+              ? styles.secondHeaderConStreakGrey
+              : styles.secondHeaderConStreak
+          }
+        >
           <Text
             style={
-              habit.streak > 0
+              isTodayCompleted
                 ? styles.secondHeaderConStreakTextActive
                 : styles.secondHeaderConStreakText
             }
@@ -98,7 +145,7 @@ const HabitDetailScreen = ({ route, navigation }) => {
           <Image
             style={styles.secondHeaderConStreakIcon}
             source={
-              habit.streak > 0
+              isTodayCompleted
                 ? require("../assets/icons/streak.png")
                 : require("../assets/icons/streak_grey.png")
             }
@@ -169,6 +216,7 @@ const styles = StyleSheet.create({
   habitContainer: {
     height: "auto",
     width: "100%",
+    maxWidth: 450,
     backgroundColor: "#ffffff",
     alignItems: "center",
     justifyContent: "center",
@@ -185,11 +233,19 @@ const styles = StyleSheet.create({
     gap: 3,
   },
 
+  habitActivityRow: {
+    gap: 3,
+  },
+
   habitActivity: {
     height: 12,
     width: 12,
     backgroundColor: "#E8E8E8",
     borderRadius: 3,
+  },
+
+  habitActivityCompleted: {
+    backgroundColor: "#10EC29",
   },
 
   secondHeader: {
@@ -218,11 +274,24 @@ const styles = StyleSheet.create({
   },
 
   secondHeaderConStreak: {
-    height: 24,
+    height: "auto",
     width: "auto",
     alignItems: "center",
     justifyContent: "flex-start",
     flexDirection: "row",
+    backgroundColor: "#ffffff",
+    paddingHorizontal: 7,
+    borderRadius: 5,
+    gap: 2.5,
+  },
+
+  secondHeaderConStreakGrey: {
+    height: "auto",
+    width: "auto",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    flexDirection: "row",
+    paddingHorizontal: 7,
     gap: 2.5,
   },
 

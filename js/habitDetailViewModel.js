@@ -33,3 +33,8 @@ export const habitDetailViewModel = (habitId) => {
 
   return { habit, loading };
 };
+
+const deleteHabitViewModel = (habitId) => {
+  const habitRef = doc(db, "users", userId, "habits", habitId);
+
+}

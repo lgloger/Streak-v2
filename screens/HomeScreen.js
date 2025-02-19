@@ -30,7 +30,6 @@ const HomeScreen = ({ navigation }) => {
       weekday: "short",
     });
     const dateStr = date.toISOString().split("T")[0];
-    const isToday = new Date().toDateString() === date.toDateString();
     const isCompleted = completedDates.includes(dateStr);
 
     return (
@@ -108,7 +107,9 @@ const HomeScreen = ({ navigation }) => {
             <TouchableOpacity
               style={styles.habitContainer}
               key={habit.id}
-              onPress={() => navigation.navigate("HabitDetail", { habitId: habit.id })}
+              onPress={() =>
+                navigation.navigate("HabitDetail", { habitId: habit.id })
+              }
               activeOpacity={0.6}
             >
               <View style={styles.habitConHeader}>
@@ -123,7 +124,10 @@ const HomeScreen = ({ navigation }) => {
                   <View style={styles.secondHeaderConStreak}>
                     <Text
                       style={
-                        habit.streak > 0
+                        habit.streak > 0 &&
+                        habit.completedDates?.includes(
+                          new Date().toISOString().split("T")[0]
+                        )
                           ? styles.secondHeaderConStreakTextActive
                           : styles.secondHeaderConStreakText
                       }
@@ -133,7 +137,10 @@ const HomeScreen = ({ navigation }) => {
                     <Image
                       style={styles.secondHeaderConStreakIcon}
                       source={
-                        habit.streak > 0
+                        habit.streak > 0 &&
+                        habit.completedDates?.includes(
+                          new Date().toISOString().split("T")[0]
+                        )
                           ? require("../assets/icons/streak.png")
                           : require("../assets/icons/streak_grey.png")
                       }
