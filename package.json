@@ -1,9 +1,9 @@
 {
   "dependencies": {
     "expo": "^52.0.35",
+    "expo-status-bar": "~2.0.1",
     "react": "18.3.1",
-    "react-native": "0.76.7",
-    "expo-status-bar": "~2.0.1"
+    "react-native": "0.76.7"
   },
   "name": "Streak-v2",
   "version": "1.0.0",
@@ -13,7 +13,7 @@
     "start": "expo start --dev-client"
   },
   "devDependencies": {
-    "@react-native-community/cli": "latest",
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "@react-native-community/cli": "^15.1.3"
   }
 }
