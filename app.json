@@ -25,11 +25,11 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "owner": "lucagloger2",
     "extra": {
       "eas": {
-        "projectId": "1728f011-7620-4da3-af58-25090dae487c"
+        "projectId": "f9cd8789-1485-4018-9d2e-2fb43089d089"
       }
-    },
-    "owner": "lucagloger"
+    }
   }
 }
