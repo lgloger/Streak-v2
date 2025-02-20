@@ -1,3 +1,7 @@
+if (typeof global.setImmediate === 'undefined') {
+  global.setImmediate = (callback) => setTimeout(callback, 0);
+}
+
 import React, { useEffect, useCallback } from "react";
 import { StyleSheet, View } from "react-native";
 import * as NavigationBar from "expo-navigation-bar";
