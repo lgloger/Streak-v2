@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#E8E8E8"
     },
     "ios": {
       "supportsTablet": true
@@ -20,9 +20,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.lucagloger.Streak",
-      "jsEngine": "hermes",
-      "softwareKeyboardLayoutMode": "pan"
+      "package": "com.lucagloger.Streak"
     },
     "web": {
       "favicon": "./assets/favicon.png"
