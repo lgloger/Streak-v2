@@ -14,7 +14,7 @@ import { addHabitViewModel } from "../js/dataManger";
 import IconPickerModal from "../components/IconPickerModal";
 import { iconMapping } from "../components/IconPickerModal";
 
-const AddHabitScreen = ({ navigation }) => {
+const AddHabitsScreen = ({ navigation }) => {
   const { selectedIcon, setSelectedIcon, title, setTitle, addHabit } =
     addHabitViewModel(navigation);
 
@@ -197,4 +197,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddHabitScreen;
+export default AddHabitsScreen;
