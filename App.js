@@ -16,19 +16,9 @@ export default function App() {
   });
 
   useEffect(() => {
-    const prepare = async () => {
-      try {
-        await SplashScreen.preventAutoHideAsync();
-      } catch (e) {
-        console.warn("Fehler beim Verhindern des Auto-Hide:", e);
-      }
-    };
-    prepare();
-  }, []);
-
-  useEffect(() => {
+    console.log("fontsLoaded:", fontsLoaded)
     NavigationBar.setBackgroundColorAsync("#E8E8E8");
-  }, []);
+  }, [fontsLoaded]);
 
   const onLayoutRootView = useCallback(async () => {
     console.log("fontsLoaded:", fontsLoaded);
@@ -37,7 +27,7 @@ export default function App() {
         await SplashScreen.hideAsync();
         console.log("Splash Screen versteckt!");
       } catch (error) {
-        console.warn("Fehler beim Verstecken des Splash Screens:", error);
+        console.error("Fehler beim Verstecken des Splash Screens:", error);
       }
     }
   }, [fontsLoaded]);
