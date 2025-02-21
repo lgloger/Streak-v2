@@ -17,6 +17,7 @@ import {
   deleteHabitViewModel,
   descriptionViewModel,
 } from "../js/habitDetailViewModel";
+import { iconMapping } from "../components/IconPickerModal";
 
 const HabitDetailScreen = ({ route, navigation }) => {
   const { habitId } = route.params || {};
@@ -32,19 +33,6 @@ const HabitDetailScreen = ({ route, navigation }) => {
       </View>
     );
   }
-
-  const iconMapping = {
-    sport_blue: require("../assets/icons/sport_blue.png"),
-    book_blue: require("../assets/icons/book_blue.png"),
-    school_blue: require("../assets/icons/school_blue.png"),
-    star_blue: require("../assets/icons/star_blue.png"),
-    soccer_blue: require("../assets/icons/soccer_blue.png"),
-    yoga_blue: require("../assets/icons/yoga_blue.png"),
-    hiking_blue: require("../assets/icons/hiking_blue.png"),
-    code_blue: require("../assets/icons/code_blue.png"),
-    park_blue: require("../assets/icons/park_blue.png"),
-    food_blue: require("../assets/icons/food_blue.png"),
-  };
 
   const Container = Platform.select({
     web: View,
@@ -124,6 +112,7 @@ const HabitDetailScreen = ({ route, navigation }) => {
             source={require("../assets/icons/arrow.png")}
           />
         </TouchableOpacity>
+        <Text style={styles.firstHeaderTitle}>{habit.title}</Text>
         <TouchableOpacity
           style={styles.headerButtonRed}
           onPress={deleteHabitModal}
@@ -136,48 +125,50 @@ const HabitDetailScreen = ({ route, navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={styles.habitContainer}>
+        <Text style={styles.conTitle}>Habit</Text>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={styles.habitActivityCon}>{renderHabitActivities()}</View>
         </ScrollView>
-      </View>
-      <View style={styles.secondHeader}>
-        <View style={styles.secHeaderfirstCon}>
-          <View style={styles.headerButton}>
-            <Image
-              style={styles.headerButtonIcon}
-              source={iconMapping[habit.selectedIcon]}
-            />
+        <View style={styles.secondHeader}>
+          <View style={styles.secHeaderfirstCon}>
+            <View style={styles.inputButton}>
+              <Image
+                style={styles.inputIcon}
+                source={iconMapping[habit.selectedIcon]}
+              />
+            </View>
+            <Text style={styles.headerTitle}>{habit.title}</Text>
           </View>
-          <Text style={styles.headerTitle}>{habit.title}</Text>
-        </View>
-        <View
-          style={
-            isTodayCompleted
-              ? styles.secondHeaderConStreakGrey
-              : styles.secondHeaderConStreak
-          }
-        >
-          <Text
+          <View
             style={
               isTodayCompleted
-                ? styles.secondHeaderConStreakTextActive
-                : styles.secondHeaderConStreakText
+                ? styles.secondHeaderConStreakGrey
+                : styles.secondHeaderConStreak
             }
           >
-            {habit.streak}
-          </Text>
-          <Image
-            style={styles.secondHeaderConStreakIcon}
-            source={
-              isTodayCompleted
-                ? require("../assets/icons/streak.png")
-                : require("../assets/icons/streak_grey.png")
-            }
-          />
+            <Text
+              style={
+                isTodayCompleted
+                  ? styles.secondHeaderConStreakTextActive
+                  : styles.secondHeaderConStreakText
+              }
+            >
+              {habit.streak}
+            </Text>
+            <Image
+              style={styles.secondHeaderConStreakIcon}
+              source={
+                isTodayCompleted
+                  ? require("../assets/icons/streak.png")
+                  : require("../assets/icons/streak_grey.png")
+              }
+            />
+          </View>
         </View>
       </View>
       <View style={styles.mainContainer}>
         <View style={styles.descriptionContainer}>
+          <Text style={styles.conTitle}>Description</Text>
           <TextInput
             style={styles.descriptionText}
             onChangeText={setDescription}
@@ -207,6 +198,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     paddingHorizontal: 20,
+    gap: 15,
   },
 
   firstHeader: {
@@ -242,16 +234,32 @@ const styles = StyleSheet.create({
     width: 24,
   },
 
+  firstHeaderTitle: {
+    fontSize: 18,
+    fontFamily: "Poppins-Medium",
+    color: "#000000",
+    includeFontPadding: false,
+  },
+
   habitContainer: {
     height: "auto",
     width: "100%",
     maxWidth: 450,
     backgroundColor: "#ffffff",
-    alignItems: "center",
+    alignItems: "left",
     justifyContent: "center",
     borderRadius: 25,
     padding: 15,
-    marginTop: 60,
+    gap: 15,
+    marginTop: 45,
+  },
+
+  conTitle: {
+    fontSize: 14,
+    fontFamily: "Poppins-SemiBold",
+    color: "#D0D0D0",
+    includeFontPadding: false,
+    textAlign: "left",
   },
 
   habitActivityCon: {
@@ -278,15 +286,14 @@ const styles = StyleSheet.create({
   },
 
   secondHeader: {
-    height: 60,
+    height: 50,
     width: "100%",
     maxWidth: 450,
     alignItems: "center",
     justifyContent: "space-between",
     flexDirection: "row",
     backgroundColor: "transparent",
-    marginTop: 10,
-    marginBottom: 10,
+    gap: 10,
   },
 
   secHeaderfirstCon: {
@@ -296,10 +303,29 @@ const styles = StyleSheet.create({
     gap: 10,
   },
 
+  inputButton: {
+    height: 50,
+    width: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#E8E8E8",
+    borderRadius: 30,
+  },
+
+  inputIcon: {
+    height: 28,
+    width: 28,
+  },
+
   headerTitle: {
-    fontSize: 22,
-    fontFamily: "Poppins-SemiBold",
+    flex: 1,
+    fontSize: 18,
+    fontFamily: "Poppins-Medium",
     includeFontPadding: false,
+    lineHeight: 50,
+    backgroundColor: "#E8E8E8",
+    borderRadius: 15,
+    paddingHorizontal: 10,
   },
 
   secondHeaderConStreak: {
@@ -308,9 +334,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     flexDirection: "row",
-    backgroundColor: "#ffffff",
     paddingHorizontal: 7,
-    borderRadius: 5,
     gap: 2.5,
   },
 

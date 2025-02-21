@@ -7,6 +7,7 @@ import {
   updateDoc,
   onSnapshot,
 } from "firebase/firestore";
+import * as Haptics from 'expo-haptics';
 
 const homeViewModel = () => {
   const [habits, setHabits] = useState([]);

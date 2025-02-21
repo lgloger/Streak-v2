@@ -43,7 +43,7 @@ const AddHabitsScreen = ({ navigation }) => {
             source={require("../assets/icons/arrow.png")}
           />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>New Habit</Text>
+        <Text style={styles.headerTitle}>Add Habit</Text>
         <TouchableOpacity
           style={styles.headerButton}
           onPress={() => addHabit()}
@@ -71,7 +71,7 @@ const AddHabitsScreen = ({ navigation }) => {
             >
               <Image
                 style={styles.inputIcon}
-                source={iconMapping[selectedIcon] || iconMapping["star_blue"]}
+                source={iconMapping[selectedIcon] || iconMapping["star"]}
               />
             </TouchableOpacity>
             <TextInput

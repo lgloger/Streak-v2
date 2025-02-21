@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { Shadow } from "react-native-shadow-2";
+import React from "react";
 import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
@@ -14,6 +13,8 @@ import {
 import { createShimmerPlaceHolder } from "expo-shimmer-placeholder";
 import { LinearGradient } from "expo-linear-gradient";
 import { homeViewModel } from "../js/homeViewModel";
+import { iconMapping } from "../components/IconPickerModal";
+import * as Haptics from "expo-haptics";
 
 const ShimmerPlaceHolder = createShimmerPlaceHolder(LinearGradient);
 
@@ -23,6 +24,7 @@ const HomeScreen = ({ navigation }) => {
   const handleCheckPress = (habit) => {
     const currentDates = habit.completedDates || [];
     toggleDay(habit.id, currentDates);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
   const renderDay = (date, completedDates = []) => {
@@ -55,19 +57,6 @@ const HomeScreen = ({ navigation }) => {
     );
   };
 
-  const iconMapping = {
-    sport_blue: require("../assets/icons/sport.png"),
-    book_blue: require("../assets/icons/book.png"),
-    school_blue: require("../assets/icons/school.png"),
-    star_blue: require("../assets/icons/star.png"),
-    soccer_blue: require("../assets/icons/soccer.png"),
-    yoga_blue: require("../assets/icons/yoga.png"),
-    hiking_blue: require("../assets/icons/hiking.png"),
-    code_blue: require("../assets/icons/code.png"),
-    park_blue: require("../assets/icons/park.png"),
-    food_blue: require("../assets/icons/food.png"),
-  };
-
   const Container = Platform.select({
     web: View,
     default: SafeAreaView,
@@ -81,10 +70,22 @@ const HomeScreen = ({ navigation }) => {
           onPress={() => navigation.navigate("Settings")}
           activeOpacity={0.6}
         >
+          <Text style={styles.headerButtonTitle}>Settings</Text>
           <Image
             style={styles.headerButtonIcon}
             source={require("../assets/icons/settings.png")}
           />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.headerButton}
+          onPress={() => navigation.navigate("AddHabit")}
+          activeOpacity={0.6}
+        >
+          <Image
+            style={styles.headerButtonIcon}
+            source={require("../assets/icons/add.png")}
+          />
+          <Text style={styles.headerButtonTitle}>Add</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.secondHeader}>
@@ -179,26 +180,7 @@ const HomeScreen = ({ navigation }) => {
           ))}
         </View>
       )}
-      <View style={styles.fabContainer}>
-        <Shadow
-          distance={5}
-          startColor="rgba(0, 0, 0, 0.03)"
-          endColor="rgba(0, 0, 0, 0.01)"
-          offset={[0, 0]}
-        >
-          <TouchableOpacity
-            style={styles.FAB}
-            onPress={() => navigation.navigate("AddHabit")}
-            activeOpacity={0.6}
-          >
-            <Image
-              style={styles.fabIcon}
-              source={require("../assets/icons/add.png")}
-            />
-          </TouchableOpacity>
-        </Shadow>
-      </View>
-      <StatusBar style="auto" />
+      <StatusBar style="dark" />
     </Container>
   );
 };
@@ -216,7 +198,7 @@ const styles = StyleSheet.create({
     height: 60,
     width: "100%",
     alignItems: "center",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
     flexDirection: "row",
     backgroundColor: "transparent",
     marginTop: Platform.OS === "android" ? RNStatusBar.currentHeight || 0 : 0,
@@ -224,16 +206,26 @@ const styles = StyleSheet.create({
 
   headerButton: {
     height: 40,
-    width: 40,
+    width: "auto",
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#ffffff",
+    flexDirection: "row",
+    paddingHorizontal: 10,
+    gap: 3,
     borderRadius: 30,
   },
 
+  headerButtonTitle: {
+    fontSize: 13,
+    fontFamily: "Poppins-SemiBold",
+    includeFontPadding: false,
+    marginHorizontal: 5,
+  },
+
   headerButtonIcon: {
-    height: 24,
-    width: 24,
+    height: 22,
+    width: 22,
   },
 
   secondHeader: {

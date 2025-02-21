@@ -12,6 +12,7 @@ import {
 import { SignOutViewModel, DeleteAccountViewModel } from "../js/authManager";
 import DeleteAccountModal from "../components/DeleteAccountModal";
 import { getAuth } from "firebase/auth";
+import packageJson from "../package.json";
 
 const SettingsScreenScreen = ({ navigation }) => {
   const { handleSignOut } = SignOutViewModel(navigation);
@@ -97,6 +98,10 @@ const SettingsScreenScreen = ({ navigation }) => {
           </View>
           <Text style={styles.settingsTitle}>Delete Account</Text>
         </TouchableOpacity>
+      </View>
+
+      <View style={styles.versionCon}>
+        <Text style={styles.settingsText}>Streak {packageJson.version}</Text>
       </View>
 
       <DeleteAccountModal
@@ -204,6 +209,15 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-Bold",
     includeFontPadding: false,
   },
+
+  versionCon: {
+    height: 60,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    backgroundColor: "#E8E8E8",
+  }
 });
 
 export default SettingsScreenScreen;
