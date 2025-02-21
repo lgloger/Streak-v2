@@ -3,16 +3,16 @@ import { View, TouchableOpacity, Image, StyleSheet } from "react-native";
 import RBSheet from "react-native-raw-bottom-sheet";
 
 export const iconMapping = {
-  sport_blue: require("../assets/icons/sport_blue.png"),
-  book_blue: require("../assets/icons/book_blue.png"),
-  school_blue: require("../assets/icons/school_blue.png"),
-  star_blue: require("../assets/icons/star_blue.png"),
-  soccer_blue: require("../assets/icons/soccer_blue.png"),
-  yoga_blue: require("../assets/icons/yoga_blue.png"),
-  hiking_blue: require("../assets/icons/hiking_blue.png"),
-  code_blue: require("../assets/icons/code_blue.png"),
-  park_blue: require("../assets/icons/park_blue.png"),
-  food_blue: require("../assets/icons/food_blue.png"),
+  sport_blue: require("../assets/icons/sport.png"),
+  book_blue: require("../assets/icons/book.png"),
+  school_blue: require("../assets/icons/school.png"),
+  star_blue: require("../assets/icons/star.png"),
+  soccer_blue: require("../assets/icons/soccer.png"),
+  yoga_blue: require("../assets/icons/yoga.png"),
+  hiking_blue: require("../assets/icons/hiking.png"),
+  code_blue: require("../assets/icons/code.png"),
+  park_blue: require("../assets/icons/park.png"),
+  food_blue: require("../assets/icons/food.png"),
 };
 
 const IconPickerModal = React.forwardRef(({ onIconSelect }, ref) => {

@@ -43,6 +43,7 @@ const AddHabitsScreen = ({ navigation }) => {
             source={require("../assets/icons/arrow.png")}
           />
         </TouchableOpacity>
+        <Text style={styles.headerTitle}>New Habit</Text>
         <TouchableOpacity
           style={styles.headerButton}
           onPress={() => addHabit()}
@@ -58,33 +59,33 @@ const AddHabitsScreen = ({ navigation }) => {
       <View style={styles.mainContainer}>
         <View style={styles.habitContainer}>
           <View style={styles.habitActivityCon}>
-            {Array.from({ length: 150 }).map((_, index) => (
+            {Array.from({ length: 131 }).map((_, index) => (
               <View key={index} style={styles.habitActivity}></View>
             ))}
           </View>
-        </View>
-        <View style={styles.inputContainer}>
-          <TouchableOpacity
-            style={styles.headerButton}
-            onPress={() => refRBSheet.current.open()}
-            activeOpacity={0.6}
-          >
-            <Image
-              style={styles.headerButtonIcon}
-              source={iconMapping[selectedIcon] || iconMapping["star_blue"]}
+          <View style={styles.inputContainer}>
+            <TouchableOpacity
+              style={styles.inputButton}
+              onPress={() => refRBSheet.current.open()}
+              activeOpacity={0.6}
+            >
+              <Image
+                style={styles.inputIcon}
+                source={iconMapping[selectedIcon] || iconMapping["star_blue"]}
+              />
+            </TouchableOpacity>
+            <TextInput
+              style={styles.input}
+              onChangeText={setTitle}
+              value={title}
+              placeholderTextColor="#000000"
+              placeholder="Untitled"
+              keyboardType="text"
+              selectionColor="#FFFFFF"
+              cursorColor="#000000"
+              caretHidden={false}
             />
-          </TouchableOpacity>
-          {title === "" && <Text style={styles.placeholder}>Untitled</Text>}
-          <TextInput
-            style={styles.input}
-            onChangeText={setTitle}
-            value={title}
-            placeholderTextColor="#000000"
-            keyboardType="text"
-            selectionColor="#FFFFFF"
-            cursorColor="#000000"
-            caretHidden={false}
-          />
+          </View>
         </View>
       </View>
       <IconPickerModal ref={refRBSheet} onIconSelect={handleIconSelect} />
@@ -125,6 +126,13 @@ const styles = StyleSheet.create({
     width: 24,
   },
 
+  headerTitle: {
+    fontSize: 18,
+    fontFamily: "Poppins-Medium",
+    color: "#000000",
+    includeFontPadding: false,
+  },
+
   secondHeader: {
     height: 60,
     width: "100%",
@@ -151,6 +159,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 25,
     padding: 15,
+    gap: 15,
   },
 
   habitActivityCon: {
@@ -178,22 +187,30 @@ const styles = StyleSheet.create({
     gap: 10,
   },
 
-  placeholder: {
-    position: "absolute",
-    top: 8,
-    left: 54,
-    fontSize: 22,
-    fontFamily: "Poppins-Bold",
-    color: "#000000",
+  inputButton: {
+    height: 50,
+    width: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#E8E8E8",
+    borderRadius: 30,
+  },
+
+  inputIcon: {
+    height: 28,
+    width: 28,
   },
 
   input: {
     flex: 1,
     height: "100%",
-    fontSize: 22,
-    fontFamily: "Poppins-Bold",
+    fontSize: 18,
+    fontFamily: "Poppins-Medium",
     color: "#000000",
     includeFontPadding: false,
+    backgroundColor: "#E8E8E8",
+    borderRadius: 15,
+    paddingHorizontal: 10,
   },
 });
 

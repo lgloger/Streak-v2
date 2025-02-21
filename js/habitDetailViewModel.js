@@ -1,8 +1,8 @@
 import { auth, db } from "../js/firebaseConfig";
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, deleteDoc, updateDoc } from "firebase/firestore";
 import { useState, useEffect } from "react";
 
-export const habitDetailViewModel = (habitId) => {
+const habitDetailViewModel = (habitId) => {
   const [habit, setHabit] = useState(null);
   const [loading, setLoading] = useState(true);
   const userId = auth.currentUser?.uid;
@@ -34,7 +34,53 @@ export const habitDetailViewModel = (habitId) => {
   return { habit, loading };
 };
 
-const deleteHabitViewModel = (habitId) => {
+const deleteHabitViewModel = async (habitId) => {
+  const userId = auth.currentUser?.uid;
   const habitRef = doc(db, "users", userId, "habits", habitId);
 
-}
+  try {
+    await deleteDoc(habitRef);
+    console.log("Habit succressfully deleted");
+  } catch {
+    console.error("Error deleting habit:", error);
+  }
+};
+
+const descriptionViewModel = (habitId) => {
+  const [description, setDescription] = useState("");
+  const userId = auth.currentUser?.uid;
+
+  useEffect(() => {
+    if (!habitId || !userId) return;
+
+    const habitRef = doc(db, "users", userId, "habits", habitId);
+    const unsubscribe = onSnapshot(habitRef, (docSnapshot) => {
+      if (docSnapshot.exists()) {
+        const habitData = docSnapshot.data();
+        setDescription(habitData.description || "");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [habitId, userId]);
+
+  const updateDescription = async (newDescription) => {
+    if (!habitId || !userId) return;
+
+    const habitRef = doc(db, "users", userId, "habits", habitId);
+    try {
+      await updateDoc(habitRef, { description: newDescription });
+      console.log("Description updated successfully!");
+    } catch (error) {
+      console.error("Error updating description:", error);
+    }
+  };
+
+  return {
+    description,
+    setDescription,
+    updateDescription,
+  };
+};
+
+export { habitDetailViewModel, deleteHabitViewModel, descriptionViewModel };

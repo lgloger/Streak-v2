@@ -9,7 +9,6 @@ import {
 } from "firebase/auth";
 import { EmailAuthProvider } from "firebase/auth";
 import { auth, db } from "../js/firebaseConfig";
-import { getAuth } from "firebase/auth";
 import { doc, setDoc, deleteDoc } from "firebase/firestore";
 import { ToastAndroid } from "react-native";
 

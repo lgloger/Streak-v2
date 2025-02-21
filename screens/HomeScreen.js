@@ -350,20 +350,20 @@ const styles = StyleSheet.create({
 
   secondHeaderConButton: {
     height: 30,
-    width: 30,
+    width: 60,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#E8E8E8",
-    borderRadius: 30,
+    borderRadius: 10,
   },
 
   secondHeaderConButtonActive: {
     height: 30,
-    width: 30,
+    width: 60,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#10EC29",
-    borderRadius: 30,
+    borderRadius: 10,
   },
 
   secondHeaderConIcon: {

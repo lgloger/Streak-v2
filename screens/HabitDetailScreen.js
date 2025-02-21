@@ -10,15 +10,20 @@ import {
   StatusBar as RNStatusBar,
   Platform,
   ScrollView,
+  Alert,
 } from "react-native";
-import { habitDetailViewModel } from "../js/habitDetailViewModel";
+import {
+  habitDetailViewModel,
+  deleteHabitViewModel,
+  descriptionViewModel,
+} from "../js/habitDetailViewModel";
 
 const HabitDetailScreen = ({ route, navigation }) => {
   const { habitId } = route.params || {};
 
   const { habit, loading } = habitDetailViewModel(habitId);
-
-  const [description, setDescription] = useState("");
+  const { description, setDescription, updateDescription } =
+    descriptionViewModel(habitId);
 
   if (!habit) {
     return (
@@ -88,6 +93,25 @@ const HabitDetailScreen = ({ route, navigation }) => {
   const today = new Date().toISOString().split("T")[0];
   const isTodayCompleted = habit.completedDates?.includes(today);
 
+  const deleteHabitModal = () =>
+    Alert.alert(
+      "Delete Habit",
+      "Deleting this habit is irreversible. All associated data will be permanently lost and cannot be restored.",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          onPress: async () => {
+            await deleteHabitViewModel(habitId);
+            navigation.goBack();
+          },
+        },
+      ]
+    );
   return (
     <Container style={styles.container}>
       <View style={styles.firstHeader}>
@@ -102,7 +126,7 @@ const HabitDetailScreen = ({ route, navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.headerButtonRed}
-          onPress={() => addHabit()}
+          onPress={deleteHabitModal}
           activeOpacity={0.6}
         >
           <Image
@@ -157,13 +181,18 @@ const HabitDetailScreen = ({ route, navigation }) => {
           <TextInput
             style={styles.descriptionText}
             onChangeText={setDescription}
+            onBlur={() => updateDescription(description)}
+            onSubmitEditing={() => updateDescription(description)}
             value={description}
-            placeholder="Test"
+            placeholder="Add a Description..."
             placeholderTextColor="#000000"
             keyboardType="default"
             selectionColor="#FFFFFF"
             cursorColor="#000000"
             caretHidden={false}
+            multiline={true}
+            blurOnSubmit={true}
+            returnKeyType="done"
           />
         </View>
       </View>
@@ -335,6 +364,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: "Poppins-Medium",
     includeFontPadding: false,
+    textAlign: "left",
   },
 });
 
