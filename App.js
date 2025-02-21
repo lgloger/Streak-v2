@@ -1,17 +1,16 @@
-if (typeof global.setImmediate === 'undefined') {
-  global.setImmediate = (callback) => setTimeout(callback, 0);
-}
-
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import * as NavigationBar from "expo-navigation-bar";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import AppNavigator from "./AppNavigator";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
+  const [appReady, setAppReady] = useState(false);
+
   const [fontsLoaded] = useFonts({
     "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
     "Poppins-Medium": require("./assets/fonts/Poppins-Medium.ttf"),
@@ -20,13 +19,24 @@ export default function App() {
   });
 
   useEffect(() => {
-    console.log("fontsLoaded:", fontsLoaded)
-    NavigationBar.setBackgroundColorAsync("#E8E8E8");
+    async function prepare() {
+      try {
+        await SplashScreen.preventAutoHideAsync();
+        console.log("Schriftarten geladen:", fontsLoaded);
+
+        await NavigationBar.setBackgroundColorAsync("#E8E8E8");
+      } catch (error) {
+        console.error("Fehler beim Vorbereiten der App:", error);
+      } finally {
+        setAppReady(true);
+      }
+    }
+
+    prepare();
   }, [fontsLoaded]);
 
   const onLayoutRootView = useCallback(async () => {
-    console.log("fontsLoaded:", fontsLoaded);
-    if (fontsLoaded) {
+    if (appReady && fontsLoaded) {
       try {
         await SplashScreen.hideAsync();
         console.log("Splash Screen versteckt!");
@@ -34,16 +44,18 @@ export default function App() {
         console.error("Fehler beim Verstecken des Splash Screens:", error);
       }
     }
-  }, [fontsLoaded]);
+  }, [appReady, fontsLoaded]);
 
-  if (!fontsLoaded) {
+  if (!appReady || !fontsLoaded) {
     return null;
   }
 
   return (
-    <View style={styles.container}  onLayout={onLayoutRootView}>
-      <AppNavigator />
-    </View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <View style={styles.container} onLayout={onLayoutRootView}>
+        <AppNavigator />
+      </View>
+    </GestureHandlerRootView>
   );
 }
 
