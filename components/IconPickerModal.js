@@ -3,16 +3,34 @@ import { View, TouchableOpacity, Image, StyleSheet } from "react-native";
 import RBSheet from "react-native-raw-bottom-sheet";
 
 export const iconMapping = {
+  hiking: require("../assets/icons/hiking.png"),
   sport: require("../assets/icons/sport.png"),
+  walk: require("../assets/icons/walk.png"),
+  weight: require("../assets/icons/weight.png"),
+  yoga: require("../assets/icons/yoga.png"),
+  bike: require("../assets/icons/bike.png"),
+  swim: require("../assets/icons/swim.png"),
+  wheelchair: require("../assets/icons/wheelchair.png"),
+  soccer: require("../assets/icons/soccer.png"),
+  eco: require("../assets/icons/eco.png"),
+  park: require("../assets/icons/park.png"),
+  sun: require("../assets/icons/sun.png"),
+  morning: require("../assets/icons/morning.png"),
   book: require("../assets/icons/book.png"),
   school: require("../assets/icons/school.png"),
-  star: require("../assets/icons/star.png"),
-  soccer: require("../assets/icons/soccer.png"),
-  yoga: require("../assets/icons/yoga.png"),
-  hiking: require("../assets/icons/hiking.png"),
-  code: require("../assets/icons/code.png"),
-  park: require("../assets/icons/park.png"),
+  pc: require("../assets/icons/pc.png"),
+  moon: require("../assets/icons/moon.png"),
+  bed: require("../assets/icons/bed.png"),
   food: require("../assets/icons/food.png"),
+  note: require("../assets/icons/note.png"),
+  brush: require("../assets/icons/brush.png"),
+  camera: require("../assets/icons/camera.png"),
+  controller: require("../assets/icons/controller.png"),
+  cut: require("../assets/icons/cut.png"),
+  calendar: require("../assets/icons/calendar.png"),
+  alarm: require("../assets/icons/alarm.png"),
+  code: require("../assets/icons/code.png"),
+  star: require("../assets/icons/star.png"),
 };
 
 const IconPickerModal = React.forwardRef(({ onIconSelect }, ref) => {
@@ -20,7 +38,7 @@ const IconPickerModal = React.forwardRef(({ onIconSelect }, ref) => {
     <RBSheet
       ref={ref}
       closeOnDragDown={true}
-      height={300}
+      height={"700"}
       customStyles={{
         container: styles.bottomSheetContainer,
         wrapper: { backgroundColor: "rgba(0, 0, 0, 0.15)" },

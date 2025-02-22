@@ -38,17 +38,14 @@ const SettingsScreenScreen = ({ navigation }) => {
     <Container style={styles.container}>
       <View style={styles.firstHeader}>
         <TouchableOpacity
-          style={styles.headerButton}
+          style={styles.headerTextButton}
           onPress={() => navigation.goBack()}
         >
-          <Image
-            style={styles.headerButtonIcon}
-            source={require("../assets/icons/arrow.png")}
-          />
+          <Text style={styles.headerButtonTitle}>Schließen</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.secondHeader}>
-        <Text style={styles.headerTitle}>Settings</Text>
+        <Text style={styles.headerTitle}>Einstellungen</Text>
       </View>
       <View style={styles.mainContainer}>
         <View style={styles.settingsCon}>
@@ -77,7 +74,7 @@ const SettingsScreenScreen = ({ navigation }) => {
                   source={require("../assets/icons/logout_red.png")}
                 />
               </View>
-              <Text style={styles.settingsTitle}>Log out</Text>
+              <Text style={styles.settingsTitle}>Ausloggen</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity
@@ -92,22 +89,26 @@ const SettingsScreenScreen = ({ navigation }) => {
                   source={require("../assets/icons/delete_red.png")}
                 />
               </View>
-              <Text style={styles.settingsTitle}>Delete Account</Text>
+              <Text style={styles.settingsTitle}>Account Löschen</Text>
             </View>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.settingsCon} activeOpacity={0.6}>
-          <Text style={styles.conTitle}>App Information</Text>
-          <View style={styles.settingsSecCon}>
+        <View style={styles.settingsCon} activeOpacity={0.6}>
+          <Text style={styles.conTitle}>Über die App</Text>
+          <TouchableOpacity
+            style={styles.settingsSecCon}
+            onPress={() => handleSignOut()}
+            activeOpacity={0.6}
+          >
             <View style={styles.headerButton}>
               <Image
                 style={styles.headerButtonIcon}
                 source={require("../assets/icons/about_blue.png")}
               />
             </View>
-            <Text style={styles.settingsTitle}>About</Text>
-          </View>
-        </TouchableOpacity>
+            <Text style={styles.settingsTitle}>Informationen</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View style={styles.versionCon}>
@@ -141,6 +142,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "transparent",
     marginTop: Platform.OS === "android" ? RNStatusBar.currentHeight || 0 : 0,
+  },
+
+  headerTextButton: {
+    height: "auto",
+    width: "auto",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  headerButtonTitle: {
+    fontSize: 16,
+    fontFamily: "Poppins-Medium",
+    color: "#000000",
+    includeFontPadding: false,
   },
 
   headerButton: {
@@ -186,7 +201,7 @@ const styles = StyleSheet.create({
     maxWidth: 450,
     alignItems: "center",
     justifyContent: "flex-start",
-    gap: 15,
+    gap: 30,
   },
 
   settingsCon: {
@@ -195,7 +210,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     alignItems: "flex-start",
     justifyContent: "flex-start",
-    borderRadius: 25,
+    borderRadius: 15,
   },
 
   settingsSecCon: {
@@ -228,7 +243,7 @@ const styles = StyleSheet.create({
 
   settingsTitle: {
     flex: 1,
-    fontSize: 22,
+    fontSize: 18,
     fontFamily: "Poppins-Bold",
     lineHeight: 25.5,
     includeFontPadding: false,

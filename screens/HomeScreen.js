@@ -71,7 +71,7 @@ const HomeScreen = ({ navigation }) => {
           onPress={() => navigation.navigate("Settings")}
           activeOpacity={0.6}
         >
-          <Text style={styles.headerButtonTitle}>Settings</Text>
+          <Text style={styles.headerButtonTitle}>Einstellungen</Text>
           <Image
             style={styles.headerButtonIcon}
             source={require("../assets/icons/settings.png")}
@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
     maxWidth: 450,
     alignItems: "center",
     justifyContent: "flex-start",
-    gap: 15,
+    gap: 30,
   },
 
   shimmer: {
@@ -263,9 +263,9 @@ const styles = StyleSheet.create({
     width: "100%",
     maxWidth: 450,
     backgroundColor: "#ffffff",
-    borderRadius: 25,
+    borderRadius: 15,
     padding: 15,
-    marginBottom: 15,
+    marginBottom: 30,
   },
 
   habitConHeader: {
@@ -291,7 +291,7 @@ const styles = StyleSheet.create({
 
   firstHeaderConTitle: {
     fontSize: 18,
-    fontFamily: "Poppins-Bold",
+    fontFamily: "Poppins-SemiBold",
     color: "#000000",
     includeFontPadding: false,
   },
@@ -406,33 +406,6 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-Medium",
     color: "#ffffff",
     includeFontPadding: false,
-  },
-
-  fabContainer: {
-    position: "absolute",
-    bottom: 20,
-    left: Platform.select({
-      web: 0,
-      default: 20,
-    }),
-    height: "auto",
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  FAB: {
-    height: 100,
-    width: 100,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#ffffff",
-    borderRadius: 100,
-  },
-
-  fabIcon: {
-    height: 60,
-    width: 60,
   },
 });
 

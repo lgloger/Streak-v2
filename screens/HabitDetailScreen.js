@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   ActivityIndicator,
@@ -20,6 +20,7 @@ import {
   updateHabitColor,
 } from "../js/habitDetailViewModel";
 import { iconMapping } from "../components/IconPickerModal";
+import * as Haptics from "expo-haptics";
 
 const HabitDetailScreen = ({ route, navigation }) => {
   const { habitId } = route.params || {};
@@ -113,24 +114,17 @@ const HabitDetailScreen = ({ route, navigation }) => {
           style={styles.headerButton}
           onPress={() => navigation.goBack()}
         >
-          <Image
-            style={styles.headerButtonIcon}
-            source={require("../assets/icons/arrow.png")}
-          />
+          <Text style={styles.firstHeaderTitle}>Schließen</Text>
         </TouchableOpacity>
-        <Text style={styles.firstHeaderTitle}>{habit.title}</Text>
         <TouchableOpacity
-          style={styles.headerButtonRed}
+          style={styles.headerButton}
           onPress={deleteHabitModal}
           activeOpacity={0.6}
         >
-          <Image
-            style={styles.headerButtonIcon}
-            source={require("../assets/icons/delete_red.png")}
-          />
+          <Text style={styles.firstHeaderTitle}>Löschen</Text>
         </TouchableOpacity>
       </View>
-      <View style={[styles.habitContainer, { marginTop: 45 }]}>
+      <View style={[styles.habitContainer, { marginTop: 30 }]}>
         <Text style={styles.conTitle}>Habit</Text>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={styles.habitActivityCon}>{renderHabitActivities()}</View>
@@ -172,17 +166,62 @@ const HabitDetailScreen = ({ route, navigation }) => {
           </View>
         </View>
       </View>
+      <View style={styles.habitContainer}>
+        <Text style={styles.conTitle}>Farbe Wählen</Text>
+        <View style={styles.colorContainer}>
+          <TouchableOpacity
+            style={[styles.colorButton, { backgroundColor: "#2EE23E" }]}
+            onPress={() => {
+              updateHabitColor(habitId, "#2EE23E");
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }}
+            activeOpacity={0.6}
+          ></TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.colorButton, { backgroundColor: "#FF1E1E" }]}
+            onPress={() => {
+              updateHabitColor(habitId, "#FF1E1E");
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }}
+            activeOpacity={0.6}
+          ></TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.colorButton, { backgroundColor: "#1DC8E4" }]}
+            onPress={() => {
+              updateHabitColor(habitId, "#1DC8E4");
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }}
+            activeOpacity={0.6}
+          ></TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.colorButton, { backgroundColor: "#A51DE4" }]}
+            onPress={() => {
+              updateHabitColor(habitId, "#A51DE4");
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }}
+            activeOpacity={0.6}
+          ></TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.colorButton, { backgroundColor: "#FFEC21" }]}
+            onPress={() => {
+              updateHabitColor(habitId, "#FFEC21");
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }}
+            activeOpacity={0.6}
+          ></TouchableOpacity>
+        </View>
+      </View>
       <View style={styles.mainContainer}>
         <View style={styles.descriptionContainer}>
-          <Text style={styles.conTitle}>Description</Text>
+          <Text style={styles.conTitle}>Notizen</Text>
           <TextInput
             style={styles.descriptionText}
             onChangeText={setDescription}
             onBlur={() => updateDescription(description)}
             onSubmitEditing={() => updateDescription(description)}
             value={description}
-            placeholder="Add a Description..."
-            placeholderTextColor="#000000"
+            placeholder="Schreibe eine Notiz..."
+            placeholderTextColor="#818181"
             keyboardType="default"
             selectionColor="#FFFFFF"
             cursorColor="#000000"
@@ -191,56 +230,6 @@ const HabitDetailScreen = ({ route, navigation }) => {
             blurOnSubmit={true}
             returnKeyType="done"
           />
-        </View>
-        <View style={styles.habitContainer}>
-          <Text style={styles.conTitle}>Color</Text>
-          <View style={styles.colorContainer}>
-            <TouchableOpacity
-              style={[
-                styles.colorButton,
-                { backgroundColor: "#2EE23E" },
-                habit.color === "#2EE23E" && styles.selectedColorButton,
-              ]}
-              onPress={() => {updateHabitColor(habitId, "#2EE23E")}}
-              activeOpacity={0.6}
-            ></TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.colorButton,
-                { backgroundColor: "#FF1E1E" },
-                habit.color === "#FF1E1E" && styles.selectedColorButton,
-              ]}
-              onPress={() => updateHabitColor(habitId, "#FF1E1E")}
-              activeOpacity={0.6}
-            ></TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.colorButton,
-                { backgroundColor: "#1DC8E4" },
-                habit.color === "#1DC8E4" && styles.selectedColorButton,
-              ]}
-              onPress={() => updateHabitColor(habitId, "#1DC8E4")}
-              activeOpacity={0.6}
-            ></TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.colorButton,
-                { backgroundColor: "#A51DE4" },
-                habit.color === "#A51DE4" && styles.selectedColorButton,
-              ]}
-              onPress={() => updateHabitColor(habitId, "#A51DE4")}
-              activeOpacity={0.6}
-            ></TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.colorButton,
-                { backgroundColor: "#FF901E" },
-                habit.color === "#FF901E" && styles.selectedColorButton,
-              ]}
-              onPress={() => updateHabitColor(habitId, "#FF901E")}
-              activeOpacity={0.6}
-            ></TouchableOpacity>
-          </View>
         </View>
       </View>
     </Container>
@@ -271,7 +260,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     paddingHorizontal: 20,
-    gap: 15,
+    gap: 30,
   },
 
   firstHeader: {
@@ -285,30 +274,14 @@ const styles = StyleSheet.create({
   },
 
   headerButton: {
-    height: 40,
-    width: 40,
+    height: "auto",
+    width: "auto",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "rgba(107, 198, 255, 0.45)",
-    borderRadius: 30,
-  },
-
-  headerButtonRed: {
-    height: 40,
-    width: 40,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "rgba(255, 107, 110, 0.45)",
-    borderRadius: 30,
-  },
-
-  headerButtonIcon: {
-    height: 24,
-    width: 24,
   },
 
   firstHeaderTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: "Poppins-Medium",
     color: "#000000",
     includeFontPadding: false,
@@ -321,7 +294,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     alignItems: "left",
     justifyContent: "center",
-    borderRadius: 25,
+    borderRadius: 15,
     padding: 15,
     gap: 15,
   },
@@ -387,7 +360,7 @@ const styles = StyleSheet.create({
 
   headerTitle: {
     flex: 1,
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: "Poppins-Medium",
     includeFontPadding: false,
     lineHeight: 50,
@@ -448,13 +421,14 @@ const styles = StyleSheet.create({
     width: "100%",
     maxWidth: 450,
     backgroundColor: "#ffffff",
-    borderRadius: 25,
+    borderRadius: 15,
     padding: 15,
   },
 
   descriptionText: {
     fontSize: 18,
     fontFamily: "Poppins-Medium",
+    color: "#818181",
     includeFontPadding: false,
     textAlign: "left",
   },
@@ -464,18 +438,14 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
+    gap: 10,
   },
 
   colorButton: {
-    height: 40,
-    width: 40,
+    height: 35,
+    width: 35,
     borderRadius: 30,
-  },
-
-  selectedColorButton: {
-    borderWidth: 5,
-    borderColor: "#E8E8E8",
   },
 });
 

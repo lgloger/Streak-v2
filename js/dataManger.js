@@ -4,9 +4,9 @@ import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import { ToastAndroid } from "react-native";
 
 const addHabitViewModel = (navigation) => {
-  const [selectedIcon, setSelectedIcon] = useState("star");
+  const [selectedIcon, setSelectedIcon] = useState("walk");
   const [title, setTitle] = useState("");
-  const [color, setColor] = useState('#1DC8E4');
+  const [color, setColor] = useState('#2EE23E');
   const userId = auth.currentUser?.uid;
 
   const addHabit = async () => {
