@@ -52,51 +52,61 @@ const SettingsScreenScreen = ({ navigation }) => {
       </View>
       <View style={styles.mainContainer}>
         <View style={styles.settingsCon}>
-          <View style={styles.headerButton}>
-            <Image
-              style={styles.headerButtonIcon}
-              source={require("../assets/icons/email_blue.png")}
-            />
+          <Text style={styles.conTitle}>Account</Text>
+          <View style={styles.settingsSecCon}>
+            <View style={styles.headerButton}>
+              <Image
+                style={styles.headerButtonIcon}
+                source={require("../assets/icons/email_blue.png")}
+              />
+            </View>
+            <View style={styles.settingsTextCon}>
+              <Text style={styles.settingsTitle}>Email</Text>
+              <Text style={styles.settingsText}>{email}</Text>
+            </View>
           </View>
-          <View style={styles.settingsTextCon}>
-            <Text style={styles.settingsTitle}>Email</Text>
-            <Text style={styles.settingsText}>{email}</Text>
-          </View>
+          <TouchableOpacity
+            style={styles.settingsCon}
+            onPress={() => handleSignOut()}
+            activeOpacity={0.6}
+          >
+            <View style={styles.settingsSecCon}>
+              <View style={styles.headerButtonRed}>
+                <Image
+                  style={styles.headerButtonIcon}
+                  source={require("../assets/icons/logout_red.png")}
+                />
+              </View>
+              <Text style={styles.settingsTitle}>Log out</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.settingsCon}
+            onPress={() => setIsModalVisible(true)}
+            activeOpacity={0.6}
+          >
+            <View style={styles.settingsSecCon}>
+              <View style={styles.headerButtonRed}>
+                <Image
+                  style={styles.headerButtonIcon}
+                  source={require("../assets/icons/delete_red.png")}
+                />
+              </View>
+              <Text style={styles.settingsTitle}>Delete Account</Text>
+            </View>
+          </TouchableOpacity>
         </View>
         <TouchableOpacity style={styles.settingsCon} activeOpacity={0.6}>
-          <View style={styles.headerButton}>
-            <Image
-              style={styles.headerButtonIcon}
-              source={require("../assets/icons/about_blue.png")}
-            />
+          <Text style={styles.conTitle}>App Information</Text>
+          <View style={styles.settingsSecCon}>
+            <View style={styles.headerButton}>
+              <Image
+                style={styles.headerButtonIcon}
+                source={require("../assets/icons/about_blue.png")}
+              />
+            </View>
+            <Text style={styles.settingsTitle}>About</Text>
           </View>
-          <Text style={styles.settingsTitle}>About</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.settingsCon}
-          onPress={() => handleSignOut()}
-          activeOpacity={0.6}
-        >
-          <View style={styles.headerButtonRed}>
-            <Image
-              style={styles.headerButtonIcon}
-              source={require("../assets/icons/logout_red.png")}
-            />
-          </View>
-          <Text style={styles.settingsTitle}>Log out</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.settingsCon}
-          onPress={() => setIsModalVisible(true)}
-          activeOpacity={0.6}
-        >
-          <View style={styles.headerButtonRed}>
-            <Image
-              style={styles.headerButtonIcon}
-              source={require("../assets/icons/delete_red.png")}
-            />
-          </View>
-          <Text style={styles.settingsTitle}>Delete Account</Text>
         </TouchableOpacity>
       </View>
 
@@ -162,7 +172,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     flexDirection: "row",
-    backgroundColor: "transparent",
   },
 
   headerTitle: {
@@ -184,16 +193,36 @@ const styles = StyleSheet.create({
     height: "auto",
     width: "100%",
     backgroundColor: "#FFFFFF",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    borderRadius: 25,
+  },
+
+  settingsSecCon: {
+    height: "auto",
+    width: "100%",
     alignItems: "center",
     justifyContent: "flex-start",
     flexDirection: "row",
     gap: 10,
     borderRadius: 25,
+    paddingHorizontal: 15,
+    marginBottom: 15,
+  },
+
+  conTitle: {
+    fontSize: 14,
+    fontFamily: "Poppins-SemiBold",
+    color: "#D0D0D0",
+    includeFontPadding: false,
+    textAlign: "left",
     padding: 15,
   },
 
   settingsTextCon: {
-    flex: 1,
+    height: 40,
+    alignItems: "flex-start",
+    justifyContent: "center",
     flexDirection: "column",
   },
 
@@ -201,12 +230,14 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 22,
     fontFamily: "Poppins-Bold",
+    lineHeight: 25.5,
     includeFontPadding: false,
   },
 
   settingsText: {
     fontSize: 12,
     fontFamily: "Poppins-Bold",
+    lineHeight: 15.5,
     includeFontPadding: false,
   },
 
@@ -217,7 +248,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "row",
     backgroundColor: "#E8E8E8",
-  }
+  },
 });
 
 export default SettingsScreenScreen;

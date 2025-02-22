@@ -27,7 +27,7 @@ const HomeScreen = ({ navigation }) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
-  const renderDay = (date, completedDates = []) => {
+  const renderDay = (date, completedDates = [], habit) => {
     const dayAbbreviation = date.toLocaleDateString("en-US", {
       weekday: "short",
     });
@@ -40,13 +40,13 @@ const HomeScreen = ({ navigation }) => {
         <View
           style={[
             styles.backroundDate,
-            isCompleted && styles.backroundDateGreen,
+            isCompleted && {backgroundColor: habit.color},
           ]}
         >
           <Text
             style={
               isCompleted
-                ? styles.backroundDateTextGreen
+                ? styles.backroundDateTextActive
                 : styles.backroundDateText
             }
           >
@@ -148,13 +148,13 @@ const HomeScreen = ({ navigation }) => {
                     />
                   </View>
                   <TouchableOpacity
-                    style={
+                    style={[
                       habit.completedDates?.includes(
                         new Date().toISOString().split("T")[0]
                       )
-                        ? styles.secondHeaderConButtonActive
-                        : styles.secondHeaderConButton
-                    }
+                        ? [styles.secondHeaderConButtonActive, { backgroundColor: habit.color }]
+                        : styles.secondHeaderConButton,
+                    ]}
                     onPress={() => handleCheckPress(habit)}
                     activeOpacity={0.6}
                   >
@@ -173,7 +173,7 @@ const HomeScreen = ({ navigation }) => {
               </View>
               <View style={styles.dateContainer}>
                 {getCurrentWeek().map((date) =>
-                  date ? renderDay(date, habit.completedDates) : null
+                  date ? renderDay(date, habit.completedDates, habit) : null
                 )}
               </View>
             </TouchableOpacity>
@@ -354,7 +354,6 @@ const styles = StyleSheet.create({
     width: 60,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#10EC29",
     borderRadius: 10,
   },
 
@@ -394,12 +393,11 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
 
-  backroundDateGreen: {
+  backroundDateActive: {
     height: 30,
     width: 30,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#10EC29",
     borderRadius: 30,
   },
 
@@ -410,7 +408,7 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
   },
 
-  backroundDateTextGreen: {
+  backroundDateTextActive: {
     fontSize: 12,
     fontFamily: "Poppins-Medium",
     color: "#ffffff",

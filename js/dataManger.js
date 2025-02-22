@@ -6,6 +6,7 @@ import { ToastAndroid } from "react-native";
 const addHabitViewModel = (navigation) => {
   const [selectedIcon, setSelectedIcon] = useState("star");
   const [title, setTitle] = useState("");
+  const [color, setColor] = useState('#10EC29');
   const userId = auth.currentUser?.uid;
 
   const addHabit = async () => {
@@ -21,6 +22,7 @@ const addHabitViewModel = (navigation) => {
       await setDoc(Ref, {
         title,
         selectedIcon,
+        color,
         completedDates: [],
         streak: 0,
         createdAt: serverTimestamp(),
@@ -37,6 +39,8 @@ const addHabitViewModel = (navigation) => {
     setSelectedIcon,
     title,
     setTitle,
+    color,
+    setColor,
     addHabit,
   };
 };

@@ -27,11 +27,7 @@ const HabitDetailScreen = ({ route, navigation }) => {
     descriptionViewModel(habitId);
 
   if (!habit) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.errorText}>Habit not found</Text>
-      </View>
-    );
+    return <View style={styles.container}></View>;
   }
 
   const Container = Platform.select({
@@ -69,7 +65,7 @@ const HabitDetailScreen = ({ route, navigation }) => {
               key={dayOfYear}
               style={[
                 styles.habitActivity,
-                isCompleted && styles.habitActivityCompleted,
+                isCompleted && {backgroundColor: habit.color},
               ]}
             />
           );
@@ -279,10 +275,6 @@ const styles = StyleSheet.create({
     width: 12,
     backgroundColor: "#E8E8E8",
     borderRadius: 3,
-  },
-
-  habitActivityCompleted: {
-    backgroundColor: "#10EC29",
   },
 
   secondHeader: {

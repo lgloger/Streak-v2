@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -15,8 +15,15 @@ import IconPickerModal from "../components/IconPickerModal";
 import { iconMapping } from "../components/IconPickerModal";
 
 const AddHabitsScreen = ({ navigation }) => {
-  const { selectedIcon, setSelectedIcon, title, setTitle, addHabit } =
-    addHabitViewModel(navigation);
+  const {
+    selectedIcon,
+    setSelectedIcon,
+    title,
+    setTitle,
+    color,
+    setColor,
+    addHabit,
+  } = addHabitViewModel(navigation);
 
   const refRBSheet = React.createRef();
 
@@ -58,6 +65,7 @@ const AddHabitsScreen = ({ navigation }) => {
       <View style={styles.secondHeader}></View>
       <View style={styles.mainContainer}>
         <View style={styles.habitContainer}>
+          <Text style={styles.conTitle}>Habit</Text>
           <View style={styles.habitActivityCon}>
             {Array.from({ length: 131 }).map((_, index) => (
               <View key={index} style={styles.habitActivity}></View>
@@ -85,6 +93,31 @@ const AddHabitsScreen = ({ navigation }) => {
               cursorColor="#000000"
               caretHidden={false}
             />
+          </View>
+        </View>
+        <View style={styles.habitContainer}>
+          <Text style={styles.conTitle}>Color</Text>
+          <View style={styles.colorContainer}>
+            <TouchableOpacity
+              style={[styles.colorButton, { backgroundColor: "#FF0000" }]}
+              onPress={() => setColor("#FF0000")}
+              activeOpacity={0.6}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.colorButton, { backgroundColor: "#FFA347" }]}
+              onPress={() => setColor("#FFA347")}
+              activeOpacity={0.6}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.colorButton, { backgroundColor: "#6394FF" }]}
+              onPress={() => setColor("#6394FF")}
+              activeOpacity={0.6}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.colorButton, { backgroundColor: "#10EC29" }]}
+              onPress={() => setColor("#10EC29")}
+              activeOpacity={0.6}
+            ></TouchableOpacity>
           </View>
         </View>
       </View>
@@ -155,11 +188,19 @@ const styles = StyleSheet.create({
     height: "auto",
     width: "100%",
     backgroundColor: "#ffffff",
-    alignItems: "center",
+    alignItems: "flex-start",
     justifyContent: "center",
     borderRadius: 25,
     padding: 15,
     gap: 15,
+  },
+
+  conTitle: {
+    fontSize: 14,
+    fontFamily: "Poppins-SemiBold",
+    color: "#D0D0D0",
+    includeFontPadding: false,
+    textAlign: "left",
   },
 
   habitActivityCon: {
@@ -211,6 +252,20 @@ const styles = StyleSheet.create({
     backgroundColor: "#E8E8E8",
     borderRadius: 15,
     paddingHorizontal: 10,
+  },
+
+  colorContainer: {
+    height: "auto",
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+
+  colorButton: {
+    height: 50,
+    width: 50,
+    borderRadius: 30,
   },
 });
 
