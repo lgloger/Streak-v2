@@ -18,7 +18,7 @@ const DeleteAccountModal = ({ visible, onClose, onDelete, email }) => {
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
           <Text style={styles.modalTitle}>
-            Enter Password to delete your Account
+            Geben Sie ihr Passwort ein um ihren Account zu Löschen
           </Text>
           <View style={styles.inputContainer}>
             <Image
@@ -29,7 +29,7 @@ const DeleteAccountModal = ({ visible, onClose, onDelete, email }) => {
               style={styles.input}
               onChangeText={setPassword}
               value={password}
-              placeholder="Password"
+              placeholder="Passwort"
               placeholderTextColor="#000000"
               selectionColor="#FFFFFF"
               cursorColor="#000000"
@@ -46,14 +46,14 @@ const DeleteAccountModal = ({ visible, onClose, onDelete, email }) => {
               }}
               activeOpacity={0.6}
             >
-              <Text style={styles.buttonText}>Delete</Text>
+              <Text style={styles.buttonText}>Löschen</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.continueButton}
               onPress={onClose}
               activeOpacity={0.6}
             >
-              <Text style={styles.buttonText}>Cancel</Text>
+              <Text style={styles.buttonText}>Abbrechen</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 18,
-    fontFamily: "Poppins-Bold",
+    fontFamily: "Poppins-SemiBold",
     color: "#000000",
     includeFontPadding: false,
   },

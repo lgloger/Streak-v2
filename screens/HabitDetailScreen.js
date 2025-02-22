@@ -90,16 +90,16 @@ const HabitDetailScreen = ({ route, navigation }) => {
 
   const deleteHabitModal = () =>
     Alert.alert(
-      "Delete Habit",
-      "Deleting this habit is irreversible. All associated data will be permanently lost and cannot be restored.",
+      "Habit Löschen",
+      "Das Löschen dieses Habit ist unwiderruflich. Alle zugehörigen Daten werden dauerhaft gelöscht und können nicht wiederhergestellt werden.",
       [
         {
-          text: "Cancel",
+          text: "Abbrechen",
           onPress: () => console.log("Cancel Pressed"),
           style: "cancel",
         },
         {
-          text: "Delete",
+          text: "Löschen",
           onPress: async () => {
             await deleteHabitViewModel(habitId);
             navigation.goBack();
