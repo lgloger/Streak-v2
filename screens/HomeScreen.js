@@ -6,6 +6,7 @@ import {
   Text,
   Image,
   TouchableOpacity,
+  ScrollView,
   SafeAreaView,
   StatusBar as RNStatusBar,
   Platform,
@@ -14,7 +15,7 @@ import { createShimmerPlaceHolder } from "expo-shimmer-placeholder";
 import { LinearGradient } from "expo-linear-gradient";
 import { homeViewModel } from "../js/homeViewModel";
 import { iconMapping } from "../components/IconPickerModal";
-import * as Haptics from "expo-haptics";
+import * as Haptics from 'expo-haptics';
 
 const ShimmerPlaceHolder = createShimmerPlaceHolder(LinearGradient);
 
@@ -103,7 +104,7 @@ const HomeScreen = ({ navigation }) => {
           />
         </View>
       ) : (
-        <View style={styles.mainContainer}>
+        <ScrollView style={{ flex: 1, width: "100%" }} contentContainerStyle={{ alignItems: "center" }} showsVerticalScrollIndicator={false}>
           {habits.map((habit) => (
             <TouchableOpacity
               style={styles.habitContainer}
@@ -178,7 +179,7 @@ const HomeScreen = ({ navigation }) => {
               </View>
             </TouchableOpacity>
           ))}
-        </View>
+        </ScrollView>
       )}
       <StatusBar style="dark" />
     </Container>
@@ -257,14 +258,6 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
 
-  mainContainer: {
-    flex: 1,
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    gap: 15,
-  },
-
   habitContainer: {
     height: "auto",
     width: "100%",
@@ -272,10 +265,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     borderRadius: 25,
     padding: 15,
+    marginBottom: 15,
   },
 
   habitConHeader: {
-    height: "auto",
     width: "100%",
     alignItems: "center",
     justifyContent: "space-between",

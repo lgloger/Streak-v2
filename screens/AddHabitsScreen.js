@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from "react";
 import {
   StyleSheet,
   View,
@@ -37,6 +37,139 @@ const AddHabitsScreen = ({ navigation }) => {
     default: SafeAreaView,
   });
 
+  const activityStatus = [
+    true,
+    true,
+    true,
+    false,
+    false,
+    true,
+    false,
+    false,
+    false,
+    true,
+    true,
+    true,
+    false,
+    true,
+    true,
+    false,
+    false,
+    false,
+    true,
+    false,
+    false,
+    false,
+    false,
+    true,
+    true,
+    false,
+    true,
+    false,
+    false,
+    true,
+    true,
+    false,
+    false,
+    true,
+    false,
+    false,
+    false,
+    true,
+    true,
+    false,
+    false,
+    true,
+    false,
+    false,
+    true,
+    false,
+    false,
+    true,
+    true,
+    false,
+    true,
+    false,
+    true,
+    false,
+    false,
+    true,
+    true,
+    true,
+    false,
+    false,
+    true,
+    true,
+    true,
+    false,
+    false,
+    true,
+    true,
+    false,
+    false,
+    false,
+    true,
+    true,
+    false,
+    false,
+    true,
+    false,
+    true,
+    false,
+    false,
+    true,
+    false,
+    true,
+    false,
+    true,
+    false,
+    false,
+    true,
+    true,
+    true,
+    false,
+    false,
+    true,
+    true,
+    true,
+    false,
+    true,
+    true,
+    false,
+    false,
+    false,
+    true,
+    true,
+    false,
+    false,
+    false,
+    true,
+    false,
+    true,
+    true,
+    false,
+    false,
+    false,
+    true,
+    true,
+    false,
+    true,
+    true,
+    false,
+    false,
+    true,
+    true,
+    true,
+    false,
+    true,
+    false,
+    false,
+    false,
+    true,
+    false,
+    true,
+  ];
+
   return (
     <Container style={styles.container}>
       <View style={styles.firstHeader}>
@@ -67,8 +200,14 @@ const AddHabitsScreen = ({ navigation }) => {
         <View style={styles.habitContainer}>
           <Text style={styles.conTitle}>Habit</Text>
           <View style={styles.habitActivityCon}>
-            {Array.from({ length: 131 }).map((_, index) => (
-              <View key={index} style={styles.habitActivity}></View>
+            {activityStatus.map((isCompleted, index) => (
+              <View
+                key={index}
+                style={[
+                  styles.habitActivity,
+                  { backgroundColor: isCompleted ? color : "#E8E8E8" },
+                ]}
+              ></View>
             ))}
           </View>
           <View style={styles.inputContainer}>
@@ -91,6 +230,7 @@ const AddHabitsScreen = ({ navigation }) => {
               keyboardType="text"
               selectionColor="#FFFFFF"
               cursorColor="#000000"
+              maxLength={11}
               caretHidden={false}
             />
           </View>
@@ -99,23 +239,48 @@ const AddHabitsScreen = ({ navigation }) => {
           <Text style={styles.conTitle}>Color</Text>
           <View style={styles.colorContainer}>
             <TouchableOpacity
-              style={[styles.colorButton, { backgroundColor: "#FF0000" }]}
-              onPress={() => setColor("#FF0000")}
+              style={[
+                styles.colorButton,
+                { backgroundColor: "#2EE23E" },
+                color === "#2EE23E" && styles.selectedColorButton,
+              ]}
+              onPress={() => setColor("#2EE23E")}
               activeOpacity={0.6}
             ></TouchableOpacity>
             <TouchableOpacity
-              style={[styles.colorButton, { backgroundColor: "#FFA347" }]}
-              onPress={() => setColor("#FFA347")}
+              style={[
+                styles.colorButton,
+                { backgroundColor: "#FF1E1E" },
+                color === "#FF1E1E" && styles.selectedColorButton,
+              ]}
+              onPress={() => setColor("#FF1E1E")}
               activeOpacity={0.6}
             ></TouchableOpacity>
             <TouchableOpacity
-              style={[styles.colorButton, { backgroundColor: "#6394FF" }]}
-              onPress={() => setColor("#6394FF")}
+              style={[
+                styles.colorButton,
+                { backgroundColor: "#1DC8E4" },
+                color === "#1DC8E4" && styles.selectedColorButton,
+              ]}
+              onPress={() => setColor("#1DC8E4")}
               activeOpacity={0.6}
             ></TouchableOpacity>
             <TouchableOpacity
-              style={[styles.colorButton, { backgroundColor: "#10EC29" }]}
-              onPress={() => setColor("#10EC29")}
+              style={[
+                styles.colorButton,
+                { backgroundColor: "#A51DE4" },
+                color === "#A51DE4" && styles.selectedColorButton,
+              ]}
+              onPress={() => setColor("#A51DE4")}
+              activeOpacity={0.6}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.colorButton,
+                { backgroundColor: "#FF901E" },
+                color === "#FF901E" && styles.selectedColorButton,
+              ]}
+              onPress={() => setColor("#FF901E")}
               activeOpacity={0.6}
             ></TouchableOpacity>
           </View>
@@ -263,9 +428,14 @@ const styles = StyleSheet.create({
   },
 
   colorButton: {
-    height: 50,
-    width: 50,
+    height: 40,
+    width: 40,
     borderRadius: 30,
+  },
+
+  selectedColorButton: {
+    borderWidth: 5,
+    borderColor: "#E8E8E8",
   },
 });
 

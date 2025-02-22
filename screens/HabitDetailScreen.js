@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   View,
+  ActivityIndicator,
   Text,
   StyleSheet,
   SafeAreaView,
@@ -16,6 +17,7 @@ import {
   habitDetailViewModel,
   deleteHabitViewModel,
   descriptionViewModel,
+  updateHabitColor,
 } from "../js/habitDetailViewModel";
 import { iconMapping } from "../components/IconPickerModal";
 
@@ -27,7 +29,15 @@ const HabitDetailScreen = ({ route, navigation }) => {
     descriptionViewModel(habitId);
 
   if (!habit) {
-    return <View style={styles.container}></View>;
+    return (
+      <View style={loadingStyles.loadingContainer}>
+        <ActivityIndicator
+          size="large"
+          color="#000000"
+          style={{ marginBottom: 10 }}
+        />
+      </View>
+    );
   }
 
   const Container = Platform.select({
@@ -65,7 +75,7 @@ const HabitDetailScreen = ({ route, navigation }) => {
               key={dayOfYear}
               style={[
                 styles.habitActivity,
-                isCompleted && {backgroundColor: habit.color},
+                isCompleted && { backgroundColor: habit.color },
               ]}
             />
           );
@@ -120,7 +130,7 @@ const HabitDetailScreen = ({ route, navigation }) => {
           />
         </TouchableOpacity>
       </View>
-      <View style={styles.habitContainer}>
+      <View style={[styles.habitContainer, { marginTop: 45 }]}>
         <Text style={styles.conTitle}>Habit</Text>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={styles.habitActivityCon}>{renderHabitActivities()}</View>
@@ -182,10 +192,77 @@ const HabitDetailScreen = ({ route, navigation }) => {
             returnKeyType="done"
           />
         </View>
+        <View style={styles.habitContainer}>
+          <Text style={styles.conTitle}>Color</Text>
+          <View style={styles.colorContainer}>
+            <TouchableOpacity
+              style={[
+                styles.colorButton,
+                { backgroundColor: "#2EE23E" },
+                habit.color === "#2EE23E" && styles.selectedColorButton,
+              ]}
+              onPress={() => {updateHabitColor(habitId, "#2EE23E")}}
+              activeOpacity={0.6}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.colorButton,
+                { backgroundColor: "#FF1E1E" },
+                habit.color === "#FF1E1E" && styles.selectedColorButton,
+              ]}
+              onPress={() => updateHabitColor(habitId, "#FF1E1E")}
+              activeOpacity={0.6}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.colorButton,
+                { backgroundColor: "#1DC8E4" },
+                habit.color === "#1DC8E4" && styles.selectedColorButton,
+              ]}
+              onPress={() => updateHabitColor(habitId, "#1DC8E4")}
+              activeOpacity={0.6}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.colorButton,
+                { backgroundColor: "#A51DE4" },
+                habit.color === "#A51DE4" && styles.selectedColorButton,
+              ]}
+              onPress={() => updateHabitColor(habitId, "#A51DE4")}
+              activeOpacity={0.6}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.colorButton,
+                { backgroundColor: "#FF901E" },
+                habit.color === "#FF901E" && styles.selectedColorButton,
+              ]}
+              onPress={() => updateHabitColor(habitId, "#FF901E")}
+              activeOpacity={0.6}
+            ></TouchableOpacity>
+          </View>
+        </View>
       </View>
     </Container>
   );
 };
+
+const loadingStyles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#E8E8E8",
+    padding: 10,
+  },
+
+  loadingText: {
+    fontSize: 18,
+    fontFamily: "Poppins-Medium",
+    color: "#000000",
+  },
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -247,7 +324,6 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     padding: 15,
     gap: 15,
-    marginTop: 45,
   },
 
   conTitle: {
@@ -381,6 +457,25 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-Medium",
     includeFontPadding: false,
     textAlign: "left",
+  },
+
+  colorContainer: {
+    height: "auto",
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+
+  colorButton: {
+    height: 40,
+    width: 40,
+    borderRadius: 30,
+  },
+
+  selectedColorButton: {
+    borderWidth: 5,
+    borderColor: "#E8E8E8",
   },
 });
 

@@ -83,4 +83,17 @@ const descriptionViewModel = (habitId) => {
   };
 };
 
-export { habitDetailViewModel, deleteHabitViewModel, descriptionViewModel };
+const updateHabitColor = async (habitId, newColor) => {
+  const userId = auth.currentUser?.uid;
+  if (!userId || !habitId) return;
+
+  const habitRef = doc(db, "users", userId, "habits", habitId);
+  try {
+    await updateDoc(habitRef, { color: newColor });
+    console.log("Color updated successfully!");
+  } catch (error) {
+    console.error("Error updating color:", error);
+  }
+};
+
+export { habitDetailViewModel, deleteHabitViewModel, descriptionViewModel, updateHabitColor };
