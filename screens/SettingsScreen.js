@@ -83,8 +83,8 @@ const SettingsScreenScreen = ({ navigation }) => {
             <Text style={styles.settingsTitle}>Email</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.settingsSecCon, { marginBottom: 15 }]}
-            onPress={() => handleSignOut()}
+            style={styles.settingsSecCon}
+            onPress={() => navigation.navigate("FeatureRequest")}
             activeOpacity={0.6}
           >
             <View style={styles.headerButton}>
@@ -125,7 +125,7 @@ const SettingsScreenScreen = ({ navigation }) => {
             <Text style={styles.settingsTitle}>Datenschutz</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.settingsSecCon, { marginBottom: 15 }]}
+            style={styles.settingsSecCon}
             onPress={() => handleSignOut()}
             activeOpacity={0.6}
           >
@@ -154,7 +154,7 @@ const SettingsScreenScreen = ({ navigation }) => {
             <Text style={styles.settingsTitle}>Ausloggen</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.settingsSecCon, { marginBottom: 15 }]}
+            style={styles.settingsSecCon}
             onPress={() => handleSignOut()}
             activeOpacity={0.6}
           >
@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
     gap: 10,
     borderRadius: 25,
     paddingHorizontal: 15,
-    marginBottom: 10,
+    marginBottom: 15,
   },
 
   conTitle: {

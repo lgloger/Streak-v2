@@ -10,8 +10,9 @@ import ResetPasswordScreen from "./screens/ResetPasswordScreen";
 import EmailSentScreen from "./screens/EmailSentScreen";
 import HomeScreen from "./screens/HomeScreen";
 import HabitDetailScreen from "./screens/HabitDetailScreen";
-import SettingsScreen from "./screens/SettingsScreen";
 import AddHabitScreen from "./screens/AddHabitsScreen";
+import SettingsScreen from "./screens/SettingsScreen";
+import FeatureRequestScreen from "./screens/FeatureRequestScreen";
 import { auth } from "./js/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 import { StyleSheet, ActivityIndicator, View, Text } from "react-native";
@@ -63,9 +64,10 @@ const AppNavigator = () => {
         <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
         <Stack.Screen name="EmailSent" component={EmailSentScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="AddHabit" component={AddHabitScreen} />
         <Stack.Screen name="HabitDetail" component={HabitDetailScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
-        <Stack.Screen name="AddHabit" component={AddHabitScreen} />
+        <Stack.Screen name="FeatureRequest" component={FeatureRequestScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
