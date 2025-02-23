@@ -160,7 +160,7 @@ const AddHabitsScreen = ({ navigation }) => {
           activeOpacity={0.6}
         >
           <Text style={styles.headerTitle}>Schließen</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> 
         <Text style={styles.headerTitle}>Neuer Habit</Text>
         <TouchableOpacity
           style={styles.headerButton}

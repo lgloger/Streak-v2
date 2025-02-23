@@ -1,6 +1,7 @@
 import React from "react";
 import { View, TouchableOpacity, Image, StyleSheet } from "react-native";
 import RBSheet from "react-native-raw-bottom-sheet";
+import { StatusBar } from "react-native";
 
 export const iconMapping = {
   hiking: require("../assets/icons/hiking.png"),
@@ -39,6 +40,16 @@ const IconPickerModal = React.forwardRef(({ onIconSelect }, ref) => {
       ref={ref}
       closeOnDragDown={true}
       height={"700"}
+      onOpen={() => {
+        setTimeout(() => {
+          StatusBar.setBarStyle("light-content");
+          StatusBar.setBackgroundColor("rgba(0, 0, 0, 0.15)");
+        }, 41);
+      }}
+      onClose={() => {
+        StatusBar.setBarStyle("dark-content");
+        StatusBar.setBackgroundColor("#E8E8E8");
+      }}
       customStyles={{
         container: styles.bottomSheetContainer,
         wrapper: { backgroundColor: "rgba(0, 0, 0, 0.15)" },
@@ -53,10 +64,7 @@ const IconPickerModal = React.forwardRef(({ onIconSelect }, ref) => {
             onPress={() => onIconSelect(iconKey)}
             activeOpacity={0.6}
           >
-            <Image
-              style={styles.modalIcon}
-              source={iconMapping[iconKey]}
-            />
+            <Image style={styles.modalIcon} source={iconMapping[iconKey]} />
           </TouchableOpacity>
         ))}
       </View>

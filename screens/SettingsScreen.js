@@ -41,7 +41,7 @@ const SettingsScreenScreen = ({ navigation }) => {
           style={styles.headerTextButton}
           onPress={() => navigation.goBack()}
         >
-          <Text style={styles.headerButtonTitle}>Schließen</Text>
+          <Text style={styles.headerButtonTitle}>Zurück</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.secondHeader}>
@@ -244,14 +244,14 @@ const styles = StyleSheet.create({
   settingsTitle: {
     flex: 1,
     fontSize: 18,
-    fontFamily: "Poppins-Bold",
+    fontFamily: "Poppins-SemiBold",
     lineHeight: 25.5,
     includeFontPadding: false,
   },
 
   settingsText: {
     fontSize: 12,
-    fontFamily: "Poppins-Bold",
+    fontFamily: "Poppins-SemiBold",
     lineHeight: 15.5,
     includeFontPadding: false,
   },

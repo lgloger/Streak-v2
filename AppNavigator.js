@@ -53,8 +53,8 @@ const AppNavigator = () => {
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           gestureDirection: "horizontal",
           transitionSpec: {
-            open: { animation: "timing", config: { duration: 250 } },
-            close: { animation: "timing", config: { duration: 250 } },
+            open: { animation: "timing", config: { duration: 240 } },
+            close: { animation: "timing", config: { duration: 240 } },
           },
         }}
       >
