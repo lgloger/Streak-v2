@@ -13,12 +13,31 @@ import { SignOutViewModel, DeleteAccountViewModel } from "../js/authManager";
 import DeleteAccountModal from "../components/DeleteAccountModal";
 import { getAuth } from "firebase/auth";
 import packageJson from "../package.json";
+import * as MailComposer from 'expo-mail-composer';
 
 const SettingsScreenScreen = ({ navigation }) => {
   const { handleSignOut } = SignOutViewModel(navigation);
   const { handleDeleteAccount } = DeleteAccountViewModel(navigation);
   const [email, setEmail] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const sendEmail = async () => {
+    const supportEmail = 'luca.kloger@gmail.com';
+    const subject = 'Streak - Support';
+    const body = 'Beschreiben sie ihr Anliegen';
+
+    const result = await MailComposer.composeAsync({
+      recipients: [supportEmail],
+      subject: subject,
+      body: body,
+    });
+
+    if (result.status === 'sent') {
+      console.log('Email sent successfully');
+    } else {
+      console.log('Email not sent');
+    }
+  };
 
   useEffect(() => {
     const auth = getAuth();
@@ -48,53 +67,37 @@ const SettingsScreenScreen = ({ navigation }) => {
         <Text style={styles.headerTitle}>Einstellungen</Text>
       </View>
       <View style={styles.mainContainer}>
-        <View style={styles.settingsCon}>
-          <Text style={styles.conTitle}>Account</Text>
-          <View style={styles.settingsSecCon}>
+        <View style={styles.settingsCon} activeOpacity={0.6}>
+          <Text style={styles.conTitle}>Support</Text>
+          <TouchableOpacity
+            style={styles.settingsSecCon}
+            onPress={sendEmail}
+            activeOpacity={0.6}
+          >
             <View style={styles.headerButton}>
               <Image
                 style={styles.headerButtonIcon}
-                source={require("../assets/icons/email_blue.png")}
+                source={require("../assets/icons/email.png")}
               />
             </View>
-            <View style={styles.settingsTextCon}>
-              <Text style={styles.settingsTitle}>Email</Text>
-              <Text style={styles.settingsText}>{email}</Text>
-            </View>
-          </View>
+            <Text style={styles.settingsTitle}>Email</Text>
+          </TouchableOpacity>
           <TouchableOpacity
-            style={styles.settingsCon}
+            style={[styles.settingsSecCon, { marginBottom: 15 }]}
             onPress={() => handleSignOut()}
             activeOpacity={0.6}
           >
-            <View style={styles.settingsSecCon}>
-              <View style={styles.headerButtonRed}>
-                <Image
-                  style={styles.headerButtonIcon}
-                  source={require("../assets/icons/logout_red.png")}
-                />
-              </View>
-              <Text style={styles.settingsTitle}>Ausloggen</Text>
+            <View style={styles.headerButton}>
+              <Image
+                style={styles.headerButtonIcon}
+                source={require("../assets/icons/roadmap.png")}
+              />
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.settingsCon}
-            onPress={() => setIsModalVisible(true)}
-            activeOpacity={0.6}
-          >
-            <View style={styles.settingsSecCon}>
-              <View style={styles.headerButtonRed}>
-                <Image
-                  style={styles.headerButtonIcon}
-                  source={require("../assets/icons/delete_red.png")}
-                />
-              </View>
-              <Text style={styles.settingsTitle}>Account Löschen</Text>
-            </View>
+            <Text style={styles.settingsTitle}>Roadmap</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.settingsCon} activeOpacity={0.6}>
-          <Text style={styles.conTitle}>Über die App</Text>
+          <Text style={styles.conTitle}>Informationen zur App</Text>
           <TouchableOpacity
             style={styles.settingsSecCon}
             onPress={() => handleSignOut()}
@@ -103,10 +106,65 @@ const SettingsScreenScreen = ({ navigation }) => {
             <View style={styles.headerButton}>
               <Image
                 style={styles.headerButtonIcon}
-                source={require("../assets/icons/about_blue.png")}
+                source={require("../assets/icons/about.png")}
               />
             </View>
-            <Text style={styles.settingsTitle}>Informationen</Text>
+            <Text style={styles.settingsTitle}>About</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.settingsSecCon}
+            onPress={() => handleSignOut()}
+            activeOpacity={0.6}
+          >
+            <View style={styles.headerButton}>
+              <Image
+                style={styles.headerButtonIcon}
+                source={require("../assets/icons/lock.png")}
+              />
+            </View>
+            <Text style={styles.settingsTitle}>Datenschutz</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.settingsSecCon, { marginBottom: 15 }]}
+            onPress={() => handleSignOut()}
+            activeOpacity={0.6}
+          >
+            <View style={styles.headerButton}>
+              <Image
+                style={styles.headerButtonIcon}
+                source={require("../assets/icons/lawyer.png")}
+              />
+            </View>
+            <Text style={styles.settingsTitle}>Rechtliches</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.settingsCon}>
+          <Text style={styles.conTitle}>Account</Text>
+          <TouchableOpacity
+            style={styles.settingsSecCon}
+            onPress={() => handleSignOut()}
+            activeOpacity={0.6}
+          >
+            <View style={styles.headerButton}>
+              <Image
+                style={styles.headerButtonIcon}
+                source={require("../assets/icons/logout.png")}
+              />
+            </View>
+            <Text style={styles.settingsTitle}>Ausloggen</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.settingsSecCon, { marginBottom: 15 }]}
+            onPress={() => handleSignOut()}
+            activeOpacity={0.6}
+          >
+            <View style={styles.headerButton}>
+              <Image
+                style={styles.headerButtonIcon}
+                source={require("../assets/icons/delete.png")}
+              />
+            </View>
+            <Text style={styles.settingsTitle}>Account Löschen</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -159,20 +217,10 @@ const styles = StyleSheet.create({
   },
 
   headerButton: {
-    height: 40,
-    width: 40,
+    height: "auto",
+    width: "auto",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "rgba(107, 198, 255, 0.45)",
-    borderRadius: 30,
-  },
-
-  headerButtonRed: {
-    height: 40,
-    width: 40,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "rgba(255, 107, 110, 0.45)",
     borderRadius: 30,
   },
 
@@ -222,7 +270,7 @@ const styles = StyleSheet.create({
     gap: 10,
     borderRadius: 25,
     paddingHorizontal: 15,
-    marginBottom: 15,
+    marginBottom: 10,
   },
 
   conTitle: {

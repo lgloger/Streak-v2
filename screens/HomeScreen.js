@@ -316,14 +316,14 @@ const styles = StyleSheet.create({
 
   secondHeaderConStreakText: {
     fontSize: 18,
-    fontFamily: "Poppins-Bold",
+    fontFamily: "Poppins-SemiBold",
     color: "#D0D0D0",
     includeFontPadding: false,
   },
 
   secondHeaderConStreakTextActive: {
     fontSize: 18,
-    fontFamily: "Poppins-Bold",
+    fontFamily: "Poppins-SemiBold",
     color: "#000000",
     includeFontPadding: false,
   },
