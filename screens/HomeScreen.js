@@ -11,12 +11,13 @@ import {
   StatusBar as RNStatusBar,
   Platform,
 } from "react-native";
+import * as Haptics from "expo-haptics";
+import { Animated } from "react-native";
 import { createShimmerPlaceHolder } from "expo-shimmer-placeholder";
 import { LinearGradient } from "expo-linear-gradient";
 import { homeViewModel } from "../js/homeViewModel";
 import { iconMapping } from "../components/IconPickerModal";
-import * as Haptics from "expo-haptics";
-import { Animated } from "react-native";
+import { AnimatedStreakText } from "../components/AnimatedText";
 
 const ShimmerPlaceHolder = createShimmerPlaceHolder(LinearGradient);
 
@@ -156,18 +157,12 @@ const HomeScreen = ({ navigation }) => {
                 </View>
                 <View style={styles.secondHeaderConHeader}>
                   <View style={styles.secondHeaderConStreak}>
-                    <Text
-                      style={
-                        habit.streak > 0 &&
-                        habit.completedDates?.includes(
-                          new Date().toISOString().split("T")[0]
-                        )
-                          ? styles.secondHeaderConStreakTextActive
-                          : styles.secondHeaderConStreakText
-                      }
-                    >
-                      {habit.streak}
-                    </Text>
+                    <AnimatedStreakText
+                      streak={habit.streak}
+                      isTodayCompleted={habit.completedDates?.includes(
+                        new Date().toISOString().split("T")[0]
+                      )}
+                    />
                     <Image
                       style={styles.secondHeaderConStreakIcon}
                       source={
@@ -349,20 +344,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     flexDirection: "row",
     gap: 2.5,
-  },
-
-  secondHeaderConStreakText: {
-    fontSize: 18,
-    fontFamily: "Poppins-SemiBold",
-    color: "#D0D0D0",
-    includeFontPadding: false,
-  },
-
-  secondHeaderConStreakTextActive: {
-    fontSize: 18,
-    fontFamily: "Poppins-SemiBold",
-    color: "#000000",
-    includeFontPadding: false,
+    overflow: 'hidden',
   },
 
   secondHeaderConStreakIcon: {
