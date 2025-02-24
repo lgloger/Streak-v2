@@ -10,9 +10,17 @@ import {
   Platform,
 } from "react-native";
 import { getAuth } from "firebase/auth";
+import useFeatureViewModel from "../js/FeatureViewModel";
+import { createShimmerPlaceHolder } from "expo-shimmer-placeholder";
+import { LinearGradient } from "expo-linear-gradient";
+
+const ShimmerPlaceHolder = createShimmerPlaceHolder(LinearGradient);
 
 const FeatureRequestScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("pending");
+  const { allFeatures, filteredFeatures, loading, fetchFeatures, toggleVote } =
+    useFeatureViewModel();
 
   useEffect(() => {
     const auth = getAuth();
@@ -22,6 +30,31 @@ const FeatureRequestScreen = ({ navigation }) => {
       setEmail(user.email);
     }
   }, []);
+
+  useEffect(() => {
+    let unsubscribe;
+
+    const fetchData = async () => {
+      unsubscribe = await fetchFeatures(selectedStatus);
+    };
+
+    fetchData();
+
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, [selectedStatus]);
+
+  const handleVote = async (featureId) => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (user) {
+      await toggleVote(featureId, user.uid);
+    }
+  };
 
   const Container = Platform.select({
     web: View,
@@ -45,41 +78,73 @@ const FeatureRequestScreen = ({ navigation }) => {
         <View style={styles.categoryCon}>
           <TouchableOpacity
             style={styles.categoryButton}
-            // onPress={}
+            onPress={() => setSelectedStatus("pending")}
             activeOpacity={0.6}
           >
-            <Text style={styles.categoryButtonText}>Pending (0)</Text>
+            <Text style={styles.categoryButtonText}>
+              Pending (
+              {allFeatures.filter((f) => f.status === "pending").length})
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.categoryButton}
-            // onPress={}
+            onPress={() => setSelectedStatus("planned")}
             activeOpacity={0.6}
           >
-            <Text style={styles.categoryButtonText}>Planned (1)</Text>
+            <Text style={styles.categoryButtonText}>
+              Planned (
+              {allFeatures.filter((f) => f.status === "planned").length})
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.categoryButton}
-            // onPress={}
+            onPress={() => setSelectedStatus("completed")}
             activeOpacity={0.6}
           >
-            <Text style={styles.categoryButtonText}>Completed (0)</Text>
+            <Text style={styles.categoryButtonText}>
+              Completed (
+              {allFeatures.filter((f) => f.status === "completed").length})
+            </Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.featureCon} activeOpacity={0.6}>
-          <View style={styles.voteCon}>
-            <Image
-              style={styles.voteIcon}
-              source={require("../assets/icons/vote.png")}
+        {loading ? (
+          <View style={styles.shimmerContainer}>
+            <ShimmerPlaceHolder
+              style={styles.shimmer}
+              shimmerColors={["#FFFFFF", "#E8E8E8", "#FFFFFF"]}
             />
-            <Text style={styles.voteText}>3</Text>
           </View>
-          <View style={styles.featureTextCon}>
-            <Text style={styles.featureTitle}>Hello World 👋</Text>
-            <Text style={styles.featureDescription}>
-              Use this feedback entry as an example.
-            </Text>
-          </View>
-        </TouchableOpacity>
+        ) : (
+          filteredFeatures.map((feature) => {
+            const auth = getAuth();
+            const user = auth.currentUser;
+            const hasVoted = feature.votedUsers?.includes(user.uid);
+
+            return (
+              <TouchableOpacity
+                key={feature.id}
+                style={styles.featureCon}
+                onPress={() => handleVote(feature.id)}
+                activeOpacity={0.6}
+              >
+                <View style={styles.voteCon}>
+                  <Image
+                    style={styles.voteIcon}
+                    source={require("../assets/icons/vote.png")}
+                    tintColor={hasVoted ? null : "#818181"}
+                  />
+                  <Text style={styles.voteText}>{feature.vote}</Text>
+                </View>
+                <View style={styles.featureTextCon}>
+                  <Text style={styles.featureTitle}>{feature.title}</Text>
+                  <Text style={styles.featureDescription}>
+                    {feature.description}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            );
+          })
+        )}
       </View>
     </Container>
   );
@@ -178,6 +243,21 @@ const styles = StyleSheet.create({
     color: "#818181",
     includeFontPadding: false,
     textAlign: "center",
+  },
+
+  shimmerContainer: {
+    height: "auto",
+    width: "100%",
+    maxWidth: 450,
+    alignItems: "center",
+    justifyContent: "flex-start",
+    gap: 30,
+  },
+
+  shimmer: {
+    width: "100%",
+    height: 73,
+    borderRadius: 15,
   },
 
   featureCon: {

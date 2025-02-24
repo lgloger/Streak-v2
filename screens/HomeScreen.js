@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
@@ -15,12 +15,24 @@ import { createShimmerPlaceHolder } from "expo-shimmer-placeholder";
 import { LinearGradient } from "expo-linear-gradient";
 import { homeViewModel } from "../js/homeViewModel";
 import { iconMapping } from "../components/IconPickerModal";
-import * as Haptics from 'expo-haptics';
+import * as Haptics from "expo-haptics";
+import { Animated } from "react-native";
 
 const ShimmerPlaceHolder = createShimmerPlaceHolder(LinearGradient);
 
 const HomeScreen = ({ navigation }) => {
   const { habits, loading, getCurrentWeek, toggleDay } = homeViewModel();
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (!loading) {
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [loading]);
 
   const handleCheckPress = (habit) => {
     const currentDates = habit.completedDates || [];
@@ -28,20 +40,36 @@ const HomeScreen = ({ navigation }) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
-  const renderDay = (date, completedDates = [], habit) => {
+  const renderDay = (date, completedDates = [], habit, index) => {
     const dayAbbreviation = date.toLocaleDateString("en-US", {
       weekday: "short",
     });
+
     const dateStr = date.toISOString().split("T")[0];
     const isCompleted = completedDates.includes(dateStr);
 
+    const opacity = fadeAnim.interpolate({
+      inputRange: [index * (1 / 7), (index + 1) * (1 / 7)],
+      outputRange: [0, 1],
+      extrapolate: "clamp",
+    });
+
+    const scale = fadeAnim.interpolate({
+      inputRange: [index * (1 / 7), (index + 1) * (1 / 7)],
+      outputRange: [0, 1],
+      extrapolate: "clamp",
+    });
+
     return (
-      <View style={styles.dayContainer} key={date.toString()}>
+      <Animated.View
+        style={[styles.dayContainer, { opacity, transform: [{ scale }] }]}
+        key={date.toString()}
+      >
         <Text style={styles.dayConText}>{dayAbbreviation}</Text>
         <View
           style={[
             styles.backroundDate,
-            isCompleted && {backgroundColor: habit.color},
+            isCompleted && { backgroundColor: habit.color },
           ]}
         >
           <Text
@@ -54,7 +82,7 @@ const HomeScreen = ({ navigation }) => {
             {date.getDate()}
           </Text>
         </View>
-      </View>
+      </Animated.View>
     );
   };
 
@@ -104,7 +132,11 @@ const HomeScreen = ({ navigation }) => {
           />
         </View>
       ) : (
-        <ScrollView style={{ flex: 1, width: "100%" }} contentContainerStyle={{ alignItems: "center" }} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={{ flex: 1, width: "100%" }}
+          contentContainerStyle={{ alignItems: "center" }}
+          showsVerticalScrollIndicator={false}
+        >
           {habits.map((habit) => (
             <TouchableOpacity
               style={styles.habitContainer}
@@ -153,7 +185,10 @@ const HomeScreen = ({ navigation }) => {
                       habit.completedDates?.includes(
                         new Date().toISOString().split("T")[0]
                       )
-                        ? [styles.secondHeaderConButtonActive, { backgroundColor: habit.color }]
+                        ? [
+                            styles.secondHeaderConButtonActive,
+                            { backgroundColor: habit.color },
+                          ]
                         : styles.secondHeaderConButton,
                     ]}
                     onPress={() => handleCheckPress(habit)}
@@ -173,8 +208,10 @@ const HomeScreen = ({ navigation }) => {
                 </View>
               </View>
               <View style={styles.dateContainer}>
-                {getCurrentWeek().map((date) =>
-                  date ? renderDay(date, habit.completedDates, habit) : null
+                {getCurrentWeek().map((date, index) =>
+                  date
+                    ? renderDay(date, habit.completedDates, habit, index)
+                    : null
                 )}
               </View>
             </TouchableOpacity>
@@ -255,7 +292,7 @@ const styles = StyleSheet.create({
   shimmer: {
     width: "100%",
     height: 142,
-    borderRadius: 25,
+    borderRadius: 15,
   },
 
   habitContainer: {

@@ -40,7 +40,7 @@ const AppNavigator = () => {
           color="#000000"
           style={{ marginBottom: 10 }}
         />
-        <Text style={loadingStyles.loadingText}>Logging in</Text>
+        {/* <Text style={loadingStyles.loadingText}>Logging in</Text> */}
       </View>
     );
   }
