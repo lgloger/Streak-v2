@@ -40,7 +40,6 @@ const AppNavigator = () => {
           color="#000000"
           style={{ marginBottom: 10 }}
         />
-        {/* <Text style={loadingStyles.loadingText}>Logging in</Text> */}
       </View>
     );
   }
@@ -54,8 +53,8 @@ const AppNavigator = () => {
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           gestureDirection: "horizontal",
           transitionSpec: {
-            open: { animation: "timing", config: { duration: 240 } },
-            close: { animation: "timing", config: { duration: 240 } },
+            open: { animation: "timing", config: { duration: 245 } },
+            close: { animation: "timing", config: { duration: 245 } },
           },
         }}
       >
