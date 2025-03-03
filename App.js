@@ -24,7 +24,7 @@ export default function App() {
         await SplashScreen.preventAutoHideAsync();
         console.log("Schriftarten geladen:", fontsLoaded);
 
-        await NavigationBar.setBackgroundColorAsync("#E8E8E8");
+        await NavigationBar.setBackgroundColorAsync("#F2F2F6");
       } catch (error) {
         console.error("Fehler beim Vorbereiten der App:", error);
       } finally {

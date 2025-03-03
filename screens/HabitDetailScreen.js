@@ -114,24 +114,25 @@ const HabitDetailScreen = ({ route, navigation }) => {
           style={styles.headerButton}
           onPress={() => navigation.goBack()}
         >
-          <Text style={styles.firstHeaderTitle}>Schließen</Text>
+          <Text style={styles.firstHeaderTitle}>Habits</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.headerButton}
           onPress={deleteHabitModal}
           activeOpacity={0.6}
         >
-          <Text style={styles.firstHeaderTitle}>Löschen</Text>
+          <Text style={styles.firstHeaderTitle}>Delete</Text>
         </TouchableOpacity>
       </View>
       <View style={[styles.habitContainer, { marginTop: 30 }]}>
-        <Text style={styles.conTitle}>Habit</Text>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={styles.habitActivityCon}>{renderHabitActivities()}</View>
         </ScrollView>
         <View style={styles.secondHeader}>
           <View style={styles.secHeaderfirstCon}>
-            <View style={styles.inputButton}>
+            <View
+              style={[styles.inputButton, { backgroundColor: habit.color }]}
+            >
               <Image
                 style={styles.inputIcon}
                 source={iconMapping[habit.selectedIcon]}
@@ -139,30 +140,8 @@ const HabitDetailScreen = ({ route, navigation }) => {
             </View>
             <Text style={styles.headerTitle}>{habit.title}</Text>
           </View>
-          <View
-            style={
-              isTodayCompleted
-                ? styles.secondHeaderConStreakGrey
-                : styles.secondHeaderConStreak
-            }
-          >
-            <Text
-              style={
-                isTodayCompleted
-                  ? styles.secondHeaderConStreakTextActive
-                  : styles.secondHeaderConStreakText
-              }
-            >
-              {habit.streak}
-            </Text>
-            <Image
-              style={styles.secondHeaderConStreakIcon}
-              source={
-                isTodayCompleted
-                  ? require("../assets/icons/streak.png")
-                  : require("../assets/icons/streak_grey.png")
-              }
-            />
+          <View style={styles.secondHeaderConStreak}>
+            <Text style={styles.secondHeaderConStreakText}>{habit.streak}</Text>
           </View>
         </View>
       </View>
@@ -242,7 +221,7 @@ const loadingStyles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#E8E8E8",
+    backgroundColor: "#F2F2F6",
     padding: 10,
   },
 
@@ -256,11 +235,11 @@ const loadingStyles = StyleSheet.create({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E8E8E8",
+    backgroundColor: "#F2F2F6",
     alignItems: "center",
     justifyContent: "flex-start",
-    paddingHorizontal: 20,
-    gap: 30,
+    paddingHorizontal: 16,
+    gap: 15,
   },
 
   firstHeader: {
@@ -281,9 +260,9 @@ const styles = StyleSheet.create({
   },
 
   firstHeaderTitle: {
-    fontSize: 16,
+    fontSize: 17,
+    color: "#0C79FE",
     fontFamily: "Poppins-Medium",
-    color: "#000000",
     includeFontPadding: false,
   },
 
@@ -294,8 +273,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     alignItems: "left",
     justifyContent: "center",
-    borderRadius: 15,
-    padding: 15,
+    borderRadius: 12,
+    padding: 10,
     gap: 15,
   },
 
@@ -327,7 +306,7 @@ const styles = StyleSheet.create({
   },
 
   secondHeader: {
-    height: 50,
+    height: "auto",
     width: "100%",
     maxWidth: 450,
     alignItems: "center",
@@ -345,28 +324,24 @@ const styles = StyleSheet.create({
   },
 
   inputButton: {
-    height: 50,
-    width: 50,
+    height: 32,
+    width: 32,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#E8E8E8",
-    borderRadius: 30,
+    borderRadius: 16,
   },
 
   inputIcon: {
-    height: 28,
-    width: 28,
+    height: 18,
+    width: 18,
   },
 
   headerTitle: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: "Poppins-Medium",
+    color: "#000000",
     includeFontPadding: false,
-    lineHeight: 50,
-    backgroundColor: "#E8E8E8",
-    borderRadius: 15,
-    paddingHorizontal: 10,
   },
 
   secondHeaderConStreak: {
@@ -375,37 +350,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     flexDirection: "row",
-    paddingHorizontal: 7,
-    gap: 2.5,
-  },
-
-  secondHeaderConStreakGrey: {
-    height: "auto",
-    width: "auto",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    flexDirection: "row",
-    paddingHorizontal: 7,
-    gap: 2.5,
+    paddingHorizontal: 6,
   },
 
   secondHeaderConStreakText: {
-    fontSize: 22,
-    fontFamily: "Poppins-Bold",
-    color: "#D0D0D0",
-    includeFontPadding: false,
-  },
-
-  secondHeaderConStreakTextActive: {
-    fontSize: 22,
-    fontFamily: "Poppins-Bold",
+    fontSize: 28,
+    fontFamily: "Poppins-SemiBold",
     color: "#000000",
     includeFontPadding: false,
-  },
-
-  secondHeaderConStreakIcon: {
-    height: 24,
-    width: 24,
   },
 
   mainContainer: {

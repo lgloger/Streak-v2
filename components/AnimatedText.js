@@ -48,7 +48,6 @@ export const AnimatedStreakText = ({ streak, isTodayCompleted }) => {
       <Animated.Text
         style={[
           styles.streakText,
-          isTodayCompleted && styles.streakTextActive,
           {
             opacity,
             transform: [{ translateY: animateY }],
@@ -77,18 +76,16 @@ export const AnimatedStreakText = ({ streak, isTodayCompleted }) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: 24,
+    height: 30,
     width: 30,
     alignItems: "center",
     overflow: "hidden",
   },
+
   streakText: {
-    fontSize: 18,
+    fontSize: 28,
     fontFamily: "Poppins-SemiBold",
-    color: "#D0D0D0",
-    includeFontPadding: false,
-  },
-  streakTextActive: {
     color: "#000000",
+    includeFontPadding: false,
   },
 });

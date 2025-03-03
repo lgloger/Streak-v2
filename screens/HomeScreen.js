@@ -100,22 +100,14 @@ const HomeScreen = ({ navigation }) => {
           onPress={() => navigation.navigate("Settings")}
           activeOpacity={0.6}
         >
-          <Text style={styles.headerButtonTitle}>Einstellungen</Text>
-          <Image
-            style={styles.headerButtonIcon}
-            source={require("../assets/icons/settings.png")}
-          />
+          <Text style={styles.headerButtonTitle}>Settings</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.headerButton}
           onPress={() => navigation.navigate("AddHabit")}
           activeOpacity={0.6}
         >
-          <Image
-            style={styles.headerButtonIcon}
-            source={require("../assets/icons/add.png")}
-          />
-          <Text style={styles.headerButtonTitle}>Add</Text>
+          <Text style={styles.headerButtonTitle}>Add Habit</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.secondHeader}>
@@ -149,10 +141,17 @@ const HomeScreen = ({ navigation }) => {
             >
               <View style={styles.habitConHeader}>
                 <View style={styles.firstHabitConHeader}>
-                  <Image
-                    style={styles.firstHeaderConIcon}
-                    source={iconMapping[habit.selectedIcon]}
-                  />
+                  <View
+                    style={[
+                      styles.firstHeaderCon,
+                      { backgroundColor: habit.color },
+                    ]}
+                  >
+                    <Image
+                      style={styles.firstHeaderConIcon}
+                      source={iconMapping[habit.selectedIcon]}
+                    />
+                  </View>
                   <Text style={styles.firstHeaderConTitle}>{habit.title}</Text>
                 </View>
                 <View style={styles.secondHeaderConHeader}>
@@ -163,19 +162,8 @@ const HomeScreen = ({ navigation }) => {
                         new Date().toISOString().split("T")[0]
                       )}
                     />
-                    <Image
-                      style={styles.secondHeaderConStreakIcon}
-                      source={
-                        habit.streak > 0 &&
-                        habit.completedDates?.includes(
-                          new Date().toISOString().split("T")[0]
-                        )
-                          ? require("../assets/icons/streak.png")
-                          : require("../assets/icons/streak_grey.png")
-                      }
-                    />
                   </View>
-                  <TouchableOpacity
+                  {/* <TouchableOpacity
                     style={[
                       habit.completedDates?.includes(
                         new Date().toISOString().split("T")[0]
@@ -199,7 +187,7 @@ const HomeScreen = ({ navigation }) => {
                           : require("../assets/icons/check_grey.png")
                       }
                     />
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                 </View>
               </View>
               <View style={styles.dateContainer}>
@@ -221,10 +209,10 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E8E8E8",
+    backgroundColor: "#F2F2F6",
     alignItems: "center",
     justifyContent: "flex-start",
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
   },
 
   firstHeader: {
@@ -242,23 +230,17 @@ const styles = StyleSheet.create({
     width: "auto",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#ffffff",
+    backgroundColor: "transparent",
     flexDirection: "row",
-    paddingHorizontal: 10,
     gap: 3,
     borderRadius: 30,
   },
 
   headerButtonTitle: {
-    fontSize: 13,
-    fontFamily: "Poppins-SemiBold",
+    fontSize: 17,
+    color: "#0C79FE",
+    fontFamily: "Poppins-Medium",
     includeFontPadding: false,
-    marginHorizontal: 5,
-  },
-
-  headerButtonIcon: {
-    height: 22,
-    width: 22,
   },
 
   secondHeader: {
@@ -281,13 +263,13 @@ const styles = StyleSheet.create({
     maxWidth: 450,
     alignItems: "center",
     justifyContent: "flex-start",
-    gap: 30,
+    gap: 15,
   },
 
   shimmer: {
     width: "100%",
-    height: 142,
-    borderRadius: 15,
+    height: 116,
+    borderRadius: 12,
   },
 
   habitContainer: {
@@ -295,9 +277,9 @@ const styles = StyleSheet.create({
     width: "100%",
     maxWidth: 450,
     backgroundColor: "#ffffff",
-    borderRadius: 15,
-    padding: 15,
-    marginBottom: 30,
+    borderRadius: 12,
+    padding: 10,
+    marginBottom: 15,
   },
 
   habitConHeader: {
@@ -316,14 +298,22 @@ const styles = StyleSheet.create({
     gap: 10,
   },
 
+  firstHeaderCon: {
+    height: 32,
+    width: 32,
+    borderRadius: 16,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
   firstHeaderConIcon: {
-    height: 24,
-    width: 24,
+    height: 18,
+    width: 18,
   },
 
   firstHeaderConTitle: {
     fontSize: 18,
-    fontFamily: "Poppins-SemiBold",
+    fontFamily: "Poppins-Medium",
     color: "#000000",
     includeFontPadding: false,
   },
@@ -338,18 +328,13 @@ const styles = StyleSheet.create({
   },
 
   secondHeaderConStreak: {
-    height: 24,
+    height: "auto",
     width: "auto",
     alignItems: "center",
     justifyContent: "flex-start",
     flexDirection: "row",
-    gap: 2.5,
-    overflow: 'hidden',
-  },
-
-  secondHeaderConStreakIcon: {
-    height: 24,
-    width: 24,
+    overflow: "hidden",
+    marginRight: 6,
   },
 
   secondHeaderConButton: {
@@ -369,36 +354,31 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 
-  secondHeaderConIcon: {
-    height: 24,
-    width: 24,
-  },
-
   dateContainer: {
     height: "auto",
     width: "100%",
     alignItems: "center",
     justifyContent: "space-between",
     flexDirection: "row",
-    marginTop: 25,
+    marginTop: 10,
   },
 
   dayContainer: {
     alignItems: "center",
     justifyContent: "space-between",
-    gap: 10,
+    gap: 5,
   },
 
   dayConText: {
     fontSize: 12,
     fontFamily: "Poppins-Medium",
-    color: "#D0D0D0",
+    color: "#8E8E92",
     includeFontPadding: false,
   },
 
   backroundDate: {
-    height: 30,
-    width: 30,
+    height: 32,
+    width: 32,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#E8E8E8",
@@ -406,8 +386,8 @@ const styles = StyleSheet.create({
   },
 
   backroundDateActive: {
-    height: 30,
-    width: 30,
+    height: 32,
+    width: 32,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 30,
@@ -416,7 +396,7 @@ const styles = StyleSheet.create({
   backroundDateText: {
     fontSize: 12,
     fontFamily: "Poppins-Medium",
-    color: "#818181",
+    color: "#8E8E92",
     includeFontPadding: false,
   },
 
