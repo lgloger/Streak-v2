@@ -19,15 +19,15 @@ import {
   descriptionViewModel,
   updateHabitColor,
 } from "../js/habitDetailViewModel";
+import { homeViewModel } from "../js/homeViewModel";
 import { iconMapping } from "../components/IconPickerModal";
 import * as Haptics from "expo-haptics";
 
 const HabitDetailScreen = ({ route, navigation }) => {
   const { habitId } = route.params || {};
 
-  const { habit, loading } = habitDetailViewModel(habitId);
-  const { description, setDescription, updateDescription } =
-    descriptionViewModel(habitId);
+  const { toggleDay } = homeViewModel();
+  const { habit } = habitDetailViewModel(habitId);
 
   if (!habit) {
     return (
@@ -86,7 +86,6 @@ const HabitDetailScreen = ({ route, navigation }) => {
   };
 
   const today = new Date().toISOString().split("T")[0];
-  const isTodayCompleted = habit.completedDates?.includes(today);
 
   const deleteHabitModal = () =>
     Alert.alert(
@@ -107,6 +106,12 @@ const HabitDetailScreen = ({ route, navigation }) => {
         },
       ]
     );
+
+  const handleCheckPress = (habit) => {
+    const currentDates = habit.completedDates || [];
+    toggleDay(habit.id, currentDates);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+  };
   return (
     <Container style={styles.container}>
       <View style={styles.firstHeader}>
@@ -114,6 +119,10 @@ const HabitDetailScreen = ({ route, navigation }) => {
           style={styles.headerButton}
           onPress={() => navigation.goBack()}
         >
+          <Image
+            style={styles.headerIcon}
+            source={require("../assets/icons/arrow.png")}
+          />
           <Text style={styles.firstHeaderTitle}>Habits</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -124,10 +133,39 @@ const HabitDetailScreen = ({ route, navigation }) => {
           <Text style={styles.firstHeaderTitle}>Delete</Text>
         </TouchableOpacity>
       </View>
-      <View style={[styles.habitContainer, { marginTop: 30 }]}>
-        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <View style={styles.habitActivityCon}>{renderHabitActivities()}</View>
-        </ScrollView>
+      <View style={[styles.habitContainer, { marginTop: 45 }]}>
+        <View style={styles.habitContainerActivityBtnCon}>
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+            <View style={styles.habitActivityCon}>
+              {renderHabitActivities()}
+            </View>
+          </ScrollView>
+          <TouchableOpacity
+            style={[
+              habit.completedDates?.includes(
+                new Date().toISOString().split("T")[0]
+              )
+                ? [
+                    styles.secondHeaderConButton,
+                    { backgroundColor: habit.color },
+                  ]
+                : styles.secondHeaderConButton,
+            ]}
+            onPress={() => handleCheckPress(habit)}
+            activeOpacity={0.6}
+          >
+            <Image
+              style={styles.secondHeaderConIcon}
+              source={
+                habit.completedDates?.includes(
+                  new Date().toISOString().split("T")[0]
+                )
+                  ? require("../assets/icons/check.png")
+                  : require("../assets/icons/check_grey.png")
+              }
+            />
+          </TouchableOpacity>
+        </View>
         <View style={styles.secondHeader}>
           <View style={styles.secHeaderfirstCon}>
             <View
@@ -146,69 +184,63 @@ const HabitDetailScreen = ({ route, navigation }) => {
         </View>
       </View>
       <View style={styles.habitContainer}>
-        <Text style={styles.conTitle}>Farbe Wählen</Text>
         <View style={styles.colorContainer}>
           <TouchableOpacity
-            style={[styles.colorButton, { backgroundColor: "#2EE23E" }]}
+            style={[styles.colorButton, { backgroundColor: "#F14C3C" }]}
             onPress={() => {
-              updateHabitColor(habitId, "#2EE23E");
+              updateHabitColor(habitId, "#F14C3C");
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}
             activeOpacity={0.6}
           ></TouchableOpacity>
           <TouchableOpacity
-            style={[styles.colorButton, { backgroundColor: "#FF1E1E" }]}
+            style={[styles.colorButton, { backgroundColor: "#FFA033" }]}
             onPress={() => {
-              updateHabitColor(habitId, "#FF1E1E");
+              updateHabitColor(habitId, "#FFA033");
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}
             activeOpacity={0.6}
           ></TouchableOpacity>
           <TouchableOpacity
-            style={[styles.colorButton, { backgroundColor: "#1DC8E4" }]}
+            style={[styles.colorButton, { backgroundColor: "#F7CE45" }]}
             onPress={() => {
-              updateHabitColor(habitId, "#1DC8E4");
+              updateHabitColor(habitId, "#F7CE45");
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}
             activeOpacity={0.6}
           ></TouchableOpacity>
           <TouchableOpacity
-            style={[styles.colorButton, { backgroundColor: "#A51DE4" }]}
+            style={[styles.colorButton, { backgroundColor: "#5DC466" }]}
             onPress={() => {
-              updateHabitColor(habitId, "#A51DE4");
+              updateHabitColor(habitId, "#5DC466");
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}
             activeOpacity={0.6}
           ></TouchableOpacity>
           <TouchableOpacity
-            style={[styles.colorButton, { backgroundColor: "#FFEC21" }]}
+            style={[styles.colorButton, { backgroundColor: "#0C79FE" }]}
             onPress={() => {
-              updateHabitColor(habitId, "#FFEC21");
+              updateHabitColor(habitId, "#0C79FE");
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}
             activeOpacity={0.6}
           ></TouchableOpacity>
-        </View>
-      </View>
-      <View style={styles.mainContainer}>
-        <View style={styles.descriptionContainer}>
-          <Text style={styles.conTitle}>Notizen</Text>
-          <TextInput
-            style={styles.descriptionText}
-            onChangeText={setDescription}
-            onBlur={() => updateDescription(description)}
-            onSubmitEditing={() => updateDescription(description)}
-            value={description}
-            placeholder="Schreibe eine Notiz..."
-            placeholderTextColor="#818181"
-            keyboardType="default"
-            selectionColor="#FFFFFF"
-            cursorColor="#000000"
-            caretHidden={false}
-            multiline={true}
-            blurOnSubmit={true}
-            returnKeyType="done"
-          />
+          <TouchableOpacity
+            style={[styles.colorButton, { backgroundColor: "#B67AD5" }]}
+            onPress={() => {
+              updateHabitColor(habitId, "#B67AD5");
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }}
+            activeOpacity={0.6}
+          ></TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.colorButton, { backgroundColor: "#998667" }]}
+            onPress={() => {
+              updateHabitColor(habitId, "#998667");
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }}
+            activeOpacity={0.6}
+          ></TouchableOpacity>
         </View>
       </View>
     </Container>
@@ -257,6 +289,13 @@ const styles = StyleSheet.create({
     width: "auto",
     alignItems: "center",
     justifyContent: "center",
+    flexDirection: "row",
+    gap: 2,
+  },
+
+  headerIcon: {
+    height: 24,
+    width: 24,
   },
 
   firstHeaderTitle: {
@@ -278,12 +317,10 @@ const styles = StyleSheet.create({
     gap: 15,
   },
 
-  conTitle: {
-    fontSize: 14,
-    fontFamily: "Poppins-SemiBold",
-    color: "#D0D0D0",
-    includeFontPadding: false,
-    textAlign: "left",
+  habitContainerActivityBtnCon: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
   },
 
   habitActivityCon: {
@@ -303,6 +340,20 @@ const styles = StyleSheet.create({
     width: 12,
     backgroundColor: "#E8E8E8",
     borderRadius: 3,
+  },
+
+  secondHeaderConButton: {
+    height: "102",
+    width: "45",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#E8E8E8",
+    borderRadius: 6,
+  },
+
+  secondHeaderConIcon: {
+    height: 28,
+    width: 28,
   },
 
   secondHeader: {
@@ -360,43 +411,19 @@ const styles = StyleSheet.create({
     includeFontPadding: false,
   },
 
-  mainContainer: {
-    flex: 1,
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    gap: 15,
-  },
-
-  descriptionContainer: {
-    height: "auto",
-    width: "100%",
-    maxWidth: 450,
-    backgroundColor: "#ffffff",
-    borderRadius: 15,
-    padding: 15,
-  },
-
-  descriptionText: {
-    fontSize: 18,
-    fontFamily: "Poppins-Medium",
-    color: "#818181",
-    includeFontPadding: false,
-    textAlign: "left",
-  },
-
   colorContainer: {
     height: "auto",
     width: "100%",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "flex-start",
+    justifyContent: "space-between",
     gap: 10,
+    flexWrap: "wrap",
   },
 
   colorButton: {
-    height: 35,
-    width: 35,
+    height: 40,
+    width: 40,
     borderRadius: 30,
   },
 });

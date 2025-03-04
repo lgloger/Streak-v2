@@ -35,12 +35,6 @@ const HomeScreen = ({ navigation }) => {
     }
   }, [loading]);
 
-  const handleCheckPress = (habit) => {
-    const currentDates = habit.completedDates || [];
-    toggleDay(habit.id, currentDates);
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-  };
-
   const renderDay = (date, completedDates = [], habit, index) => {
     const dayAbbreviation = date.toLocaleDateString("en-US", {
       weekday: "short",
@@ -163,31 +157,6 @@ const HomeScreen = ({ navigation }) => {
                       )}
                     />
                   </View>
-                  {/* <TouchableOpacity
-                    style={[
-                      habit.completedDates?.includes(
-                        new Date().toISOString().split("T")[0]
-                      )
-                        ? [
-                            styles.secondHeaderConButtonActive,
-                            { backgroundColor: habit.color },
-                          ]
-                        : styles.secondHeaderConButton,
-                    ]}
-                    onPress={() => handleCheckPress(habit)}
-                    activeOpacity={0.6}
-                  >
-                    <Image
-                      style={styles.secondHeaderConIcon}
-                      source={
-                        habit.completedDates?.includes(
-                          new Date().toISOString().split("T")[0]
-                        )
-                          ? require("../assets/icons/check.png")
-                          : require("../assets/icons/check_grey.png")
-                      }
-                    />
-                  </TouchableOpacity> */}
                 </View>
               </View>
               <View style={styles.dateContainer}>

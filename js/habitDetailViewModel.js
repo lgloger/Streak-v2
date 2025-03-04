@@ -46,43 +46,6 @@ const deleteHabitViewModel = async (habitId) => {
   }
 };
 
-const descriptionViewModel = (habitId) => {
-  const [description, setDescription] = useState("");
-  const userId = auth.currentUser?.uid;
-
-  useEffect(() => {
-    if (!habitId || !userId) return;
-
-    const habitRef = doc(db, "users", userId, "habits", habitId);
-    const unsubscribe = onSnapshot(habitRef, (docSnapshot) => {
-      if (docSnapshot.exists()) {
-        const habitData = docSnapshot.data();
-        setDescription(habitData.description || "");
-      }
-    });
-
-    return () => unsubscribe();
-  }, [habitId, userId]);
-
-  const updateDescription = async (newDescription) => {
-    if (!habitId || !userId) return;
-
-    const habitRef = doc(db, "users", userId, "habits", habitId);
-    try {
-      await updateDoc(habitRef, { description: newDescription });
-      console.log("Description updated successfully!");
-    } catch (error) {
-      console.error("Error updating description:", error);
-    }
-  };
-
-  return {
-    description,
-    setDescription,
-    updateDescription,
-  };
-};
-
 const updateHabitColor = async (habitId, newColor) => {
   const userId = auth.currentUser?.uid;
   if (!userId || !habitId) return;
@@ -96,4 +59,4 @@ const updateHabitColor = async (habitId, newColor) => {
   }
 };
 
-export { habitDetailViewModel, deleteHabitViewModel, descriptionViewModel, updateHabitColor };
+export { habitDetailViewModel, deleteHabitViewModel, updateHabitColor };

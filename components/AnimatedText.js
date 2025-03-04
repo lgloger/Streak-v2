@@ -77,7 +77,7 @@ export const AnimatedStreakText = ({ streak, isTodayCompleted }) => {
 const styles = StyleSheet.create({
   container: {
     height: 30,
-    width: 30,
+    width: "auto",
     alignItems: "center",
     overflow: "hidden",
   },
