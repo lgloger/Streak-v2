@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -10,9 +10,7 @@ import {
   Platform,
   ScrollView,
   Alert,
-  Switch,
 } from "react-native";
-import DateTimePicker from '@react-native-community/datetimepicker';
 import {
   habitDetailViewModel,
   deleteHabitViewModel,
@@ -65,21 +63,6 @@ const HabitDetailScreen = ({ route, navigation }) => {
 
   const { toggleDay } = homeViewModel();
   const { habit } = habitDetailViewModel(habitId);
-
-  const [reminderEnabled, setReminderEnabled] = useState(false);
-  const [reminderTime, setReminderTime] = useState(new Date());
-  const [showPicker, setShowPicker] = useState(false);
-
-  const onToggleSwitch = () => setReminderEnabled(previousState => !previousState);
-  const onChangeTime = (event, selectedDate) => {
-    if (event.type === "set") {
-      const currentDate = selectedDate || reminderTime;
-      setShowPicker(Platform.OS === 'ios');
-      setReminderTime(currentDate);
-    } else {
-      setShowPicker(false);
-    }
-  };
 
   if (!habit) {
     return (
@@ -234,33 +217,6 @@ const HabitDetailScreen = ({ route, navigation }) => {
             <ColorButton key={color} color={color} habitId={habitId} />
           ))}
         </View>
-      </View>
-      <View style={styles.habitContainer}>
-        <Text style={styles.reminderTitle}>Reminder</Text>
-        <View style={styles.reminderContainer}>
-          <Text style={styles.reminderText}>Enable Reminder</Text>
-          <Switch
-            onValueChange={onToggleSwitch}
-            value={reminderEnabled}
-          />
-        </View>
-        {reminderEnabled && (
-          <>
-            <TouchableOpacity onPress={() => setShowPicker(true)}>
-              <Text style={styles.reminderText}>
-                {reminderTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-              </Text>
-            </TouchableOpacity>
-            {showPicker && (
-              <DateTimePicker
-                value={reminderTime}
-                mode="time"
-                display="default"
-                onChange={onChangeTime}
-              />
-            )}
-          </>
-        )}
       </View>
     </Container>
   );
@@ -450,28 +406,6 @@ const styles = StyleSheet.create({
     height: 40,
     width: 40,
     borderRadius: 30,
-  },
-
-  reminderContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingVertical: 10,
-  },
-
-  reminderTitle: {
-    fontSize: 18,
-    fontFamily: "Poppins-SemiBold",
-    color: "#000000",
-    includeFontPadding: false,
-    marginBottom: 10,
-  },
-
-  reminderText: {
-    fontSize: 16,
-    fontFamily: "Poppins-Medium",
-    color: "#000000",
-    includeFontPadding: false,
   },
 });
 
