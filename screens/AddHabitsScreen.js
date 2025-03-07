@@ -11,9 +11,8 @@ import {
   Platform,
 } from "react-native";
 import { addHabitViewModel } from "../js/dataManger";
-import IconPickerModal from "../components/IconPickerModal";
-import { iconMapping } from "../components/IconPickerModal";
 import * as Haptics from "expo-haptics";
+import { iconMapping } from "../components/iconMapping";
 
 const Header = ({ navigation, addHabit }) => (
   <View style={styles.firstHeader}>
@@ -29,7 +28,7 @@ const Header = ({ navigation, addHabit }) => (
       onPress={() => addHabit()}
       activeOpacity={0.6}
     >
-      <Text style={styles.firstHeaderTitle}>Save</Text>
+      <Text style={styles.firstHeaderTitle}>Done</Text>
     </TouchableOpacity>
   </View>
 );
@@ -43,6 +42,19 @@ const ColorButton = ({ color, setColor }) => (
     }}
     activeOpacity={0.6}
   />
+);
+
+const IconButton = ({ icon, setSelectedIcon }) => (
+  <TouchableOpacity
+    style={styles.iconButton}
+    onPress={() => {
+      setSelectedIcon(icon);
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }}
+    activeOpacity={0.6}
+  >
+    <Image style={styles.iconImage} source={iconMapping[icon]} />
+  </TouchableOpacity>
 );
 
 const AddHabitsScreen = ({ navigation }) => {
@@ -75,27 +87,25 @@ const AddHabitsScreen = ({ navigation }) => {
       <View style={styles.mainContainer}>
         <View style={styles.habitContainer}>
           <View style={styles.iconPickerContainer}>
-            <TouchableOpacity
+            <View
               style={[styles.inputButton, { backgroundColor: color, shadowColor: color }]}
-              onPress={() => refRBSheet.current.open()}
-              activeOpacity={0.6}
             >
               <Image
                 style={styles.inputIcon}
                 source={iconMapping[selectedIcon] || iconMapping["star"]}
               />
-            </TouchableOpacity>
+            </View>
           </View>
           <View style={styles.inputContainer}>
             <TextInput
               style={[styles.input, { color: color }]}
               onChangeText={setTitle}
               value={title}
-              placeholderTextColor={color}
+              placeholderTextColor="#818181"
               placeholder="Habit Title"
               keyboardType="text"
               selectionColor="#FFFFFF"
-              cursorColor={color}
+              cursorColor="#818181"
               maxLength={12}
               caretHidden={false}
             />
@@ -103,13 +113,19 @@ const AddHabitsScreen = ({ navigation }) => {
         </View>
         <View style={styles.habitContainer}>
           <View style={styles.colorContainer}>
-            {["#F14C3C", "#FFA033", "#F7CE45", "#5DC466", "#0C79FE", "#B67AD5", "#998667"].map((color) => (
+            {["#F14C3C", "#FFA033", "#F7CE45", "#5DC466", "#0C79FE", "#B67AD5", "#998667", "#474848"].map((color) => (
               <ColorButton key={color} color={color} setColor={setColor} />
             ))}
           </View>
         </View>
+        <View style={styles.habitContainer}>
+          <View style={styles.iconContainer}>
+            {Object.keys(iconMapping).map((icon) => (
+              <IconButton key={icon} icon={icon} setSelectedIcon={setSelectedIcon} />
+            ))}
+          </View>
+        </View>
       </View>
-      <IconPickerModal ref={refRBSheet} onIconSelect={handleIconSelect} />
     </Container>
   );
 };
@@ -145,14 +161,14 @@ const styles = StyleSheet.create({
   firstHeaderTitle: {
     fontSize: 17,
     color: "#0C79FE",
-    fontFamily: "Poppins-Medium",
+    fontFamily: "Poppins-SemiBold",
     includeFontPadding: false,
   },
 
   firstHeaderTitleBlack: {
     fontSize: 17,
     color: "#000000",
-    fontFamily: "Poppins-Medium",
+    fontFamily: "Poppins-SemiBold",
     includeFontPadding: false,
   },
 
@@ -171,7 +187,7 @@ const styles = StyleSheet.create({
     maxWidth: 450,
     alignItems: "center",
     justifyContent: "flex-start",
-    gap: 30,
+    gap: 15,
   },
 
   habitContainer: {
@@ -270,6 +286,33 @@ const styles = StyleSheet.create({
     height: 40,
     width: 40,
     borderRadius: 30,
+  },
+
+  iconContainer: {
+    height: "auto",
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 10,
+    flexWrap: "wrap",
+    padding: 10,
+    borderRadius: 12,
+  },
+
+  iconButton: {
+    height: 40,
+    width: 40,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#E4E4E5",
+    borderRadius: 20,
+  },
+
+  iconImage: {
+    height: 24,
+    width: 24,
+    tintColor: '#474848',
   },
 });
 

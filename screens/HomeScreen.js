@@ -11,12 +11,11 @@ import {
   StatusBar as RNStatusBar,
   Platform,
 } from "react-native";
-import * as Haptics from "expo-haptics";
 import { Animated } from "react-native";
 import { createShimmerPlaceHolder } from "expo-shimmer-placeholder";
 import { LinearGradient } from "expo-linear-gradient";
 import { homeViewModel } from "../js/homeViewModel";
-import { iconMapping } from "../components/IconPickerModal";
+import { iconMapping } from "../components/iconMapping";
 import { AnimatedStreakText } from "../components/AnimatedText";
 
 const ShimmerPlaceHolder = createShimmerPlaceHolder(LinearGradient);
@@ -213,7 +212,7 @@ const styles = StyleSheet.create({
   headerButtonTitle: {
     fontSize: 17,
     color: "#0C79FE",
-    fontFamily: "Poppins-Medium",
+    fontFamily: "Poppins-SemiBold",
     includeFontPadding: false,
   },
 

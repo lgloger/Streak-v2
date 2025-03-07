@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
-  ActivityIndicator,
   Text,
   StyleSheet,
   SafeAreaView,
@@ -11,17 +10,22 @@ import {
   Platform,
   ScrollView,
   Alert,
+  Switch,
 } from "react-native";
+import DateTimePicker from '@react-native-community/datetimepicker';
 import {
   habitDetailViewModel,
   deleteHabitViewModel,
-  descriptionViewModel,
   updateHabitColor,
 } from "../js/habitDetailViewModel";
+import { createShimmerPlaceHolder } from "expo-shimmer-placeholder";
+import { LinearGradient } from "expo-linear-gradient";
 import { homeViewModel } from "../js/homeViewModel";
-import { iconMapping } from "../components/IconPickerModal";
+import { iconMapping } from "../components/iconMapping";
 import * as Haptics from "expo-haptics";
 import { AnimatedStreakText } from "../components/AnimatedText";
+
+const ShimmerPlaceHolder = createShimmerPlaceHolder(LinearGradient);
 
 const Header = ({ navigation, deleteHabitModal }) => (
   <View style={styles.firstHeader}>
@@ -62,13 +66,31 @@ const HabitDetailScreen = ({ route, navigation }) => {
   const { toggleDay } = homeViewModel();
   const { habit } = habitDetailViewModel(habitId);
 
+  const [reminderEnabled, setReminderEnabled] = useState(false);
+  const [reminderTime, setReminderTime] = useState(new Date());
+  const [showPicker, setShowPicker] = useState(false);
+
+  const onToggleSwitch = () => setReminderEnabled(previousState => !previousState);
+  const onChangeTime = (event, selectedDate) => {
+    if (event.type === "set") {
+      const currentDate = selectedDate || reminderTime;
+      setShowPicker(Platform.OS === 'ios');
+      setReminderTime(currentDate);
+    } else {
+      setShowPicker(false);
+    }
+  };
+
   if (!habit) {
     return (
-      <View style={loadingStyles.loadingContainer}>
-        <ActivityIndicator
-          size="large"
-          color="#000000"
-          style={{ marginBottom: 10 }}
+      <View style={styles.shimmerContainer}>
+        <ShimmerPlaceHolder
+          style={styles.shimmerOne}
+          shimmerColors={["#FFFFFF", "#E8E8E8", "#FFFFFF"]}
+        />
+        <ShimmerPlaceHolder
+          style={styles.shimmer}
+          shimmerColors={["#FFFFFF", "#E8E8E8", "#FFFFFF"]}
         />
       </View>
     );
@@ -122,16 +144,15 @@ const HabitDetailScreen = ({ route, navigation }) => {
 
   const deleteHabitModal = () =>
     Alert.alert(
-      "Habit Löschen",
-      "Das Löschen dieses Habit ist unwiderruflich. Alle zugehörigen Daten werden dauerhaft gelöscht und können nicht wiederhergestellt werden.",
+      "Delete Habit",
+      "Deleting this habit is irreversible. All associated data will be permanently deleted and cannot be recovered.",
       [
         {
-          text: "Abbrechen",
-          onPress: () => console.log("Cancel Pressed"),
+          text: "Cancel",
           style: "cancel",
         },
         {
-          text: "Löschen",
+          text: "Delete",
           onPress: async () => {
             await deleteHabitViewModel(habitId);
             navigation.goBack();
@@ -159,7 +180,10 @@ const HabitDetailScreen = ({ route, navigation }) => {
           <TouchableOpacity
             style={[
               habit.completedDates?.includes(today)
-                ? [styles.secondHeaderConButton, { backgroundColor: habit.color }]
+                ? [
+                    styles.secondHeaderConButton,
+                    { backgroundColor: habit.color },
+                  ]
                 : styles.secondHeaderConButton,
             ]}
             onPress={() => handleCheckPress(habit)}
@@ -197,29 +221,71 @@ const HabitDetailScreen = ({ route, navigation }) => {
       </View>
       <View style={styles.habitContainer}>
         <View style={styles.colorContainer}>
-          {["#F14C3C", "#FFA033", "#F7CE45", "#5DC466", "#0C79FE", "#B67AD5", "#998667"].map((color) => (
+          {[
+            "#F14C3C",
+            "#FFA033",
+            "#F7CE45",
+            "#5DC466",
+            "#0C79FE",
+            "#B67AD5",
+            "#998667",
+            "#474848",
+          ].map((color) => (
             <ColorButton key={color} color={color} habitId={habitId} />
           ))}
         </View>
+      </View>
+      <View style={styles.habitContainer}>
+        <Text style={styles.reminderTitle}>Reminder</Text>
+        <View style={styles.reminderContainer}>
+          <Text style={styles.reminderText}>Enable Reminder</Text>
+          <Switch
+            onValueChange={onToggleSwitch}
+            value={reminderEnabled}
+          />
+        </View>
+        {reminderEnabled && (
+          <>
+            <TouchableOpacity onPress={() => setShowPicker(true)}>
+              <Text style={styles.reminderText}>
+                {reminderTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              </Text>
+            </TouchableOpacity>
+            {showPicker && (
+              <DateTimePicker
+                value={reminderTime}
+                mode="time"
+                display="default"
+                onChange={onChangeTime}
+              />
+            )}
+          </>
+        )}
       </View>
     </Container>
   );
 };
 
 const loadingStyles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    display: "flex",
+  shimmerContainer: {
+    height: "auto",
+    width: "100%",
+    maxWidth: 450,
     alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#F2F2F6",
-    padding: 10,
+    justifyContent: "flex-start",
+    gap: 15,
   },
 
-  loadingText: {
-    fontSize: 18,
-    fontFamily: "Poppins-Medium",
-    color: "#000000",
+  shimmerOne: {
+    width: "100%",
+    height: 170,
+    borderRadius: 12,
+  },
+
+  shimmer: {
+    width: "100%",
+    height: 60,
+    borderRadius: 12,
   },
 });
 
@@ -260,7 +326,7 @@ const styles = StyleSheet.create({
   firstHeaderTitle: {
     fontSize: 17,
     color: "#0C79FE",
-    fontFamily: "Poppins-Medium",
+    fontFamily: "Poppins-SemiBold",
     includeFontPadding: false,
   },
 
@@ -384,6 +450,28 @@ const styles = StyleSheet.create({
     height: 40,
     width: 40,
     borderRadius: 30,
+  },
+
+  reminderContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 10,
+  },
+
+  reminderTitle: {
+    fontSize: 18,
+    fontFamily: "Poppins-SemiBold",
+    color: "#000000",
+    includeFontPadding: false,
+    marginBottom: 10,
+  },
+
+  reminderText: {
+    fontSize: 16,
+    fontFamily: "Poppins-Medium",
+    color: "#000000",
+    includeFontPadding: false,
   },
 });
 
