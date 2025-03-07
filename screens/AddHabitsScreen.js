@@ -15,6 +15,36 @@ import IconPickerModal from "../components/IconPickerModal";
 import { iconMapping } from "../components/IconPickerModal";
 import * as Haptics from "expo-haptics";
 
+const Header = ({ navigation, addHabit }) => (
+  <View style={styles.firstHeader}>
+    <TouchableOpacity
+      style={styles.headerButton}
+      onPress={() => navigation.goBack()}
+    >
+      <Text style={styles.firstHeaderTitle}>Cancel</Text>
+    </TouchableOpacity>
+    <Text style={styles.firstHeaderTitleBlack}>New Habit</Text>
+    <TouchableOpacity
+      style={styles.headerButton}
+      onPress={() => addHabit()}
+      activeOpacity={0.6}
+    >
+      <Text style={styles.firstHeaderTitle}>Save</Text>
+    </TouchableOpacity>
+  </View>
+);
+
+const ColorButton = ({ color, setColor }) => (
+  <TouchableOpacity
+    style={[styles.colorButton, { backgroundColor: color }]}
+    onPress={() => {
+      setColor(color);
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }}
+    activeOpacity={0.6}
+  />
+);
+
 const AddHabitsScreen = ({ navigation }) => {
   const {
     selectedIcon,
@@ -38,156 +68,15 @@ const AddHabitsScreen = ({ navigation }) => {
     default: SafeAreaView,
   });
 
-  const activityStatus = [
-    true,
-    false,
-    false,
-    false,
-    true,
-    true,
-    false,
-    false,
-    false,
-    true,
-    false,
-    false,
-    true,
-    true,
-    false,
-    false,
-    false,
-    false,
-    false,
-    true,
-    false,
-    false,
-    false,
-    true,
-    false,
-    false,
-    false,
-    true,
-    false,
-    false,
-    true,
-    false,
-    false,
-    false,
-    true,
-    false,
-    false,
-    false,
-    true,
-    false,
-    false,
-    true,
-    false,
-    false,
-    true,
-    false,
-    false,
-    false,
-    false,
-    true,
-    false,
-    false,
-    false,
-    false,
-    false,
-    true,
-    false,
-    true,
-    false,
-    false,
-    false,
-    true,
-    false,
-    false,
-    false,
-    true,
-    false,
-    true,
-    false,
-    false,
-    false,
-    true,
-    false,
-    false,
-    false,
-    true,
-    false,
-    false,
-    true,
-    false,
-    false,
-    false,
-    true,
-    false,
-    false,
-    false,
-    true,
-    false,
-    true,
-    false,
-    false,
-    false,
-    true,
-    false,
-    true,
-    false,
-    false,
-    false,
-    false,
-    false,
-    true,
-    false,
-    false,
-    false,
-    true,
-    false,
-    false,
-    false,
-    true,
-    false,
-  ];
-
   return (
     <Container style={styles.container}>
-      <View style={styles.firstHeader}>
-        <TouchableOpacity
-          style={styles.headerButton}
-          onPress={() => navigation.goBack()}
-          activeOpacity={0.6}
-        >
-          <Text style={styles.headerTitle}>Schließen</Text>
-        </TouchableOpacity> 
-        <Text style={styles.headerTitle}>Neuer Habit</Text>
-        <TouchableOpacity
-          style={styles.headerButton}
-          onPress={() => addHabit()}
-          activeOpacity={0.6}
-        >
-          <Text style={styles.headerTitle}>Speichern</Text>
-        </TouchableOpacity>
-      </View>
+      <Header navigation={navigation} addHabit={addHabit} />
       <View style={styles.secondHeader}></View>
       <View style={styles.mainContainer}>
         <View style={styles.habitContainer}>
-          <Text style={styles.conTitle}>Habit</Text>
-          <View style={styles.habitActivityCon}>
-            {activityStatus.map((isCompleted, index) => (
-              <View
-                key={index}
-                style={[
-                  styles.habitActivity,
-                  { backgroundColor: isCompleted ? color : "#E8E8E8" },
-                ]}
-              ></View>
-            ))}
-          </View>
-          <View style={styles.inputContainer}>
+          <View style={styles.iconPickerContainer}>
             <TouchableOpacity
-              style={styles.inputButton}
+              style={[styles.inputButton, { backgroundColor: color, shadowColor: color }]}
               onPress={() => refRBSheet.current.open()}
               activeOpacity={0.6}
             >
@@ -196,63 +85,27 @@ const AddHabitsScreen = ({ navigation }) => {
                 source={iconMapping[selectedIcon] || iconMapping["star"]}
               />
             </TouchableOpacity>
+          </View>
+          <View style={styles.inputContainer}>
             <TextInput
-              style={styles.input}
+              style={[styles.input, { color: color }]}
               onChangeText={setTitle}
               value={title}
-              placeholderTextColor="#818181"
-              placeholder="Habit Titel"
+              placeholderTextColor={color}
+              placeholder="Habit Title"
               keyboardType="text"
               selectionColor="#FFFFFF"
-              cursorColor="#000000"
-              maxLength={11}
+              cursorColor={color}
+              maxLength={12}
               caretHidden={false}
             />
           </View>
         </View>
         <View style={styles.habitContainer}>
-          <Text style={styles.conTitle}>Farbe Wählen</Text>
           <View style={styles.colorContainer}>
-            <TouchableOpacity
-              style={[styles.colorButton, { backgroundColor: "#2EE23E" }]}
-              onPress={() => {
-                setColor("#2EE23E");
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              }}
-              activeOpacity={0.6}
-            ></TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.colorButton, { backgroundColor: "#FF1E1E" }]}
-              onPress={() => {
-                setColor("#FF1E1E");
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              }}
-              activeOpacity={0.6}
-            ></TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.colorButton, { backgroundColor: "#1DC8E4" }]}
-              onPress={() => {
-                setColor("#1DC8E4");
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              }}
-              activeOpacity={0.6}
-            ></TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.colorButton, { backgroundColor: "#A51DE4" }]}
-              onPress={() => {
-                setColor("#A51DE4");
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              }}
-              activeOpacity={0.6}
-            ></TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.colorButton, { backgroundColor: "#FF901E" }]}
-              onPress={() => {
-                setColor("#FF901E");
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              }}
-              activeOpacity={0.6}
-            ></TouchableOpacity>
+            {["#F14C3C", "#FFA033", "#F7CE45", "#5DC466", "#0C79FE", "#B67AD5", "#998667"].map((color) => (
+              <ColorButton key={color} color={color} setColor={setColor} />
+            ))}
           </View>
         </View>
       </View>
@@ -264,10 +117,10 @@ const AddHabitsScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E8E8E8",
+    backgroundColor: "#F2F2F6",
     alignItems: "center",
     justifyContent: "flex-start",
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
   },
 
   firstHeader: {
@@ -285,12 +138,21 @@ const styles = StyleSheet.create({
     width: "auto",
     alignItems: "center",
     justifyContent: "center",
+    flexDirection: "row",
+    gap: 2,
   },
 
-  headerTitle: {
-    fontSize: 16,
+  firstHeaderTitle: {
+    fontSize: 17,
+    color: "#0C79FE",
     fontFamily: "Poppins-Medium",
+    includeFontPadding: false,
+  },
+
+  firstHeaderTitleBlack: {
+    fontSize: 17,
     color: "#000000",
+    fontFamily: "Poppins-Medium",
     includeFontPadding: false,
   },
 
@@ -315,12 +177,20 @@ const styles = StyleSheet.create({
   habitContainer: {
     height: "auto",
     width: "100%",
+    maxWidth: 450,
     backgroundColor: "#ffffff",
-    alignItems: "flex-start",
+    alignItems: "left",
     justifyContent: "center",
-    borderRadius: 15,
-    padding: 15,
-    gap: 15,
+    borderRadius: 12,
+    padding: 10,
+    gap: 20,
+  },
+
+  iconPickerContainer: {
+    height: "auto",
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   conTitle: {
@@ -348,7 +218,7 @@ const styles = StyleSheet.create({
 
   inputContainer: {
     position: "relative",
-    height: 50,
+    height: 56,
     width: "100%",
     alignItems: "center",
     justifyContent: "flex-start",
@@ -357,29 +227,33 @@ const styles = StyleSheet.create({
   },
 
   inputButton: {
-    height: 50,
-    width: 50,
+    height: 96,
+    width: 96,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#E8E8E8",
-    borderRadius: 30,
+    borderRadius: 48,
+    shadowColor: "#5DC466",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 1,
+    shadowRadius: 15,
+    elevation: 15,
   },
 
   inputIcon: {
-    height: 28,
-    width: 28,
+    height: 56,
+    width: 56,
   },
 
   input: {
     flex: 1,
     height: "100%",
-    fontSize: 16,
-    fontFamily: "Poppins-Medium",
-    color: "#000000",
+    fontSize: 22,
+    fontFamily: "Poppins-SemiBold",
     includeFontPadding: false,
     backgroundColor: "#E8E8E8",
     borderRadius: 15,
     paddingHorizontal: 10,
+    textAlign: "center",
   },
 
   colorContainer: {
@@ -387,13 +261,14 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "flex-start",
+    justifyContent: "space-between",
     gap: 10,
+    flexWrap: "wrap",
   },
 
   colorButton: {
-    height: 35,
-    width: 35,
+    height: 40,
+    width: 40,
     borderRadius: 30,
   },
 });

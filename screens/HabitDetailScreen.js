@@ -7,7 +7,6 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Image,
-  TextInput,
   StatusBar as RNStatusBar,
   Platform,
   ScrollView,
@@ -22,6 +21,40 @@ import {
 import { homeViewModel } from "../js/homeViewModel";
 import { iconMapping } from "../components/IconPickerModal";
 import * as Haptics from "expo-haptics";
+import { AnimatedStreakText } from "../components/AnimatedText";
+
+const Header = ({ navigation, deleteHabitModal }) => (
+  <View style={styles.firstHeader}>
+    <TouchableOpacity
+      style={styles.headerButton}
+      onPress={() => navigation.goBack()}
+    >
+      <Image
+        style={styles.headerIcon}
+        source={require("../assets/icons/arrow.png")}
+      />
+      <Text style={styles.firstHeaderTitle}>Habits</Text>
+    </TouchableOpacity>
+    <TouchableOpacity
+      style={styles.headerButton}
+      onPress={deleteHabitModal}
+      activeOpacity={0.6}
+    >
+      <Text style={styles.firstHeaderTitle}>Delete</Text>
+    </TouchableOpacity>
+  </View>
+);
+
+const ColorButton = ({ color, habitId }) => (
+  <TouchableOpacity
+    style={[styles.colorButton, { backgroundColor: color }]}
+    onPress={() => {
+      updateHabitColor(habitId, color);
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }}
+    activeOpacity={0.6}
+  />
+);
 
 const HabitDetailScreen = ({ route, navigation }) => {
   const { habitId } = route.params || {};
@@ -112,27 +145,10 @@ const HabitDetailScreen = ({ route, navigation }) => {
     toggleDay(habit.id, currentDates);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
+
   return (
     <Container style={styles.container}>
-      <View style={styles.firstHeader}>
-        <TouchableOpacity
-          style={styles.headerButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Image
-            style={styles.headerIcon}
-            source={require("../assets/icons/arrow.png")}
-          />
-          <Text style={styles.firstHeaderTitle}>Habits</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.headerButton}
-          onPress={deleteHabitModal}
-          activeOpacity={0.6}
-        >
-          <Text style={styles.firstHeaderTitle}>Delete</Text>
-        </TouchableOpacity>
-      </View>
+      <Header navigation={navigation} deleteHabitModal={deleteHabitModal} />
       <View style={[styles.habitContainer, { marginTop: 45 }]}>
         <View style={styles.habitContainerActivityBtnCon}>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -142,13 +158,8 @@ const HabitDetailScreen = ({ route, navigation }) => {
           </ScrollView>
           <TouchableOpacity
             style={[
-              habit.completedDates?.includes(
-                new Date().toISOString().split("T")[0]
-              )
-                ? [
-                    styles.secondHeaderConButton,
-                    { backgroundColor: habit.color },
-                  ]
+              habit.completedDates?.includes(today)
+                ? [styles.secondHeaderConButton, { backgroundColor: habit.color }]
                 : styles.secondHeaderConButton,
             ]}
             onPress={() => handleCheckPress(habit)}
@@ -157,9 +168,7 @@ const HabitDetailScreen = ({ route, navigation }) => {
             <Image
               style={styles.secondHeaderConIcon}
               source={
-                habit.completedDates?.includes(
-                  new Date().toISOString().split("T")[0]
-                )
+                habit.completedDates?.includes(today)
                   ? require("../assets/icons/check.png")
                   : require("../assets/icons/check_grey.png")
               }
@@ -179,68 +188,18 @@ const HabitDetailScreen = ({ route, navigation }) => {
             <Text style={styles.headerTitle}>{habit.title}</Text>
           </View>
           <View style={styles.secondHeaderConStreak}>
-            <Text style={styles.secondHeaderConStreakText}>{habit.streak}</Text>
+            <AnimatedStreakText
+              streak={habit.streak}
+              isTodayCompleted={habit.completedDates?.includes(today)}
+            />
           </View>
         </View>
       </View>
       <View style={styles.habitContainer}>
         <View style={styles.colorContainer}>
-          <TouchableOpacity
-            style={[styles.colorButton, { backgroundColor: "#F14C3C" }]}
-            onPress={() => {
-              updateHabitColor(habitId, "#F14C3C");
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            }}
-            activeOpacity={0.6}
-          ></TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.colorButton, { backgroundColor: "#FFA033" }]}
-            onPress={() => {
-              updateHabitColor(habitId, "#FFA033");
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            }}
-            activeOpacity={0.6}
-          ></TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.colorButton, { backgroundColor: "#F7CE45" }]}
-            onPress={() => {
-              updateHabitColor(habitId, "#F7CE45");
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            }}
-            activeOpacity={0.6}
-          ></TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.colorButton, { backgroundColor: "#5DC466" }]}
-            onPress={() => {
-              updateHabitColor(habitId, "#5DC466");
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            }}
-            activeOpacity={0.6}
-          ></TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.colorButton, { backgroundColor: "#0C79FE" }]}
-            onPress={() => {
-              updateHabitColor(habitId, "#0C79FE");
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            }}
-            activeOpacity={0.6}
-          ></TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.colorButton, { backgroundColor: "#B67AD5" }]}
-            onPress={() => {
-              updateHabitColor(habitId, "#B67AD5");
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            }}
-            activeOpacity={0.6}
-          ></TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.colorButton, { backgroundColor: "#998667" }]}
-            onPress={() => {
-              updateHabitColor(habitId, "#998667");
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            }}
-            activeOpacity={0.6}
-          ></TouchableOpacity>
+          {["#F14C3C", "#FFA033", "#F7CE45", "#5DC466", "#0C79FE", "#B67AD5", "#998667"].map((color) => (
+            <ColorButton key={color} color={color} habitId={habitId} />
+          ))}
         </View>
       </View>
     </Container>

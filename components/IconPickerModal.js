@@ -48,7 +48,7 @@ const IconPickerModal = React.forwardRef(({ onIconSelect }, ref) => {
       }}
       onClose={() => {
         StatusBar.setBarStyle("dark-content");
-        StatusBar.setBackgroundColor("#E8E8E8");
+        StatusBar.setBackgroundColor("#F2F2F6");
       }}
       customStyles={{
         container: styles.bottomSheetContainer,

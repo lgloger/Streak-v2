@@ -6,7 +6,7 @@ import { ToastAndroid } from "react-native";
 const addHabitViewModel = (navigation) => {
   const [selectedIcon, setSelectedIcon] = useState("walk");
   const [title, setTitle] = useState("");
-  const [color, setColor] = useState('#2EE23E');
+  const [color, setColor] = useState('#5DC466');
   const userId = auth.currentUser?.uid;
 
   const addHabit = async () => {

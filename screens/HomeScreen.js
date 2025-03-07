@@ -21,6 +21,46 @@ import { AnimatedStreakText } from "../components/AnimatedText";
 
 const ShimmerPlaceHolder = createShimmerPlaceHolder(LinearGradient);
 
+const HabitHeader = ({ habit }) => (
+  <View style={styles.habitConHeader}>
+    <View style={styles.firstHabitConHeader}>
+      <View style={[styles.firstHeaderCon, { backgroundColor: habit.color }]}>
+        <Image
+          style={styles.firstHeaderConIcon}
+          source={iconMapping[habit.selectedIcon]}
+        />
+      </View>
+      <Text style={styles.firstHeaderConTitle}>{habit.title}</Text>
+    </View>
+    <View style={styles.secondHeaderConHeader}>
+      <View style={styles.secondHeaderConStreak}>
+        <AnimatedStreakText
+          streak={habit.streak}
+          isTodayCompleted={habit.completedDates?.includes(
+            new Date().toISOString().split("T")[0]
+          )}
+        />
+      </View>
+    </View>
+  </View>
+);
+
+const Habit = ({ habit, navigation, renderDay, getCurrentWeek }) => (
+  <TouchableOpacity
+    style={styles.habitContainer}
+    key={habit.id}
+    onPress={() => navigation.navigate("HabitDetail", { habitId: habit.id })}
+    activeOpacity={0.6}
+  >
+    <HabitHeader habit={habit} />
+    <View style={styles.dateContainer}>
+      {getCurrentWeek().map((date, index) =>
+        date ? renderDay(date, habit.completedDates, habit, index) : null
+      )}
+    </View>
+  </TouchableOpacity>
+);
+
 const HomeScreen = ({ navigation }) => {
   const { habits, loading, getCurrentWeek, toggleDay } = homeViewModel();
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -125,48 +165,13 @@ const HomeScreen = ({ navigation }) => {
           showsVerticalScrollIndicator={false}
         >
           {habits.map((habit) => (
-            <TouchableOpacity
-              style={styles.habitContainer}
+            <Habit
               key={habit.id}
-              onPress={() =>
-                navigation.navigate("HabitDetail", { habitId: habit.id })
-              }
-              activeOpacity={0.6}
-            >
-              <View style={styles.habitConHeader}>
-                <View style={styles.firstHabitConHeader}>
-                  <View
-                    style={[
-                      styles.firstHeaderCon,
-                      { backgroundColor: habit.color },
-                    ]}
-                  >
-                    <Image
-                      style={styles.firstHeaderConIcon}
-                      source={iconMapping[habit.selectedIcon]}
-                    />
-                  </View>
-                  <Text style={styles.firstHeaderConTitle}>{habit.title}</Text>
-                </View>
-                <View style={styles.secondHeaderConHeader}>
-                  <View style={styles.secondHeaderConStreak}>
-                    <AnimatedStreakText
-                      streak={habit.streak}
-                      isTodayCompleted={habit.completedDates?.includes(
-                        new Date().toISOString().split("T")[0]
-                      )}
-                    />
-                  </View>
-                </View>
-              </View>
-              <View style={styles.dateContainer}>
-                {getCurrentWeek().map((date, index) =>
-                  date
-                    ? renderDay(date, habit.completedDates, habit, index)
-                    : null
-                )}
-              </View>
-            </TouchableOpacity>
+              habit={habit}
+              navigation={navigation}
+              renderDay={renderDay}
+              getCurrentWeek={getCurrentWeek}
+            />
           ))}
         </ScrollView>
       )}

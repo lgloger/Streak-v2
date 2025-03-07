@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
     height: 30,
     width: "auto",
     alignItems: "center",
+    justifyContent: "center",
     overflow: "hidden",
   },
 
@@ -87,5 +88,6 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-SemiBold",
     color: "#000000",
     includeFontPadding: false,
+    marginTop: -4,
   },
 });
