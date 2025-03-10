@@ -10,13 +10,12 @@ Notifications.setNotificationHandler({
 
 export async function scheduleHabitNotification(habitId, title, time) {
   try {
-    // Cancel any existing notifications for this habit
     await cancelHabitNotification(habitId);
 
     const trigger = {
       hour: time.getHours(),
       minute: time.getMinutes(),
-      repeats: true, // Daily notification
+      repeats: true,
     };
 
     const notificationId = await Notifications.scheduleNotificationAsync({
@@ -37,15 +36,12 @@ export async function scheduleHabitNotification(habitId, title, time) {
 
 export async function cancelHabitNotification(habitId) {
   try {
-    // Get all scheduled notifications
     const scheduledNotifications = await Notifications.getAllScheduledNotificationsAsync();
     
-    // Find notifications with matching habitId in data
     const matchingNotifications = scheduledNotifications.filter(
       notif => notif.content.data?.habitId === habitId
     );
 
-    // Cancel each matching notification
     await Promise.all(
       matchingNotifications.map(notif => 
         Notifications.cancelScheduledNotificationAsync(notif.identifier)

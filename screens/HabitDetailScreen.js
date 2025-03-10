@@ -101,6 +101,7 @@ const HabitDetailScreen = ({ route, navigation }) => {
     setShowTimePicker(false);
     if (selectedDate) {
       setSelectedTime(selectedDate);
+      handleScheduleNotification(selectedDate);
     }
   };
 
