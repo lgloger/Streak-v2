@@ -15,7 +15,6 @@ import {
   habitDetailViewModel,
   deleteHabitViewModel,
   updateHabitColor,
-  updateHabitTime,
 } from "../js/habitDetailViewModel";
 import { createShimmerPlaceHolder } from "expo-shimmer-placeholder";
 import { LinearGradient } from "expo-linear-gradient";
@@ -24,6 +23,7 @@ import { iconMapping } from "../components/iconMapping";
 import * as Haptics from "expo-haptics";
 import { AnimatedStreakText } from "../components/AnimatedText";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { scheduleHabitNotification } from "../js/notificationService";
 
 const ShimmerPlaceHolder = createShimmerPlaceHolder(LinearGradient);
 
@@ -83,19 +83,26 @@ const HabitDetailScreen = ({ route, navigation }) => {
     new Date(new Date().setHours(7, 30))
   );
 
-  const handleTimeChange = (event, selectedDate) => {
-    setShowTimePicker(false);
-    if (selectedDate) {
-      const hours = selectedDate.getHours();
-      const minutes = selectedDate.getMinutes();
-      updateHabitTime(habitId, { hours, minutes });
-      setSelectedTime(selectedDate);
+  const { toggleDay } = homeViewModel();
+  const { habit } = habitDetailViewModel(habitId);
+
+  const handleScheduleNotification = async (newTime) => {
+    try {
+      if (habit) {
+        await scheduleHabitNotification(habitId, habit.title, newTime);
+        Alert.alert("Success", "Notification scheduled successfully!");
+      }
+    } catch (error) {
+      Alert.alert("Error", "Failed to schedule notification");
     }
   };
 
-  // SHOW HABIT DETAILS
-  const { toggleDay } = homeViewModel();
-  const { habit } = habitDetailViewModel(habitId);
+  const handleTimeChange = (event, selectedDate) => {
+    setShowTimePicker(false);
+    if (selectedDate) {
+      setSelectedTime(selectedDate);
+    }
+  };
 
   if (!habit) {
     return (
@@ -392,8 +399,8 @@ const styles = StyleSheet.create({
   },
 
   secondHeaderConButton: {
-    height: "102",
-    width: "45",
+    height: 105,
+    width: 45,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#E8E8E8",
@@ -478,17 +485,17 @@ const styles = StyleSheet.create({
 
   timeContainer: {
     padding: 10,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 12,
-    width: '100%',
+    width: "100%",
     maxWidth: 450,
   },
 
   timeButton: {
     padding: 10,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: "#f0f0f0",
     borderRadius: 6,
-    alignItems: 'center',
+    alignItems: "center",
   },
 });
 

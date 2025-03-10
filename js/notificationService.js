@@ -1,49 +1,63 @@
-import * as Notifications from "expo-notifications";
+import * as Notifications from 'expo-notifications';
 
-async function displayScheduledNotifications() {
-  const notifications = await Notifications.getScheduledNotificationsAsync();
-  console.log("Notifications: " + JSON.stringify(notifications));
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
+
+export async function scheduleHabitNotification(habitId, title, time) {
+  try {
+    // Cancel any existing notifications for this habit
+    await cancelHabitNotification(habitId);
+
+    const trigger = {
+      hour: time.getHours(),
+      minute: time.getMinutes(),
+      repeats: true, // Daily notification
+    };
+
+    const notificationId = await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "Habit Reminder",
+        body: `Time to work on: ${title}`,
+        data: { habitId },
+      },
+      trigger,
+    });
+
+    return notificationId;
+  } catch (error) {
+    console.error('Error scheduling notification:', error);
+    throw error;
+  }
 }
 
-displayScheduledNotifications();
+export async function cancelHabitNotification(habitId) {
+  try {
+    // Get all scheduled notifications
+    const scheduledNotifications = await Notifications.getAllScheduledNotificationsAsync();
+    
+    // Find notifications with matching habitId in data
+    const matchingNotifications = scheduledNotifications.filter(
+      notif => notif.content.data?.habitId === habitId
+    );
 
-export const scheduleDailyNotification = async (habitId, title, time) => {
-  const now = new Date();
-  const notificationTime = new Date();
-  notificationTime.setHours(time.hours);
-  notificationTime.setMinutes(time.minutes);
-  notificationTime.setSeconds(0);
-
-  // If the notification time is in the past, schedule it for the next day
-  if (notificationTime <= now) {
-    notificationTime.setDate(notificationTime.getDate() + 1);
+    // Cancel each matching notification
+    await Promise.all(
+      matchingNotifications.map(notif => 
+        Notifications.cancelScheduledNotificationAsync(notif.identifier)
+      )
+    );
+  } catch (error) {
+    console.error('Error cancelling notification:', error);
+    throw error;
   }
+}
 
-  await Notifications.scheduleNotificationAsync({
-    identifier: habitId,
-    content: {
-      title: "Habit Reminder",
-      body: title,
-      sound: true,
-      data: { habitId },
-    },
-    trigger: {
-      seconds: Math.floor((notificationTime.getTime() - now.getTime()) / 1000),
-      repeats: true,
-    },
-  });
-};
-
-export const cancelScheduledNotification = async (habitId) => {
-  await Notifications.cancelScheduledNotificationAsync(habitId);
-};
-
-export const setupNotificationHandler = () => {
-  Notifications.setNotificationHandler({
-    handleNotification: async () => ({
-      shouldShowAlert: true,
-      shouldPlaySound: true,
-      shouldSetBadge: false,
-    }),
-  });
-};
+export async function requestNotificationPermissions() {
+  const { status } = await Notifications.requestPermissionsAsync();
+  return status === 'granted';
+}

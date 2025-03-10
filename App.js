@@ -5,8 +5,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import AppNavigator from "./AppNavigator";
-import * as Notifications from "expo-notifications";
-import { setupNotificationHandler } from "./js/notificationService";
+import * as Notifications from 'expo-notifications';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -21,9 +20,6 @@ export default function App() {
   });
 
   useEffect(() => {
-    // Benachrichtigungshandler einrichten
-    setupNotificationHandler();
-
     const requestPermissions = async () => {
       const { status } = await Notifications.requestPermissionsAsync();
       if (status !== "granted") {

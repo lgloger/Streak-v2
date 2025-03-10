@@ -7,10 +7,6 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { useState, useEffect } from "react";
-import {
-  scheduleDailyNotification,
-  cancelScheduledNotification,
-} from "../js/notificationService";
 
 // ==================== LOAD DATA ====================
 
@@ -61,28 +57,6 @@ const updateHabitColor = async (habitId, newColor) => {
   }
 };
 
-// ==================== UPDATE NOTIFICATION TIME ====================
-
-const updateHabitTime = async (habitId, time) => {
-  const userId = auth.currentUser?.uid;
-  const habitRef = doc(db, "users", userId, "habits", habitId);
-
-  try {
-    await cancelScheduledNotification(habitId);
-
-    await updateDoc(habitRef, {
-      notificationTime: `${time.hours}:${time.minutes}`,
-    });
-
-    const habitSnap = await getDoc(habitRef);
-    const habitTitle = habitSnap.data()?.title || "Your Habit";
-    
-    await scheduleDailyNotification(habitId, `Your daily reminder for ${habitTitle}`, time);
-  } catch (error) {
-    console.error("Error updating time:", error);
-  }
-};
-
 // ==================== DELETE HABIT ====================
 
 const deleteHabitViewModel = async (habitId) => {
@@ -91,11 +65,10 @@ const deleteHabitViewModel = async (habitId) => {
 
   try {
     await deleteDoc(habitRef);
-    await cancelScheduledNotification(habitId);
     console.log("Habit successfully deleted");
   } catch {
     console.error("Error deleting habit:", error);
   }
 };
 
-export { habitDetailViewModel, deleteHabitViewModel, updateHabitColor, updateHabitTime };
+export { habitDetailViewModel, deleteHabitViewModel, updateHabitColor };
