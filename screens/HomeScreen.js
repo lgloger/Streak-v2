@@ -135,13 +135,6 @@ const HomeScreen = ({ navigation }) => {
         >
           <Text style={styles.headerButtonTitle}>Settings</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.headerButton}
-          onPress={() => navigation.navigate("AddHabit")}
-          activeOpacity={0.6}
-        >
-          <Text style={styles.headerButtonTitle}>Add Habit</Text>
-        </TouchableOpacity>
       </View>
       <View style={styles.secondHeader}>
         <Text style={styles.headerTitle}>Habits</Text>
@@ -174,6 +167,22 @@ const HomeScreen = ({ navigation }) => {
           ))}
         </ScrollView>
       )}
+      <View style={styles.firstHeader}>
+        <TouchableOpacity
+          style={styles.headerButton}
+          onPress={() => navigation.navigate("Settings")}
+          activeOpacity={0.6}
+        >
+          <Text style={styles.headerButtonTitle}>Settings</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.headerButton}
+          onPress={() => navigation.navigate("AddHabit")}
+          activeOpacity={0.6}
+        >
+          <Text style={styles.headerButtonTitle}>Add Habit</Text>
+        </TouchableOpacity>
+      </View>
       <StatusBar style="dark" />
     </Container>
   );
@@ -212,7 +221,7 @@ const styles = StyleSheet.create({
   headerButtonTitle: {
     fontSize: 17,
     color: "#0C79FE",
-    fontFamily: "Poppins-SemiBold",
+    fontFamily: "Poppins-Regular",
     includeFontPadding: false,
   },
 
@@ -231,7 +240,7 @@ const styles = StyleSheet.create({
   },
 
   shimmerContainer: {
-    height: "auto",
+    flex: 1,
     width: "100%",
     maxWidth: 450,
     alignItems: "center",

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   createStackNavigator,
-  CardStyleInterpolators,
+  TransitionPresets,
 } from "@react-navigation/stack";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
@@ -15,7 +15,7 @@ import SettingsScreen from "./screens/SettingsScreen";
 import FeatureRequestScreen from "./screens/FeatureRequestScreen";
 import { auth } from "./js/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
-import { StyleSheet, ActivityIndicator, View, Text } from "react-native";
+import { StyleSheet, ActivityIndicator, View } from "react-native";
 
 const Stack = createStackNavigator();
 
@@ -50,12 +50,7 @@ const AppNavigator = () => {
         initialRouteName={user ? "Home" : "Login"}
         screenOptions={{
           headerShown: false,
-          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-          gestureDirection: "horizontal",
-          transitionSpec: {
-            open: { animation: "timing", config: { duration: 245 } },
-            close: { animation: "timing", config: { duration: 245 } },
-          },
+          ...TransitionPresets.SlideFromRightIOS,
         }}
       >
         <Stack.Screen name="Login" component={LoginScreen} />
@@ -63,7 +58,14 @@ const AppNavigator = () => {
         <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
         <Stack.Screen name="EmailSent" component={EmailSentScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="AddHabit" component={AddHabitScreen} />
+        <Stack.Screen
+          name="AddHabit"
+          component={AddHabitScreen}
+          options={{
+            animationEnabled: true,
+            ...TransitionPresets.ModalSlideFromBottomIOS,
+          }}
+        />
         <Stack.Screen name="HabitDetail" component={HabitDetailScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
         <Stack.Screen name="FeatureRequest" component={FeatureRequestScreen} />

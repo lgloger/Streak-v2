@@ -1,6 +1,18 @@
 import { auth, db } from "../js/firebaseConfig";
-import { doc, onSnapshot, deleteDoc, updateDoc } from "firebase/firestore";
+import {
+  doc,
+  onSnapshot,
+  deleteDoc,
+  updateDoc,
+  getDoc,
+} from "firebase/firestore";
 import { useState, useEffect } from "react";
+import {
+  scheduleDailyNotification,
+  cancelScheduledNotification,
+} from "../js/notificationService";
+
+// ==================== LOAD DATA ====================
 
 const habitDetailViewModel = (habitId) => {
   const [habit, setHabit] = useState(null);
@@ -34,17 +46,7 @@ const habitDetailViewModel = (habitId) => {
   return { habit, loading };
 };
 
-const deleteHabitViewModel = async (habitId) => {
-  const userId = auth.currentUser?.uid;
-  const habitRef = doc(db, "users", userId, "habits", habitId);
-
-  try {
-    await deleteDoc(habitRef);
-    console.log("Habit succressfully deleted");
-  } catch {
-    console.error("Error deleting habit:", error);
-  }
-};
+// ==================== UPDATE HABIT COLOR ====================
 
 const updateHabitColor = async (habitId, newColor) => {
   const userId = auth.currentUser?.uid;
@@ -59,4 +61,41 @@ const updateHabitColor = async (habitId, newColor) => {
   }
 };
 
-export { habitDetailViewModel, deleteHabitViewModel, updateHabitColor };
+// ==================== UPDATE NOTIFICATION TIME ====================
+
+const updateHabitTime = async (habitId, time) => {
+  const userId = auth.currentUser?.uid;
+  const habitRef = doc(db, "users", userId, "habits", habitId);
+
+  try {
+    await cancelScheduledNotification(habitId);
+
+    await updateDoc(habitRef, {
+      notificationTime: `${time.hours}:${time.minutes}`,
+    });
+
+    const habitSnap = await getDoc(habitRef);
+    const habitTitle = habitSnap.data()?.title || "Your Habit";
+    
+    await scheduleDailyNotification(habitId, `Your daily reminder for ${habitTitle}`, time);
+  } catch (error) {
+    console.error("Error updating time:", error);
+  }
+};
+
+// ==================== DELETE HABIT ====================
+
+const deleteHabitViewModel = async (habitId) => {
+  const userId = auth.currentUser?.uid;
+  const habitRef = doc(db, "users", userId, "habits", habitId);
+
+  try {
+    await deleteDoc(habitRef);
+    await cancelScheduledNotification(habitId);
+    console.log("Habit successfully deleted");
+  } catch {
+    console.error("Error deleting habit:", error);
+  }
+};
+
+export { habitDetailViewModel, deleteHabitViewModel, updateHabitColor, updateHabitTime };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -15,6 +15,7 @@ import {
   habitDetailViewModel,
   deleteHabitViewModel,
   updateHabitColor,
+  updateHabitTime,
 } from "../js/habitDetailViewModel";
 import { createShimmerPlaceHolder } from "expo-shimmer-placeholder";
 import { LinearGradient } from "expo-linear-gradient";
@@ -22,6 +23,7 @@ import { homeViewModel } from "../js/homeViewModel";
 import { iconMapping } from "../components/iconMapping";
 import * as Haptics from "expo-haptics";
 import { AnimatedStreakText } from "../components/AnimatedText";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 const ShimmerPlaceHolder = createShimmerPlaceHolder(LinearGradient);
 
@@ -47,6 +49,21 @@ const Header = ({ navigation, deleteHabitModal }) => (
   </View>
 );
 
+const LoadingHeader = ({ navigation }) => (
+  <View style={styles.firstHeader}>
+    <TouchableOpacity
+      style={styles.headerButton}
+      onPress={() => navigation.goBack()}
+    >
+      <Image
+        style={styles.headerIcon}
+        source={require("../assets/icons/arrow.png")}
+      />
+      <Text style={styles.firstHeaderTitle}>Habits</Text>
+    </TouchableOpacity>
+  </View>
+);
+
 const ColorButton = ({ color, habitId }) => (
   <TouchableOpacity
     style={[styles.colorButton, { backgroundColor: color }]}
@@ -59,22 +76,41 @@ const ColorButton = ({ color, habitId }) => (
 );
 
 const HabitDetailScreen = ({ route, navigation }) => {
+  // HABIT NOTIFICATION TIME
   const { habitId } = route.params || {};
+  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [selectedTime, setSelectedTime] = useState(
+    new Date(new Date().setHours(7, 30))
+  );
 
+  const handleTimeChange = (event, selectedDate) => {
+    setShowTimePicker(false);
+    if (selectedDate) {
+      const hours = selectedDate.getHours();
+      const minutes = selectedDate.getMinutes();
+      updateHabitTime(habitId, { hours, minutes });
+      setSelectedTime(selectedDate);
+    }
+  };
+
+  // SHOW HABIT DETAILS
   const { toggleDay } = homeViewModel();
   const { habit } = habitDetailViewModel(habitId);
 
   if (!habit) {
     return (
-      <View style={styles.shimmerContainer}>
-        <ShimmerPlaceHolder
-          style={styles.shimmerOne}
-          shimmerColors={["#FFFFFF", "#E8E8E8", "#FFFFFF"]}
-        />
-        <ShimmerPlaceHolder
-          style={styles.shimmer}
-          shimmerColors={["#FFFFFF", "#E8E8E8", "#FFFFFF"]}
-        />
+      <View style={loadingStyles.laodingContainer}>
+        <LoadingHeader navigation={navigation} />
+        <View style={loadingStyles.shimmerContainer}>
+          <ShimmerPlaceHolder
+            style={loadingStyles.shimmerOne}
+            shimmerColors={["#FFFFFF", "#E8E8E8", "#FFFFFF"]}
+          />
+          <ShimmerPlaceHolder
+            style={loadingStyles.shimmer}
+            shimmerColors={["#FFFFFF", "#E8E8E8", "#FFFFFF"]}
+          />
+        </View>
       </View>
     );
   }
@@ -218,11 +254,42 @@ const HabitDetailScreen = ({ route, navigation }) => {
           ))}
         </View>
       </View>
+      <View style={styles.timeContainer}>
+        <TouchableOpacity
+          onPress={() => setShowTimePicker(true)}
+          style={styles.timeButton}
+        >
+          <Text>
+            Benachrichtigungszeit:{" "}
+            {selectedTime.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </Text>
+        </TouchableOpacity>
+
+        {showTimePicker && (
+          <DateTimePicker
+            value={selectedTime}
+            mode="time"
+            onChange={handleTimeChange}
+          />
+        )}
+      </View>
     </Container>
   );
 };
 
 const loadingStyles = StyleSheet.create({
+  laodingContainer: {
+    flex: 1,
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    paddingHorizontal: 16,
+  },
+
   shimmerContainer: {
     height: "auto",
     width: "100%",
@@ -230,6 +297,7 @@ const loadingStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     gap: 15,
+    marginTop: 60,
   },
 
   shimmerOne: {
@@ -282,7 +350,7 @@ const styles = StyleSheet.create({
   firstHeaderTitle: {
     fontSize: 17,
     color: "#0C79FE",
-    fontFamily: "Poppins-SemiBold",
+    fontFamily: "Poppins-Medium",
     includeFontPadding: false,
   },
 
@@ -406,6 +474,21 @@ const styles = StyleSheet.create({
     height: 40,
     width: 40,
     borderRadius: 30,
+  },
+
+  timeContainer: {
+    padding: 10,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    width: '100%',
+    maxWidth: 450,
+  },
+
+  timeButton: {
+    padding: 10,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 6,
+    alignItems: 'center',
   },
 });
 

@@ -13,6 +13,7 @@ import {
 import { addHabitViewModel } from "../js/dataManger";
 import * as Haptics from "expo-haptics";
 import { iconMapping } from "../components/iconMapping";
+import { ScrollView } from "react-native-gesture-handler";
 
 const Header = ({ navigation, addHabit }) => (
   <View style={styles.firstHeader}>
@@ -68,13 +69,6 @@ const AddHabitsScreen = ({ navigation }) => {
     addHabit,
   } = addHabitViewModel(navigation);
 
-  const refRBSheet = React.createRef();
-
-  const handleIconSelect = (icon) => {
-    setSelectedIcon(icon);
-    refRBSheet.current.close();
-  };
-
   const Container = Platform.select({
     web: View,
     default: SafeAreaView,
@@ -83,49 +77,66 @@ const AddHabitsScreen = ({ navigation }) => {
   return (
     <Container style={styles.container}>
       <Header navigation={navigation} addHabit={addHabit} />
-      <View style={styles.secondHeader}></View>
-      <View style={styles.mainContainer}>
-        <View style={styles.habitContainer}>
-          <View style={styles.iconPickerContainer}>
-            <View
-              style={[styles.inputButton, { backgroundColor: color, shadowColor: color }]}
-            >
-              <Image
-                style={styles.inputIcon}
-                source={iconMapping[selectedIcon] || iconMapping["star"]}
+      <ScrollView style={styles.scrollCon}>
+        <View style={styles.mainContainer}>
+          <View style={styles.habitContainer}>
+            <View style={styles.iconPickerContainer}>
+              <View
+                style={[
+                  styles.inputButton,
+                  { backgroundColor: color, shadowColor: color },
+                ]}
+              >
+                <Image
+                  style={styles.inputIcon}
+                  source={iconMapping[selectedIcon] || iconMapping["star"]}
+                />
+              </View>
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={[styles.input, { color: color }]}
+                onChangeText={setTitle}
+                value={title}
+                placeholderTextColor="#818181"
+                placeholder="Habit Title"
+                keyboardType="text"
+                selectionColor="#FFFFFF"
+                cursorColor="rgba(75, 106, 234, 0.8)"
+                maxLength={12}
+                caretHidden={false}
               />
             </View>
           </View>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={[styles.input, { color: color }]}
-              onChangeText={setTitle}
-              value={title}
-              placeholderTextColor="#818181"
-              placeholder="Habit Title"
-              keyboardType="text"
-              selectionColor="#FFFFFF"
-              cursorColor="#818181"
-              maxLength={12}
-              caretHidden={false}
-            />
+          <View style={styles.habitContainer}>
+            <View style={styles.colorContainer}>
+              {[
+                "#F14C3C",
+                "#FFA033",
+                "#F7CE45",
+                "#5DC466",
+                "#0C79FE",
+                "#B67AD5",
+                "#998667",
+                "#474848",
+              ].map((color) => (
+                <ColorButton key={color} color={color} setColor={setColor} />
+              ))}
+            </View>
+          </View>
+          <View style={styles.habitContainer}>
+            <View style={styles.iconContainer}>
+              {Object.keys(iconMapping).map((icon) => (
+                <IconButton
+                  key={icon}
+                  icon={icon}
+                  setSelectedIcon={setSelectedIcon}
+                />
+              ))}
+            </View>
           </View>
         </View>
-        <View style={styles.habitContainer}>
-          <View style={styles.colorContainer}>
-            {["#F14C3C", "#FFA033", "#F7CE45", "#5DC466", "#0C79FE", "#B67AD5", "#998667", "#474848"].map((color) => (
-              <ColorButton key={color} color={color} setColor={setColor} />
-            ))}
-          </View>
-        </View>
-        <View style={styles.habitContainer}>
-          <View style={styles.iconContainer}>
-            {Object.keys(iconMapping).map((icon) => (
-              <IconButton key={icon} icon={icon} setSelectedIcon={setSelectedIcon} />
-            ))}
-          </View>
-        </View>
-      </View>
+      </ScrollView>
     </Container>
   );
 };
@@ -161,24 +172,22 @@ const styles = StyleSheet.create({
   firstHeaderTitle: {
     fontSize: 17,
     color: "#0C79FE",
-    fontFamily: "Poppins-SemiBold",
+    fontFamily: "Poppins-Regular",
     includeFontPadding: false,
   },
 
   firstHeaderTitleBlack: {
     fontSize: 17,
     color: "#000000",
-    fontFamily: "Poppins-SemiBold",
+    fontFamily: "Poppins-Regular",
     includeFontPadding: false,
+    position: "absolute",
+    left: "37%",
   },
 
-  secondHeader: {
-    height: 60,
+  scrollCon: {
+    flex: 1,
     width: "100%",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    flexDirection: "row",
-    backgroundColor: "transparent",
   },
 
   mainContainer: {
@@ -188,6 +197,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     gap: 15,
+    marginTop: 60,
   },
 
   habitContainer: {
@@ -312,7 +322,7 @@ const styles = StyleSheet.create({
   iconImage: {
     height: 24,
     width: 24,
-    tintColor: '#474848',
+    tintColor: "#474848",
   },
 });
 
