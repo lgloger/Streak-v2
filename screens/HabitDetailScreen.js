@@ -88,9 +88,11 @@ const HabitDetailScreen = ({ route, navigation }) => {
 
   const handleScheduleNotification = async (newTime) => {
     try {
-      if (habit) {
+      if (habit && !habit.completedDates.includes(today)) {
         await scheduleHabitNotification(habitId, habit.title, newTime);
         Alert.alert("Success", "Notification scheduled successfully!");
+      } else {
+        Alert.alert("Info", "Habit already completed for today. No notification scheduled.");
       }
     } catch (error) {
       Alert.alert("Error", "Failed to schedule notification");
