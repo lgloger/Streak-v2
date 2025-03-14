@@ -20,16 +20,18 @@ import { AnimatedStreakText } from "../components/AnimatedText";
 
 const ShimmerPlaceHolder = createShimmerPlaceHolder(LinearGradient);
 
-const HabitHeader = ({ habit }) => (
+const HabitHeader = ({ habit, theme }) => (
   <View style={styles.habitConHeader}>
     <View style={styles.firstHabitConHeader}>
-      <View style={[styles.firstHeaderCon, { backgroundColor: habit.color }]}>
+      <View style={[styles.firstHeaderCon, { backgroundColor: theme.iconBackground }]}>
         <Image
-          style={styles.firstHeaderConIcon}
+          style={[styles.firstHeaderConIcon, { tintColor: theme.iconTint }]}
           source={iconMapping[habit.selectedIcon]}
         />
       </View>
-      <Text style={styles.firstHeaderConTitle}>{habit.title}</Text>
+      <Text style={[styles.firstHeaderConTitle, { color: theme.headerText }]}>
+        {habit.title}
+      </Text>
     </View>
     <View style={styles.secondHeaderConHeader}>
       <View style={styles.secondHeaderConStreak}>
@@ -38,29 +40,33 @@ const HabitHeader = ({ habit }) => (
           isTodayCompleted={habit.completedDates?.includes(
             new Date().toISOString().split("T")[0]
           )}
+          theme={theme}
         />
       </View>
     </View>
   </View>
 );
 
-const Habit = ({ habit, navigation, renderDay, getCurrentWeek }) => (
+const Habit = ({ habit, navigation, renderDay, getCurrentWeek, theme }) => (
   <TouchableOpacity
-    style={styles.habitContainer}
+    style={[
+      styles.habitContainer,
+      { backgroundColor: theme.secondary, borderColor: theme.borderColor },
+    ]}
     key={habit.id}
     onPress={() => navigation.navigate("HabitDetail", { habitId: habit.id })}
     activeOpacity={0.6}
   >
-    <HabitHeader habit={habit} />
+    <HabitHeader habit={habit} theme={theme} />
     <View style={styles.dateContainer}>
       {getCurrentWeek().map((date, index) =>
-        date ? renderDay(date, habit.completedDates, habit, index) : null
+        date ? renderDay(date, habit.completedDates, habit, index, theme) : null
       )}
     </View>
   </TouchableOpacity>
 );
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({ navigation, theme }) => {
   const { habits, loading, getCurrentWeek, toggleDay } = homeViewModel();
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -74,7 +80,7 @@ const HomeScreen = ({ navigation }) => {
     }
   }, [loading]);
 
-  const renderDay = (date, completedDates = [], habit, index) => {
+  const renderDay = (date, completedDates = [], habit, index, theme) => {
     const dayAbbreviation = date.toLocaleDateString("en-US", {
       weekday: "short",
     });
@@ -99,19 +105,23 @@ const HomeScreen = ({ navigation }) => {
         style={[styles.dayContainer, { opacity, transform: [{ scale }] }]}
         key={date.toString()}
       >
-        <Text style={styles.dayConText}>{dayAbbreviation}</Text>
+        <Text style={[styles.dayConText, { color: theme.text }]}>
+          {dayAbbreviation}
+        </Text>
         <View
           style={[
             styles.backroundDate,
-            isCompleted && { backgroundColor: habit.color },
+            {
+              backgroundColor: isCompleted ? theme.iconBackground: theme.secondary,
+              borderColor: theme.borderColor,
+            },
           ]}
         >
           <Text
-            style={
-              isCompleted
-                ? styles.backroundDateTextActive
-                : styles.backroundDateText
-            }
+            style={[
+              styles.backroundDateText,
+              { color: isCompleted ? theme.text : theme.secondaryText },
+            ]}
           >
             {date.getDate()}
           </Text>
@@ -126,28 +136,32 @@ const HomeScreen = ({ navigation }) => {
   });
 
   return (
-    <Container style={styles.container}>
-      <View style={styles.firstHeader}>
-        <TouchableOpacity
-          style={styles.headerButton}
-          onPress={() => navigation.navigate("Settings")}
-          activeOpacity={0.6}
-        >
-          <Text style={styles.headerButtonTitle}>Settings</Text>
-        </TouchableOpacity>
-      </View>
+    <Container
+      style={[styles.container, { backgroundColor: theme.background }]}
+    >
+      <View style={styles.firstHeader}></View>
       <View style={styles.secondHeader}>
-        <Text style={styles.headerTitle}>Habits</Text>
+        <Text style={[styles.headerTitle, { color: theme.headerText }]}>
+          Habits
+        </Text>
       </View>
       {loading ? (
         <View style={styles.shimmerContainer}>
           <ShimmerPlaceHolder
-            style={styles.shimmer}
-            shimmerColors={["#FFFFFF", "#E8E8E8", "#FFFFFF"]}
+            style={[styles.shimmer, { borderColor: theme.borderColor }]}
+            shimmerColors={[
+              theme.background,
+              theme.secondary,
+              theme.background,
+            ]}
           />
           <ShimmerPlaceHolder
-            style={styles.shimmer}
-            shimmerColors={["#FFFFFF", "#E8E8E8", "#FFFFFF"]}
+            style={[styles.shimmer, { borderColor: theme.borderColor }]}
+            shimmerColors={[
+              theme.background,
+              theme.secondary,
+              theme.background,
+            ]}
           />
         </View>
       ) : (
@@ -163,6 +177,7 @@ const HomeScreen = ({ navigation }) => {
               navigation={navigation}
               renderDay={renderDay}
               getCurrentWeek={getCurrentWeek}
+              theme={theme}
             />
           ))}
         </ScrollView>
@@ -173,17 +188,21 @@ const HomeScreen = ({ navigation }) => {
           onPress={() => navigation.navigate("Settings")}
           activeOpacity={0.6}
         >
-          <Text style={styles.headerButtonTitle}>Settings</Text>
+          <Text style={[styles.headerButtonTitle, { color: theme.headerText }]}>
+            Settings
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.headerButton}
           onPress={() => navigation.navigate("AddHabit")}
           activeOpacity={0.6}
         >
-          <Text style={styles.headerButtonTitle}>Add Habit</Text>
+          <Text style={[styles.headerButtonTitle, { color: theme.headerText }]}>
+            Add Habit
+          </Text>
         </TouchableOpacity>
       </View>
-      <StatusBar style="dark" />
+      <StatusBar style={theme.background === "#1D1E20" ? "light" : "dark"} />
     </Container>
   );
 };
@@ -191,7 +210,6 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F2F2F6",
     alignItems: "center",
     justifyContent: "flex-start",
     paddingHorizontal: 16,
@@ -220,8 +238,7 @@ const styles = StyleSheet.create({
 
   headerButtonTitle: {
     fontSize: 17,
-    color: "#0C79FE",
-    fontFamily: "Poppins-Regular",
+    fontFamily: "Poppins-Medium",
     includeFontPadding: false,
   },
 
@@ -251,17 +268,18 @@ const styles = StyleSheet.create({
   shimmer: {
     width: "100%",
     height: 116,
-    borderRadius: 12,
+    borderRadius: 24,
+    borderWidth: 1,
   },
 
   habitContainer: {
     height: "auto",
     width: "100%",
     maxWidth: 450,
-    backgroundColor: "#ffffff",
-    borderRadius: 12,
+    borderRadius: 24,
     padding: 10,
     marginBottom: 15,
+    borderWidth: 1,
   },
 
   habitConHeader: {
@@ -296,7 +314,6 @@ const styles = StyleSheet.create({
   firstHeaderConTitle: {
     fontSize: 18,
     fontFamily: "Poppins-Medium",
-    color: "#000000",
     includeFontPadding: false,
   },
 
@@ -319,23 +336,6 @@ const styles = StyleSheet.create({
     marginRight: 6,
   },
 
-  secondHeaderConButton: {
-    height: 30,
-    width: 60,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#E8E8E8",
-    borderRadius: 10,
-  },
-
-  secondHeaderConButtonActive: {
-    height: 30,
-    width: 60,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 10,
-  },
-
   dateContainer: {
     height: "auto",
     width: "100%",
@@ -354,7 +354,6 @@ const styles = StyleSheet.create({
   dayConText: {
     fontSize: 12,
     fontFamily: "Poppins-Medium",
-    color: "#8E8E92",
     includeFontPadding: false,
   },
 
@@ -363,29 +362,13 @@ const styles = StyleSheet.create({
     width: 32,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#E8E8E8",
     borderRadius: 30,
-  },
-
-  backroundDateActive: {
-    height: 32,
-    width: 32,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 30,
+    borderWidth: 1,
   },
 
   backroundDateText: {
     fontSize: 12,
     fontFamily: "Poppins-Medium",
-    color: "#8E8E92",
-    includeFontPadding: false,
-  },
-
-  backroundDateTextActive: {
-    fontSize: 12,
-    fontFamily: "Poppins-Medium",
-    color: "#ffffff",
     includeFontPadding: false,
   },
 });

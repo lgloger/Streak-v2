@@ -1,16 +1,18 @@
 import React, { useEffect, useCallback, useState } from "react";
-import { StyleSheet, View, Platform } from "react-native";
+import { StyleSheet, View, useColorScheme } from "react-native";
 import * as NavigationBar from "expo-navigation-bar";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import AppNavigator from "./AppNavigator";
-import * as Notifications from 'expo-notifications';
+import { lightTheme, darkTheme } from "./js/themes";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [appReady, setAppReady] = useState(false);
+  const colorScheme = useColorScheme();
+  const theme = colorScheme === "dark" ? darkTheme : lightTheme;
 
   const [fontsLoaded] = useFonts({
     "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
@@ -20,37 +22,34 @@ export default function App() {
   });
 
   useEffect(() => {
-    const requestPermissions = async () => {
-      const { status } = await Notifications.requestPermissionsAsync();
-      if (status !== "granted") {
-        alert("Benachrichtigungsberechtigungen werden benötigt!");
-      }
-    };
-    requestPermissions();
-
     async function prepare() {
       try {
         await SplashScreen.preventAutoHideAsync();
-        console.log("Schriftarten geladen:", fontsLoaded);
+        console.log("Fonts loaded:", fontsLoaded);
 
-        await NavigationBar.setBackgroundColorAsync("#F2F2F6");
+        if (theme.background) {
+          await NavigationBar.setBackgroundColorAsync(theme.background);
+        } else {
+          console.error("Theme background is null or undefined");
+        }
       } catch (error) {
-        console.error("Fehler beim Vorbereiten der App:", error);
+        console.error("Error preparing the app:", error);
       } finally {
         setAppReady(true);
       }
     }
 
+    console.log("Current Theme:", theme); // Fixed typo "Aktuelles" to "Current"
     prepare();
-  }, [fontsLoaded]);
+  }, [fontsLoaded, theme.background]);
 
   const onLayoutRootView = useCallback(async () => {
     if (appReady && fontsLoaded) {
       try {
         await SplashScreen.hideAsync();
-        console.log("Splash Screen versteckt!");
+        console.log("Splash Screen hidden!");
       } catch (error) {
-        console.error("Fehler beim Verstecken des Splash Screens:", error);
+        console.error("Error hiding Splash Screen:", error);
       }
     }
   }, [appReady, fontsLoaded]);
@@ -61,8 +60,11 @@ export default function App() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <View style={styles.container} onLayout={onLayoutRootView}>
-        <AppNavigator />
+      <View
+        style={[styles.container, { backgroundColor: theme.background }]}
+        onLayout={onLayoutRootView}
+      >
+        <AppNavigator theme={theme} />
       </View>
     </GestureHandlerRootView>
   );

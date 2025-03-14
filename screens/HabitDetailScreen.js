@@ -22,44 +22,48 @@ import { homeViewModel } from "../js/homeViewModel";
 import { iconMapping } from "../components/iconMapping";
 import * as Haptics from "expo-haptics";
 import { AnimatedStreakText } from "../components/AnimatedText";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import { scheduleHabitNotification } from "../js/notificationService";
 
 const ShimmerPlaceHolder = createShimmerPlaceHolder(LinearGradient);
 
-const Header = ({ navigation, deleteHabitModal }) => (
+const Header = ({ navigation, deleteHabitModal, theme }) => (
   <View style={styles.firstHeader}>
     <TouchableOpacity
       style={styles.headerButton}
       onPress={() => navigation.goBack()}
     >
       <Image
-        style={styles.headerIcon}
+        style={[styles.headerIcon, { tintColor: theme.iconTint }]}
         source={require("../assets/icons/arrow.png")}
       />
-      <Text style={styles.firstHeaderTitle}>Habits</Text>
+      <Text style={[styles.firstHeaderTitle, { color: theme.headerText }]}>
+        Habits
+      </Text>
     </TouchableOpacity>
     <TouchableOpacity
       style={styles.headerButton}
       onPress={deleteHabitModal}
       activeOpacity={0.6}
     >
-      <Text style={styles.firstHeaderTitle}>Delete</Text>
+      <Text style={[styles.firstHeaderTitle, { color: theme.headerText }]}>
+        Delete
+      </Text>
     </TouchableOpacity>
   </View>
 );
 
-const LoadingHeader = ({ navigation }) => (
+const LoadingHeader = ({ navigation, theme }) => (
   <View style={styles.firstHeader}>
     <TouchableOpacity
       style={styles.headerButton}
       onPress={() => navigation.goBack()}
     >
       <Image
-        style={styles.headerIcon}
+        style={[styles.headerIcon, { tintColor: theme.iconTint }]}
         source={require("../assets/icons/arrow.png")}
       />
-      <Text style={styles.firstHeaderTitle}>Habits</Text>
+      <Text style={[styles.firstHeaderTitle, { color: theme.headerText }]}>
+        Habits
+      </Text>
     </TouchableOpacity>
   </View>
 );
@@ -75,8 +79,7 @@ const ColorButton = ({ color, habitId }) => (
   />
 );
 
-const HabitDetailScreen = ({ route, navigation }) => {
-  // HABIT NOTIFICATION TIME
+const HabitDetailScreen = ({ route, navigation, theme }) => {
   const { habitId } = route.params || {};
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [selectedTime, setSelectedTime] = useState(
@@ -86,39 +89,25 @@ const HabitDetailScreen = ({ route, navigation }) => {
   const { toggleDay } = homeViewModel();
   const { habit } = habitDetailViewModel(habitId);
 
-  const handleScheduleNotification = async (newTime) => {
-    try {
-      if (habit && !habit.completedDates.includes(today)) {
-        await scheduleHabitNotification(habitId, habit.title, newTime);
-        Alert.alert("Success", "Notification scheduled successfully!");
-      } else {
-        Alert.alert("Info", "Habit already completed for today. No notification scheduled.");
-      }
-    } catch (error) {
-      Alert.alert("Error", "Failed to schedule notification");
-    }
-  };
-
   const handleTimeChange = (event, selectedDate) => {
     setShowTimePicker(false);
     if (selectedDate) {
       setSelectedTime(selectedDate);
-      handleScheduleNotification(selectedDate);
     }
   };
 
   if (!habit) {
     return (
       <View style={loadingStyles.laodingContainer}>
-        <LoadingHeader navigation={navigation} />
+        <LoadingHeader navigation={navigation} theme={theme} />
         <View style={loadingStyles.shimmerContainer}>
           <ShimmerPlaceHolder
             style={loadingStyles.shimmerOne}
-            shimmerColors={["#FFFFFF", "#E8E8E8", "#FFFFFF"]}
+            shimmerColors={[theme.background, theme.secondary, theme.background]}
           />
           <ShimmerPlaceHolder
             style={loadingStyles.shimmer}
-            shimmerColors={["#FFFFFF", "#E8E8E8", "#FFFFFF"]}
+            shimmerColors={[theme.background, theme.secondary, theme.background]}
           />
         </View>
       </View>
@@ -197,9 +186,9 @@ const HabitDetailScreen = ({ route, navigation }) => {
   };
 
   return (
-    <Container style={styles.container}>
-      <Header navigation={navigation} deleteHabitModal={deleteHabitModal} />
-      <View style={[styles.habitContainer, { marginTop: 45 }]}>
+    <Container style={[styles.container, { backgroundColor: theme.background }]}>
+      <Header navigation={navigation} deleteHabitModal={deleteHabitModal} theme={theme} />
+      <View style={[styles.habitContainer, { marginTop: 45, backgroundColor: theme.secondary, borderColor: theme.borderColor }]}>
         <View style={styles.habitContainerActivityBtnCon}>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View style={styles.habitActivityCon}>
@@ -213,7 +202,7 @@ const HabitDetailScreen = ({ route, navigation }) => {
                     styles.secondHeaderConButton,
                     { backgroundColor: habit.color },
                   ]
-                : styles.secondHeaderConButton,
+                : [styles.secondHeaderConButton, { backgroundColor: theme.secondary }],
             ]}
             onPress={() => handleCheckPress(habit)}
             activeOpacity={0.6}
@@ -238,17 +227,20 @@ const HabitDetailScreen = ({ route, navigation }) => {
                 source={iconMapping[habit.selectedIcon]}
               />
             </View>
-            <Text style={styles.headerTitle}>{habit.title}</Text>
+            <Text style={[styles.headerTitle, { color: theme.headerText }]}>
+              {habit.title}
+            </Text>
           </View>
           <View style={styles.secondHeaderConStreak}>
             <AnimatedStreakText
               streak={habit.streak}
               isTodayCompleted={habit.completedDates?.includes(today)}
+              theme={theme}
             />
           </View>
         </View>
       </View>
-      <View style={styles.habitContainer}>
+      <View style={[styles.habitContainer, { backgroundColor: theme.secondary, borderColor: theme.borderColor }]}>
         <View style={styles.colorContainer}>
           {[
             "#F14C3C",
@@ -263,28 +255,6 @@ const HabitDetailScreen = ({ route, navigation }) => {
             <ColorButton key={color} color={color} habitId={habitId} />
           ))}
         </View>
-      </View>
-      <View style={styles.timeContainer}>
-        <TouchableOpacity
-          onPress={() => setShowTimePicker(true)}
-          style={styles.timeButton}
-        >
-          <Text>
-            Benachrichtigungszeit:{" "}
-            {selectedTime.toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-          </Text>
-        </TouchableOpacity>
-
-        {showTimePicker && (
-          <DateTimePicker
-            value={selectedTime}
-            mode="time"
-            onChange={handleTimeChange}
-          />
-        )}
       </View>
     </Container>
   );
@@ -326,7 +296,6 @@ const loadingStyles = StyleSheet.create({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F2F2F6",
     alignItems: "center",
     justifyContent: "flex-start",
     paddingHorizontal: 16,
@@ -359,7 +328,6 @@ const styles = StyleSheet.create({
 
   firstHeaderTitle: {
     fontSize: 17,
-    color: "#0C79FE",
     fontFamily: "Poppins-Medium",
     includeFontPadding: false,
   },
@@ -368,12 +336,12 @@ const styles = StyleSheet.create({
     height: "auto",
     width: "100%",
     maxWidth: 450,
-    backgroundColor: "#ffffff",
     alignItems: "left",
     justifyContent: "center",
-    borderRadius: 12,
+    borderRadius: 24,
     padding: 10,
     gap: 15,
+    borderWidth: 1,
   },
 
   habitContainerActivityBtnCon: {
@@ -406,7 +374,6 @@ const styles = StyleSheet.create({
     width: 45,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#E8E8E8",
     borderRadius: 6,
   },
 
@@ -450,7 +417,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 18,
     fontFamily: "Poppins-Medium",
-    color: "#000000",
     includeFontPadding: false,
   },
 
@@ -466,7 +432,6 @@ const styles = StyleSheet.create({
   secondHeaderConStreakText: {
     fontSize: 28,
     fontFamily: "Poppins-SemiBold",
-    color: "#000000",
     includeFontPadding: false,
   },
 
@@ -476,7 +441,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    gap: 10,
     flexWrap: "wrap",
   },
 
@@ -484,21 +448,7 @@ const styles = StyleSheet.create({
     height: 40,
     width: 40,
     borderRadius: 30,
-  },
-
-  timeContainer: {
-    padding: 10,
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    width: "100%",
-    maxWidth: 450,
-  },
-
-  timeButton: {
-    padding: 10,
-    backgroundColor: "#f0f0f0",
-    borderRadius: 6,
-    alignItems: "center",
+    margin: 5,
   },
 });
 

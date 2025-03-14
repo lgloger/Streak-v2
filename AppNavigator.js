@@ -1,9 +1,6 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import {
-  createStackNavigator,
-  TransitionPresets,
-} from "@react-navigation/stack";
+import { createStackNavigator, TransitionPresets } from "@react-navigation/stack";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 import ResetPasswordScreen from "./screens/ResetPasswordScreen";
@@ -19,7 +16,7 @@ import { StyleSheet, ActivityIndicator, View } from "react-native";
 
 const Stack = createStackNavigator();
 
-const AppNavigator = () => {
+const AppNavigator = ({ theme }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -34,10 +31,10 @@ const AppNavigator = () => {
 
   if (loading) {
     return (
-      <View style={loadingStyles.loadingContainer}>
+      <View style={[loadingStyles.container, { backgroundColor: theme.background }]}>
         <ActivityIndicator
           size="large"
-          color="#000000"
+          color={theme.text}
           style={{ marginBottom: 10 }}
         />
       </View>
@@ -53,41 +50,45 @@ const AppNavigator = () => {
           ...TransitionPresets.SlideFromRightIOS,
         }}
       >
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Signup" component={SignupScreen} />
-        <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
-        <Stack.Screen name="EmailSent" component={EmailSentScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen
-          name="AddHabit"
-          component={AddHabitScreen}
-          options={{
-            animationEnabled: true,
-            ...TransitionPresets.ModalSlideFromBottomIOS,
-          }}
-        />
-        <Stack.Screen name="HabitDetail" component={HabitDetailScreen} />
-        <Stack.Screen name="Settings" component={SettingsScreen} />
-        <Stack.Screen name="FeatureRequest" component={FeatureRequestScreen} />
+        <Stack.Screen name="Login">
+          {(props) => <LoginScreen {...props} theme={theme} />}
+        </Stack.Screen>
+        <Stack.Screen name="Signup">
+          {(props) => <SignupScreen {...props} theme={theme} />}
+        </Stack.Screen>
+        <Stack.Screen name="ResetPassword">
+          {(props) => <ResetPasswordScreen {...props} theme={theme} />}
+        </Stack.Screen>
+        <Stack.Screen name="EmailSent">
+          {(props) => <EmailSentScreen {...props} theme={theme} />}
+        </Stack.Screen>
+        <Stack.Screen name="Home">
+          {(props) => <HomeScreen {...props} theme={theme} />}
+        </Stack.Screen>
+        <Stack.Screen name="AddHabit">
+          {(props) => <AddHabitScreen {...props} theme={theme} />}
+        </Stack.Screen>
+        <Stack.Screen name="HabitDetail">
+          {(props) => <HabitDetailScreen {...props} theme={theme} />}
+        </Stack.Screen>
+        <Stack.Screen name="Settings">
+          {(props) => <SettingsScreen {...props} theme={theme} />}
+        </Stack.Screen>
+        <Stack.Screen name="FeatureRequest">
+          {(props) => <FeatureRequestScreen {...props} theme={theme} />}
+        </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
 
 const loadingStyles = StyleSheet.create({
-  loadingContainer: {
+  container: {
     flex: 1,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#E8E8E8",
     padding: 10,
-  },
-
-  loadingText: {
-    fontSize: 18,
-    fontFamily: "Poppins-Medium",
-    color: "#000000",
   },
 });
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { StyleSheet, View, Text, Animated } from "react-native";
 
-export const AnimatedStreakText = ({ streak, isTodayCompleted }) => {
+export const AnimatedStreakText = ({ streak, isTodayCompleted, theme }) => {
   const prevStreakRef = useRef(streak);
   const animateY = useRef(new Animated.Value(0)).current;
   const opacity = useRef(new Animated.Value(1)).current;
@@ -49,6 +49,7 @@ export const AnimatedStreakText = ({ streak, isTodayCompleted }) => {
         style={[
           styles.streakText,
           {
+            color: theme.headerText,
             opacity,
             transform: [{ translateY: animateY }],
           },
@@ -62,6 +63,7 @@ export const AnimatedStreakText = ({ streak, isTodayCompleted }) => {
           styles.streakText,
           isTodayCompleted && styles.streakTextActive,
           {
+            color: theme.headerText,
             position: "absolute",
             opacity: Animated.subtract(1, opacity),
             transform: [{ translateY: animateY }],
@@ -86,7 +88,6 @@ const styles = StyleSheet.create({
   streakText: {
     fontSize: 28,
     fontFamily: "Poppins-SemiBold",
-    color: "#000000",
     includeFontPadding: false,
     marginTop: -4,
   },

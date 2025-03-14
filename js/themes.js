@@ -1,0 +1,33 @@
+export const lightTheme = {
+  background: "#F9F8F6",
+  headerText: "#0A0A0A",
+  text: "#7E8288",
+  secondaryText: "#8E8E92",
+  primary: "#0C79FE",
+  secondary: "#FFFFFF",
+  placeholder: "#E8E8E8",
+  buttonBackground: "#FFFFFF",
+  buttonText: "#000000",
+  inputBackground: "#E8E8E8",
+  inputText: "#000000",
+  iconTint: "#0a0a0a",
+  iconBackground: "#F0EFEE",
+  borderColor: "rgba(219, 219, 219, 0.38)",
+};
+
+export const darkTheme = {
+  background: "#1D1E20",
+  headerText: "#F9F8F6",
+  text: "#B9BCC1",
+  secondaryText: "#8E8E92",
+  primary: "#0C79FE",
+  secondary: "#313335",
+  placeholder: "#3A3A3C",
+  buttonBackground: "#1C1C1E",
+  buttonText: "#FFFFFF",
+  inputBackground: "#3A3A3C",
+  inputText: "#FFFFFF",
+  iconTint: "#FFFFFF",
+  iconBackground: "#3F4144",
+  borderColor: "rgba(255, 255, 255, 0.1)",
+};
