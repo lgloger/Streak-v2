@@ -58,7 +58,7 @@ const LoadingHeader = ({ navigation, theme }) => (
       onPress={() => navigation.goBack()}
     >
       <Image
-        style={[styles.headerIcon, { tintColor: theme.iconTint }]}
+        style={[styles.headerIcon, { tintColor: theme.headerText }]}
         source={require("../assets/icons/arrow.png")}
       />
       <Text style={[styles.firstHeaderTitle, { color: theme.headerText }]}>
@@ -98,16 +98,29 @@ const HabitDetailScreen = ({ route, navigation, theme }) => {
 
   if (!habit) {
     return (
-      <View style={loadingStyles.laodingContainer}>
+      <View
+        style={[
+          loadingStyles.laodingContainer,
+          { backgroundColor: theme.background },
+        ]}
+      >
         <LoadingHeader navigation={navigation} theme={theme} />
         <View style={loadingStyles.shimmerContainer}>
           <ShimmerPlaceHolder
             style={loadingStyles.shimmerOne}
-            shimmerColors={[theme.background, theme.secondary, theme.background]}
+            shimmerColors={[
+              theme.background,
+              theme.secondary,
+              theme.background,
+            ]}
           />
           <ShimmerPlaceHolder
             style={loadingStyles.shimmer}
-            shimmerColors={[theme.background, theme.secondary, theme.background]}
+            shimmerColors={[
+              theme.background,
+              theme.secondary,
+              theme.background,
+            ]}
           />
         </View>
       </View>
@@ -131,25 +144,30 @@ const HabitDetailScreen = ({ route, navigation, theme }) => {
   };
 
   const renderHabitActivities = () => {
-    const totalDays = getDaysInCurrentYear();
+    const today = new Date();
+    const start = new Date(today.getFullYear(), 0, 0);
+    const diff = today - start;
+    const oneDay = 1000 * 60 * 60 * 24;
+    const totalDays = Math.floor(diff / oneDay);
     const daysPerRow = 7;
     const rows = Math.ceil(totalDays / daysPerRow);
-
+  
     return Array.from({ length: rows }).map((_, rowIndex) => (
       <View key={rowIndex} style={styles.habitActivityRow}>
         {Array.from({ length: daysPerRow }).map((_, dayIndex) => {
           const dayOfYear = rowIndex * daysPerRow + dayIndex + 1;
           if (dayOfYear > totalDays) return null;
-
+  
           const date = getDateForDay(dayOfYear);
           const isCompleted = habit.completedDates.includes(date);
-
+  
           return (
             <View
               key={dayOfYear}
               style={[
                 styles.habitActivity,
                 isCompleted && { backgroundColor: habit.color },
+                { borderColor: theme.borderColor },
               ]}
             />
           );
@@ -186,9 +204,24 @@ const HabitDetailScreen = ({ route, navigation, theme }) => {
   };
 
   return (
-    <Container style={[styles.container, { backgroundColor: theme.background }]}>
-      <Header navigation={navigation} deleteHabitModal={deleteHabitModal} theme={theme} />
-      <View style={[styles.habitContainer, { marginTop: 45, backgroundColor: theme.secondary, borderColor: theme.borderColor }]}>
+    <Container
+      style={[styles.container, { backgroundColor: theme.background }]}
+    >
+      <Header
+        navigation={navigation}
+        deleteHabitModal={deleteHabitModal}
+        theme={theme}
+      />
+      <View
+        style={[
+          styles.habitContainer,
+          {
+            marginTop: 45,
+            backgroundColor: theme.secondary,
+            borderColor: theme.borderColor,
+          },
+        ]}
+      >
         <View style={styles.habitContainerActivityBtnCon}>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View style={styles.habitActivityCon}>
@@ -200,9 +233,18 @@ const HabitDetailScreen = ({ route, navigation, theme }) => {
               habit.completedDates?.includes(today)
                 ? [
                     styles.secondHeaderConButton,
-                    { backgroundColor: habit.color },
+                    {
+                      backgroundColor: habit.color,
+                      borderColor: theme.borderColor,
+                    },
                   ]
-                : [styles.secondHeaderConButton, { backgroundColor: theme.secondary }],
+                : [
+                    styles.secondHeaderConButton,
+                    {
+                      backgroundColor: theme.secondary,
+                      borderColor: theme.borderColor,
+                    },
+                  ],
             ]}
             onPress={() => handleCheckPress(habit)}
             activeOpacity={0.6}
@@ -240,7 +282,12 @@ const HabitDetailScreen = ({ route, navigation, theme }) => {
           </View>
         </View>
       </View>
-      <View style={[styles.habitContainer, { backgroundColor: theme.secondary, borderColor: theme.borderColor }]}>
+      <View
+        style={[
+          styles.habitContainer,
+          { backgroundColor: theme.secondary, borderColor: theme.borderColor },
+        ]}
+      >
         <View style={styles.colorContainer}>
           {[
             "#F14C3C",
@@ -365,8 +412,8 @@ const styles = StyleSheet.create({
   habitActivity: {
     height: 12,
     width: 12,
-    backgroundColor: "#E8E8E8",
-    borderRadius: 3,
+    borderRadius: 4,
+    borderWidth: 1,
   },
 
   secondHeaderConButton: {
@@ -375,6 +422,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 6,
+    borderWidth: 1,
   },
 
   secondHeaderConIcon: {

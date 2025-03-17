@@ -13,18 +13,18 @@ import { SignOutViewModel, DeleteAccountViewModel } from "../js/authManager";
 import DeleteAccountModal from "../components/DeleteAccountModal";
 import { getAuth } from "firebase/auth";
 import packageJson from "../package.json";
-import * as MailComposer from 'expo-mail-composer';
+import * as MailComposer from "expo-mail-composer";
 
-const SettingsScreenScreen = ({ navigation }) => {
+const SettingsScreen = ({ navigation, theme }) => {
   const { handleSignOut } = SignOutViewModel(navigation);
   const { handleDeleteAccount } = DeleteAccountViewModel(navigation);
   const [email, setEmail] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const sendEmail = async () => {
-    const supportEmail = 'luca.kloger@gmail.com';
-    const subject = 'Streak - Support';
-    const body = 'Beschreiben sie ihr Anliegen';
+    const supportEmail = "luca.kloger@gmail.com";
+    const subject = "Streak - Support";
+    const body = "Beschreiben sie ihr Anliegen";
 
     const result = await MailComposer.composeAsync({
       recipients: [supportEmail],
@@ -32,10 +32,10 @@ const SettingsScreenScreen = ({ navigation }) => {
       body: body,
     });
 
-    if (result.status === 'sent') {
-      console.log('Email sent successfully');
+    if (result.status === "sent") {
+      console.log("Email sent successfully");
     } else {
-      console.log('Email not sent');
+      console.log("Email not sent");
     }
   };
 
@@ -54,21 +54,38 @@ const SettingsScreenScreen = ({ navigation }) => {
   });
 
   return (
-    <Container style={styles.container}>
+    <Container
+      style={[styles.container, { backgroundColor: theme.background }]}
+    >
       <View style={styles.firstHeader}>
         <TouchableOpacity
           style={styles.headerTextButton}
           onPress={() => navigation.goBack()}
         >
-          <Text style={styles.headerButtonTitle}>Zurück</Text>
+          <Image
+            style={[styles.headerIcon, { tintColor: theme.headerText }]}
+            source={require("../assets/icons/arrow.png")}
+          />
+          <Text style={[styles.headerButtonTitle, { color: theme.headerText }]}>
+            Habits
+          </Text>
         </TouchableOpacity>
       </View>
       <View style={styles.secondHeader}>
-        <Text style={styles.headerTitle}>Einstellungen</Text>
+        <Text style={[styles.headerTitle, { color: theme.headerText }]}>
+          Settings
+        </Text>
       </View>
       <View style={styles.mainContainer}>
-        <View style={styles.settingsCon} activeOpacity={0.6}>
-          <Text style={styles.conTitle}>Support</Text>
+        <View
+          style={[
+            styles.settingsCon,
+            {
+              backgroundColor: theme.secondary,
+              borderColor: theme.borderColor,
+            },
+          ]}
+        >
           <TouchableOpacity
             style={styles.settingsSecCon}
             onPress={sendEmail}
@@ -76,11 +93,13 @@ const SettingsScreenScreen = ({ navigation }) => {
           >
             <View style={styles.headerButton}>
               <Image
-                style={styles.headerButtonIcon}
+                style={[styles.headerButtonIcon, { tintColor: theme.iconTint }]}
                 source={require("../assets/icons/email.png")}
               />
             </View>
-            <Text style={styles.settingsTitle}>Email</Text>
+            <Text style={[styles.settingsTitle, { color: theme.headerText }]}>
+              Email
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.settingsSecCon}
@@ -89,15 +108,24 @@ const SettingsScreenScreen = ({ navigation }) => {
           >
             <View style={styles.headerButton}>
               <Image
-                style={styles.headerButtonIcon}
+                style={[styles.headerButtonIcon, { tintColor: theme.iconTint }]}
                 source={require("../assets/icons/roadmap.png")}
               />
             </View>
-            <Text style={styles.settingsTitle}>Roadmap</Text>
+            <Text style={[styles.settingsTitle, { color: theme.headerText }]}>
+              Roadmap
+            </Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.settingsCon} activeOpacity={0.6}>
-          <Text style={styles.conTitle}>Informationen zur App</Text>
+        <View
+          style={[
+            styles.settingsCon,
+            {
+              backgroundColor: theme.secondary,
+              borderColor: theme.borderColor,
+            },
+          ]}
+        >
           <TouchableOpacity
             style={styles.settingsSecCon}
             onPress={() => handleSignOut()}
@@ -105,11 +133,13 @@ const SettingsScreenScreen = ({ navigation }) => {
           >
             <View style={styles.headerButton}>
               <Image
-                style={styles.headerButtonIcon}
+                style={[styles.headerButtonIcon, { tintColor: theme.iconTint }]}
                 source={require("../assets/icons/about.png")}
               />
             </View>
-            <Text style={styles.settingsTitle}>About</Text>
+            <Text style={[styles.settingsTitle, { color: theme.headerText }]}>
+              About
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.settingsSecCon}
@@ -118,11 +148,13 @@ const SettingsScreenScreen = ({ navigation }) => {
           >
             <View style={styles.headerButton}>
               <Image
-                style={styles.headerButtonIcon}
+                style={[styles.headerButtonIcon, { tintColor: theme.iconTint }]}
                 source={require("../assets/icons/lock.png")}
               />
             </View>
-            <Text style={styles.settingsTitle}>Datenschutz</Text>
+            <Text style={[styles.settingsTitle, { color: theme.headerText }]}>
+              Privacy
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.settingsSecCon}
@@ -131,15 +163,24 @@ const SettingsScreenScreen = ({ navigation }) => {
           >
             <View style={styles.headerButton}>
               <Image
-                style={styles.headerButtonIcon}
+                style={[styles.headerButtonIcon, { tintColor: theme.iconTint }]}
                 source={require("../assets/icons/lawyer.png")}
               />
             </View>
-            <Text style={styles.settingsTitle}>Rechtliches</Text>
+            <Text style={[styles.settingsTitle, { color: theme.headerText }]}>
+              Legal
+            </Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.settingsCon}>
-          <Text style={styles.conTitle}>Account</Text>
+        <View
+          style={[
+            styles.settingsCon,
+            {
+              backgroundColor: theme.secondary,
+              borderColor: theme.borderColor,
+            },
+          ]}
+        >
           <TouchableOpacity
             style={styles.settingsSecCon}
             onPress={() => handleSignOut()}
@@ -147,30 +188,36 @@ const SettingsScreenScreen = ({ navigation }) => {
           >
             <View style={styles.headerButton}>
               <Image
-                style={styles.headerButtonIcon}
+                style={[styles.headerButtonIcon, { tintColor: theme.iconTint }]}
                 source={require("../assets/icons/logout.png")}
               />
             </View>
-            <Text style={styles.settingsTitle}>Ausloggen</Text>
+            <Text style={[styles.settingsTitle, { color: theme.headerText }]}>
+              Sign Out
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.settingsSecCon}
-            onPress={() => handleSignOut()}
+            onPress={() => setIsModalVisible(true)} // Modal öffnen statt direkt handleSignOut
             activeOpacity={0.6}
           >
             <View style={styles.headerButton}>
               <Image
-                style={styles.headerButtonIcon}
+                style={[styles.headerButtonIcon, { tintColor: theme.iconTint }]}
                 source={require("../assets/icons/delete.png")}
               />
             </View>
-            <Text style={styles.settingsTitle}>Account Löschen</Text>
+            <Text style={[styles.settingsTitle, { color: theme.headerText }]}>
+              Delete Account
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      <View style={styles.versionCon}>
-        <Text style={styles.settingsText}>Streak {packageJson.version}</Text>
+      <View style={[styles.versionCon, { backgroundColor: theme.background }]}>
+        <Text style={[styles.settingsText, { color: theme.headerText }]}>
+          Streak {packageJson.version}
+        </Text>
       </View>
 
       <DeleteAccountModal
@@ -186,7 +233,6 @@ const SettingsScreenScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E8E8E8",
     alignItems: "center",
     justifyContent: "flex-start",
     paddingHorizontal: 20,
@@ -207,12 +253,18 @@ const styles = StyleSheet.create({
     width: "auto",
     alignItems: "center",
     justifyContent: "center",
+    flexDirection: "row",
+    gap: 2,
+  },
+
+  headerIcon: {
+    height: 24,
+    width: 24,
   },
 
   headerButtonTitle: {
     fontSize: 16,
     fontFamily: "Poppins-Medium",
-    color: "#000000",
     includeFontPadding: false,
   },
 
@@ -249,16 +301,18 @@ const styles = StyleSheet.create({
     maxWidth: 450,
     alignItems: "center",
     justifyContent: "flex-start",
-    gap: 30,
+    gap: 15,
   },
 
   settingsCon: {
     height: "auto",
     width: "100%",
-    backgroundColor: "#FFFFFF",
     alignItems: "flex-start",
     justifyContent: "flex-start",
-    borderRadius: 15,
+    borderRadius: 24,
+    borderWidth: 1,
+    paddingVertical: 15,
+    gap: 15,
   },
 
   settingsSecCon: {
@@ -270,23 +324,6 @@ const styles = StyleSheet.create({
     gap: 10,
     borderRadius: 25,
     paddingHorizontal: 15,
-    marginBottom: 15,
-  },
-
-  conTitle: {
-    fontSize: 14,
-    fontFamily: "Poppins-SemiBold",
-    color: "#D0D0D0",
-    includeFontPadding: false,
-    textAlign: "left",
-    padding: 15,
-  },
-
-  settingsTextCon: {
-    height: 40,
-    alignItems: "flex-start",
-    justifyContent: "center",
-    flexDirection: "column",
   },
 
   settingsTitle: {
@@ -310,8 +347,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
-    backgroundColor: "#E8E8E8",
   },
 });
 
-export default SettingsScreenScreen;
+export default SettingsScreen;

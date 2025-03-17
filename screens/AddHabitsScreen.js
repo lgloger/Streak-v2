@@ -15,21 +15,27 @@ import * as Haptics from "expo-haptics";
 import { iconMapping } from "../components/iconMapping";
 import { ScrollView } from "react-native-gesture-handler";
 
-const Header = ({ navigation, addHabit }) => (
+const Header = ({ navigation, addHabit, theme }) => (
   <View style={styles.firstHeader}>
     <TouchableOpacity
       style={styles.headerButton}
       onPress={() => navigation.goBack()}
     >
-      <Text style={styles.firstHeaderTitle}>Cancel</Text>
+      <Text style={[styles.firstHeaderTitle, { color: theme.headerText }]}>
+        Cancel
+      </Text>
     </TouchableOpacity>
-    <Text style={styles.firstHeaderTitleBlack}>New Habit</Text>
+    <Text style={[styles.firstHeaderTitleBlack, { color: theme.headerText }]}>
+      New Habit
+    </Text>
     <TouchableOpacity
       style={styles.headerButton}
       onPress={() => addHabit()}
       activeOpacity={0.6}
     >
-      <Text style={styles.firstHeaderTitle}>Done</Text>
+      <Text style={[styles.firstHeaderTitle, { color: theme.headerText }]}>
+        Done
+      </Text>
     </TouchableOpacity>
   </View>
 );
@@ -45,20 +51,30 @@ const ColorButton = ({ color, setColor }) => (
   />
 );
 
-const IconButton = ({ icon, setSelectedIcon }) => (
+const IconButton = ({ icon, setSelectedIcon, theme, selectedIcon }) => (
   <TouchableOpacity
-    style={styles.iconButton}
+    style={[
+      styles.iconButton,
+      { backgroundColor: theme.secondary },
+      icon === selectedIcon && {
+        borderWidth: 2,
+        borderColor: theme.borderColor,
+      },
+    ]}
     onPress={() => {
       setSelectedIcon(icon);
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }}
     activeOpacity={0.6}
   >
-    <Image style={styles.iconImage} source={iconMapping[icon]} />
+    <Image
+      style={[styles.iconImage, { tintColor: theme.iconTint }]}
+      source={iconMapping[icon]}
+    />
   </TouchableOpacity>
 );
 
-const AddHabitsScreen = ({ navigation }) => {
+const AddHabitsScreen = ({ navigation, theme }) => {
   const {
     selectedIcon,
     setSelectedIcon,
@@ -75,16 +91,26 @@ const AddHabitsScreen = ({ navigation }) => {
   });
 
   return (
-    <Container style={styles.container}>
-      <Header navigation={navigation} addHabit={addHabit} />
+    <Container
+      style={[styles.container, { backgroundColor: theme.background }]}
+    >
+      <Header navigation={navigation} addHabit={addHabit} theme={theme} />
       <ScrollView style={styles.scrollCon}>
         <View style={styles.mainContainer}>
-          <View style={styles.habitContainer}>
+          <View
+            style={[
+              styles.habitContainer,
+              {
+                backgroundColor: theme.secondary,
+                borderColor: theme.borderColor,
+              },
+            ]}
+          >
             <View style={styles.iconPickerContainer}>
               <View
                 style={[
                   styles.inputButton,
-                  { backgroundColor: color, shadowColor: color },
+                  { backgroundColor: color, borderColor: theme.borderColor },
                 ]}
               >
                 <Image
@@ -95,20 +121,35 @@ const AddHabitsScreen = ({ navigation }) => {
             </View>
             <View style={styles.inputContainer}>
               <TextInput
-                style={[styles.input, { color: color }]}
+                style={[
+                  styles.input,
+                  {
+                    color: theme.text,
+                    backgroundColor: theme.secondary,
+                    color: theme.headerText,
+                  },
+                ]}
                 onChangeText={setTitle}
                 value={title}
-                placeholderTextColor="#818181"
+                placeholderTextColor={theme.text}
                 placeholder="Habit Title"
                 keyboardType="text"
-                selectionColor="#FFFFFF"
+                selectionColor={theme.headerText}
                 cursorColor="rgba(75, 106, 234, 0.8)"
                 maxLength={12}
                 caretHidden={false}
               />
             </View>
           </View>
-          <View style={styles.habitContainer}>
+          <View
+            style={[
+              styles.habitContainer,
+              {
+                backgroundColor: theme.secondary,
+                borderColor: theme.borderColor,
+              },
+            ]}
+          >
             <View style={styles.colorContainer}>
               {[
                 "#F14C3C",
@@ -124,13 +165,23 @@ const AddHabitsScreen = ({ navigation }) => {
               ))}
             </View>
           </View>
-          <View style={styles.habitContainer}>
+          <View
+            style={[
+              styles.habitContainer,
+              {
+                backgroundColor: theme.secondary,
+                borderColor: theme.borderColor,
+              },
+            ]}
+          >
             <View style={styles.iconContainer}>
               {Object.keys(iconMapping).map((icon) => (
                 <IconButton
                   key={icon}
                   icon={icon}
                   setSelectedIcon={setSelectedIcon}
+                  theme={theme}
+                  selectedIcon={selectedIcon}
                 />
               ))}
             </View>
@@ -144,7 +195,6 @@ const AddHabitsScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F2F2F6",
     alignItems: "center",
     justifyContent: "flex-start",
     paddingHorizontal: 16,
@@ -171,14 +221,12 @@ const styles = StyleSheet.create({
 
   firstHeaderTitle: {
     fontSize: 17,
-    color: "#0C79FE",
     fontFamily: "Poppins-Regular",
     includeFontPadding: false,
   },
 
   firstHeaderTitleBlack: {
     fontSize: 17,
-    color: "#000000",
     fontFamily: "Poppins-Regular",
     includeFontPadding: false,
     position: "absolute",
@@ -204,12 +252,12 @@ const styles = StyleSheet.create({
     height: "auto",
     width: "100%",
     maxWidth: 450,
-    backgroundColor: "#ffffff",
     alignItems: "left",
     justifyContent: "center",
-    borderRadius: 12,
+    borderRadius: 24,
     padding: 10,
     gap: 20,
+    borderWidth: 1,
   },
 
   iconPickerContainer: {
@@ -217,29 +265,6 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
-  },
-
-  conTitle: {
-    fontSize: 14,
-    fontFamily: "Poppins-SemiBold",
-    color: "#D0D0D0",
-    includeFontPadding: false,
-    textAlign: "left",
-  },
-
-  habitActivityCon: {
-    height: "auto",
-    width: "100%",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 3,
-  },
-
-  habitActivity: {
-    height: 12,
-    width: 12,
-    backgroundColor: "#E8E8E8",
-    borderRadius: 3,
   },
 
   inputContainer: {
@@ -258,11 +283,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 48,
-    shadowColor: "#5DC466",
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 1,
-    shadowRadius: 15,
-    elevation: 15,
+    borderWidth: 1,
   },
 
   inputIcon: {
@@ -276,7 +297,6 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontFamily: "Poppins-SemiBold",
     includeFontPadding: false,
-    backgroundColor: "#E8E8E8",
     borderRadius: 15,
     paddingHorizontal: 10,
     textAlign: "center",
@@ -311,18 +331,16 @@ const styles = StyleSheet.create({
   },
 
   iconButton: {
-    height: 40,
-    width: 40,
+    height: 42.5,
+    width: 42.5,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#E4E4E5",
-    borderRadius: 20,
+    borderRadius: 12,
   },
 
   iconImage: {
     height: 24,
     width: 24,
-    tintColor: "#474848",
   },
 });
 
