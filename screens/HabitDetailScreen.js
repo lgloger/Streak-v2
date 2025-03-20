@@ -144,23 +144,19 @@ const HabitDetailScreen = ({ route, navigation, theme }) => {
   };
 
   const renderHabitActivities = () => {
-    const today = new Date();
-    const start = new Date(today.getFullYear(), 0, 0);
-    const diff = today - start;
-    const oneDay = 1000 * 60 * 60 * 24;
-    const totalDays = Math.floor(diff / oneDay);
+    const daysInYear = getDaysInCurrentYear();
     const daysPerRow = 7;
-    const rows = Math.ceil(totalDays / daysPerRow);
-  
+    const rows = Math.ceil(daysInYear / daysPerRow);
+
     return Array.from({ length: rows }).map((_, rowIndex) => (
       <View key={rowIndex} style={styles.habitActivityRow}>
         {Array.from({ length: daysPerRow }).map((_, dayIndex) => {
           const dayOfYear = rowIndex * daysPerRow + dayIndex + 1;
-          if (dayOfYear > totalDays) return null;
-  
+          if (dayOfYear > daysInYear) return null;
+
           const date = getDateForDay(dayOfYear);
           const isCompleted = habit.completedDates.includes(date);
-  
+
           return (
             <View
               key={dayOfYear}

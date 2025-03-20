@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
   },
 
   firstHeader: {

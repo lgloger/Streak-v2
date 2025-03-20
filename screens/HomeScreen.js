@@ -333,7 +333,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     flexDirection: "row",
     overflow: "hidden",
-    marginRight: 6,
+    marginRight: 3,
   },
 
   dateContainer: {
