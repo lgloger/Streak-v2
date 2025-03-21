@@ -107,7 +107,10 @@ const HabitDetailScreen = ({ route, navigation, theme }) => {
         <LoadingHeader navigation={navigation} theme={theme} />
         <View style={loadingStyles.shimmerContainer}>
           <ShimmerPlaceHolder
-            style={loadingStyles.shimmerOne}
+            style={[
+              loadingStyles.shimmerOne,
+              { borderColor: theme.borderColor },
+            ]}
             shimmerColors={[
               theme.background,
               theme.secondary,
@@ -115,7 +118,7 @@ const HabitDetailScreen = ({ route, navigation, theme }) => {
             ]}
           />
           <ShimmerPlaceHolder
-            style={loadingStyles.shimmer}
+            style={[loadingStyles.shimmer, { borderColor: theme.borderColor }]}
             shimmerColors={[
               theme.background,
               theme.secondary,
@@ -326,13 +329,15 @@ const loadingStyles = StyleSheet.create({
   shimmerOne: {
     width: "100%",
     height: 170,
-    borderRadius: 12,
+    borderRadius: 24,
+    borderWidth: 1,
   },
 
   shimmer: {
     width: "100%",
-    height: 60,
-    borderRadius: 12,
+    height: 125,
+    borderRadius: 24,
+    borderWidth: 1,
   },
 });
 

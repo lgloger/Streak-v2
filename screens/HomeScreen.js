@@ -182,7 +182,7 @@ const HomeScreen = ({ navigation, theme }) => {
           ))}
         </ScrollView>
       )}
-      <View style={styles.firstHeader}>
+      <View style={styles.bottomHeader}>
         <TouchableOpacity
           style={styles.headerButton}
           onPress={() => navigation.navigate("Settings")}
@@ -223,6 +223,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "transparent",
     marginTop: Platform.OS === "android" ? RNStatusBar.currentHeight || 0 : 0,
+  },
+
+  bottomHeader: {
+    height: 60,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    backgroundColor: "transparent",
   },
 
   headerButton: {
