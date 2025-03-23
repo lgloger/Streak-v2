@@ -198,7 +198,7 @@ const SettingsScreen = ({ navigation, theme }) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.settingsSecCon}
-            onPress={() => setIsModalVisible(true)} // Modal öffnen statt direkt handleSignOut
+            onPress={() => setIsModalVisible(true)}
             activeOpacity={0.6}
           >
             <View style={styles.headerButton}>
@@ -211,6 +211,15 @@ const SettingsScreen = ({ navigation, theme }) => {
               Delete Account
             </Text>
           </TouchableOpacity>
+        </View>
+        <View style={[styles.thanksCon, { backgroundColor: theme.background }]}>
+          <Image
+            style={[styles.thanksIcon, { tintColor: theme.iconTint }]}
+            source={require("../assets/logo.png")}
+          />
+          <Text style={[styles.thanksText, { color: theme.headerText }]}>
+            Thank you for being here.
+          </Text>
         </View>
       </View>
 
@@ -337,6 +346,26 @@ const styles = StyleSheet.create({
   settingsText: {
     fontSize: 12,
     fontFamily: "Poppins-SemiBold",
+    lineHeight: 15.5,
+    includeFontPadding: false,
+  },
+
+  thanksCon: {
+    flex: 1,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 12.5,
+  },
+
+  thanksIcon: {
+    height: 30,
+    width: 30,
+  },
+
+  thanksText: {
+    fontSize: 14,
+    fontFamily: "Poppins-Medium",
     lineHeight: 15.5,
     includeFontPadding: false,
   },

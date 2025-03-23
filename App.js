@@ -39,7 +39,7 @@ export default function App() {
       }
     }
 
-    console.log("Current Theme:", theme); // Fixed typo "Aktuelles" to "Current"
+    console.log("Current Theme:", theme);
     prepare();
   }, [fontsLoaded, theme.background]);
 
