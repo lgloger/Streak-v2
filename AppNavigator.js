@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator, TransitionPresets } from "@react-navigation/stack";
+import {
+  createStackNavigator,
+  TransitionPresets,
+} from "@react-navigation/stack";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 import ResetPasswordScreen from "./screens/ResetPasswordScreen";
@@ -31,7 +34,9 @@ const AppNavigator = ({ theme }) => {
 
   if (loading) {
     return (
-      <View style={[loadingStyles.container, { backgroundColor: theme.background }]}>
+      <View
+        style={[loadingStyles.container, { backgroundColor: theme.background }]}
+      >
         <ActivityIndicator
           size="large"
           color={theme.text}
@@ -65,7 +70,12 @@ const AppNavigator = ({ theme }) => {
         <Stack.Screen name="Home">
           {(props) => <HomeScreen {...props} theme={theme} />}
         </Stack.Screen>
-        <Stack.Screen name="AddHabit">
+        <Stack.Screen
+          name="AddHabit"
+          options={{
+            ...TransitionPresets.ModalSlideFromBottomIOS,
+          }}
+        >
           {(props) => <AddHabitScreen {...props} theme={theme} />}
         </Stack.Screen>
         <Stack.Screen name="HabitDetail">
