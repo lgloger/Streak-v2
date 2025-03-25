@@ -202,6 +202,38 @@ const HabitDetailScreen = ({ route, navigation, theme }) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
+  const calculateStreaks = (habits) => {
+    const dates = habits.completedDates;
+    let longestStreak = 0;
+    let currentStreak = 0;
+    let totalStreaks = 0;
+
+    for (let i = 0; i < dates.length; i++) {
+      if (i === 0) {
+        currentStreak = 1;
+        totalStreaks = 1;
+      } else {
+        const diff =
+          (new Date(dates[i]) - new Date(dates[i - 1])) / (1000 * 60 * 60 * 24);
+        if (diff === 1) {
+          currentStreak++;
+        } else if (diff > 1) {
+          longestStreak = Math.max(longestStreak, currentStreak);
+          currentStreak = 1;
+          totalStreaks++;
+        }
+      }
+
+      longestStreak = Math.max(longestStreak, currentStreak);
+    }
+    return {
+      longestStreak: longestStreak,
+      totalStreaks: totalStreaks,
+    };
+  };
+
+  const streakData = calculateStreaks(habit);
+
   return (
     <Container
       style={[styles.container, { backgroundColor: theme.background }]}
@@ -300,6 +332,40 @@ const HabitDetailScreen = ({ route, navigation, theme }) => {
           ].map((color) => (
             <ColorButton key={color} color={color} habitId={habitId} />
           ))}
+        </View>
+      </View>
+      <View
+        style={[
+          styles.habitContainer,
+          { backgroundColor: theme.secondary, borderColor: theme.borderColor },
+        ]}
+      >
+        <View style={styles.AnalysticsContainer}>
+          <View style={styles.AnalysticsTextContainer}>
+            <Text style={[styles.AnalysticsTitle, { color: theme.headerText }]}>
+              Lng. Streak
+            </Text>
+            <Text style={[styles.AnalysticsText, { color: theme.text }]}>
+              {streakData.longestStreak}{" "}
+              {streakData.longestStreak === 1 ? "day" : "days"}
+            </Text>
+          </View>
+          <View style={styles.AnalysticsTextContainer}>
+            <Text style={[styles.AnalysticsTitle, { color: theme.headerText }]}>
+              Streaks
+            </Text>
+            <Text style={[styles.AnalysticsText, { color: theme.text }]}>
+              {streakData.totalStreaks}
+            </Text>
+          </View>
+          <View style={styles.AnalysticsTextContainer}>
+            <Text style={[styles.AnalysticsTitle, { color: theme.headerText }]}>
+              Compl. Days
+            </Text>
+            <Text style={[styles.AnalysticsText, { color: theme.text }]}>
+              {habit.completedDates.length}
+            </Text>
+          </View>
         </View>
       </View>
     </Container>
@@ -498,6 +564,34 @@ const styles = StyleSheet.create({
     width: 40,
     borderRadius: 30,
     margin: 5,
+  },
+
+  AnalysticsContainer: {
+    height: "auto",
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+
+  AnalysticsTextContainer: {
+    flex: 1,
+    height: "auto",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 10,
+  },
+
+  AnalysticsTitle: {
+    fontSize: 14,
+    fontFamily: "Poppins-SemiBold",
+    includeFontPadding: false,
+  },
+
+  AnalysticsText: {
+    fontSize: 14,
+    fontFamily: "Poppins-Medium",
+    includeFontPadding: false,
   },
 });
 

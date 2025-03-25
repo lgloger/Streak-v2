@@ -25,7 +25,6 @@ export default function App() {
     async function prepare() {
       try {
         await SplashScreen.preventAutoHideAsync();
-        console.log("Fonts loaded:", fontsLoaded);
 
         if (theme.background) {
           await NavigationBar.setBackgroundColorAsync(theme.background);
@@ -39,7 +38,6 @@ export default function App() {
       }
     }
 
-    console.log("Current Theme:", theme);
     prepare();
   }, [fontsLoaded, theme.background]);
 
