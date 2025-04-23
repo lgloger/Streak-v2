@@ -81,13 +81,6 @@ const HabitDetailScreen = ({ route, navigation, theme }) => {
   const { toggleDay } = homeViewModel();
   const { habit } = habitDetailViewModel(habitId);
 
-  const handleTimeChange = (event, selectedDate) => {
-    setShowTimePicker(false);
-    if (selectedDate) {
-      setSelectedTime(selectedDate);
-    }
-  };
-
   if (!habit) {
     return (
       <View
