@@ -73,10 +73,6 @@ const ColorButton = ({ color, habitId }) => (
 
 const HabitDetailScreen = ({ route, navigation, theme }) => {
   const { habitId } = route.params || {};
-  const [showTimePicker, setShowTimePicker] = useState(false);
-  const [selectedTime, setSelectedTime] = useState(
-    new Date(new Date().setHours(7, 30))
-  );
 
   const { toggleDay } = homeViewModel();
   const { habit } = habitDetailViewModel(habitId);
