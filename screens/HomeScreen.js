@@ -198,7 +198,7 @@ const HomeScreen = ({ navigation, theme }) => {
           activeOpacity={0.6}
         >
           <Text style={[styles.headerButtonTitle, { color: theme.headerText }]}>
-            Add Habit
+            Add
           </Text>
         </TouchableOpacity>
       </View>

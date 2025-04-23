@@ -128,7 +128,7 @@ const SettingsScreen = ({ navigation, theme }) => {
         >
           <TouchableOpacity
             style={styles.settingsSecCon}
-            onPress={() => handleSignOut()}
+            // onPress={() => handleSignOut()}
             activeOpacity={0.6}
           >
             <View style={styles.headerButton}>
@@ -143,7 +143,7 @@ const SettingsScreen = ({ navigation, theme }) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.settingsSecCon}
-            onPress={() => handleSignOut()}
+            // onPress={() => handleSignOut()}
             activeOpacity={0.6}
           >
             <View style={styles.headerButton}>
@@ -158,7 +158,7 @@ const SettingsScreen = ({ navigation, theme }) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.settingsSecCon}
-            onPress={() => handleSignOut()}
+            // onPress={() => handleSignOut()}
             activeOpacity={0.6}
           >
             <View style={styles.headerButton}>

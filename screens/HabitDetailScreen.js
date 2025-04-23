@@ -31,12 +31,8 @@ const Header = ({ navigation, deleteHabitModal, theme }) => (
       style={styles.headerButton}
       onPress={() => navigation.goBack()}
     >
-      <Image
-        style={[styles.headerIcon, { tintColor: theme.iconTint }]}
-        source={require("../assets/icons/arrow.png")}
-      />
       <Text style={[styles.firstHeaderTitle, { color: theme.headerText }]}>
-        Habits
+        Schließen
       </Text>
     </TouchableOpacity>
     <TouchableOpacity
@@ -57,12 +53,8 @@ const LoadingHeader = ({ navigation, theme }) => (
       style={styles.headerButton}
       onPress={() => navigation.goBack()}
     >
-      <Image
-        style={[styles.headerIcon, { tintColor: theme.headerText }]}
-        source={require("../assets/icons/arrow.png")}
-      />
       <Text style={[styles.firstHeaderTitle, { color: theme.headerText }]}>
-        Habits
+        Schließen
       </Text>
     </TouchableOpacity>
   </View>
@@ -111,6 +103,14 @@ const HabitDetailScreen = ({ route, navigation, theme }) => {
               loadingStyles.shimmerOne,
               { borderColor: theme.borderColor },
             ]}
+            shimmerColors={[
+              theme.background,
+              theme.secondary,
+              theme.background,
+            ]}
+          />
+          <ShimmerPlaceHolder
+            style={[loadingStyles.shimmerTwo, { borderColor: theme.borderColor }]}
             shimmerColors={[
               theme.background,
               theme.secondary,
@@ -319,6 +319,40 @@ const HabitDetailScreen = ({ route, navigation, theme }) => {
           { backgroundColor: theme.secondary, borderColor: theme.borderColor },
         ]}
       >
+        <View style={styles.AnalysticsContainer}>
+          <View style={styles.AnalysticsTextContainer}>
+            <Text style={[styles.AnalysticsText, { color: theme.text }]}>
+              Lng. Streak
+            </Text>
+            <Text style={[styles.AnalysticsTitle, { color: habit.color }]}>
+              {streakData.longestStreak}{" "}
+              {streakData.longestStreak === 1 ? "day" : "days"}
+            </Text>
+          </View>
+          <View style={styles.AnalysticsTextContainer}>
+            <Text style={[styles.AnalysticsText, { color: theme.text }]}>
+              Streaks
+            </Text>
+            <Text style={[styles.AnalysticsTitle, { color: habit.color }]}>
+              {streakData.totalStreaks}
+            </Text>
+          </View>
+          <View style={styles.AnalysticsTextContainer}>
+            <Text style={[styles.AnalysticsText, { color: theme.text }]}>
+              Compl. Days
+            </Text>
+            <Text style={[styles.AnalysticsTitle, { color: habit.color }]}>
+              {habit.completedDates.length}
+            </Text>
+          </View>
+        </View>
+      </View>
+      <View
+        style={[
+          styles.habitContainer,
+          { backgroundColor: theme.secondary, borderColor: theme.borderColor },
+        ]}
+      >
         <View style={styles.colorContainer}>
           {[
             "#F14C3C",
@@ -332,40 +366,6 @@ const HabitDetailScreen = ({ route, navigation, theme }) => {
           ].map((color) => (
             <ColorButton key={color} color={color} habitId={habitId} />
           ))}
-        </View>
-      </View>
-      <View
-        style={[
-          styles.habitContainer,
-          { backgroundColor: theme.secondary, borderColor: theme.borderColor },
-        ]}
-      >
-        <View style={styles.AnalysticsContainer}>
-          <View style={styles.AnalysticsTextContainer}>
-            <Text style={[styles.AnalysticsTitle, { color: theme.headerText }]}>
-              Lng. Streak
-            </Text>
-            <Text style={[styles.AnalysticsText, { color: theme.text }]}>
-              {streakData.longestStreak}{" "}
-              {streakData.longestStreak === 1 ? "day" : "days"}
-            </Text>
-          </View>
-          <View style={styles.AnalysticsTextContainer}>
-            <Text style={[styles.AnalysticsTitle, { color: theme.headerText }]}>
-              Streaks
-            </Text>
-            <Text style={[styles.AnalysticsText, { color: theme.text }]}>
-              {streakData.totalStreaks}
-            </Text>
-          </View>
-          <View style={styles.AnalysticsTextContainer}>
-            <Text style={[styles.AnalysticsTitle, { color: theme.headerText }]}>
-              Compl. Days
-            </Text>
-            <Text style={[styles.AnalysticsText, { color: theme.text }]}>
-              {habit.completedDates.length}
-            </Text>
-          </View>
         </View>
       </View>
     </Container>
@@ -394,7 +394,14 @@ const loadingStyles = StyleSheet.create({
 
   shimmerOne: {
     width: "100%",
-    height: 170,
+    height: 178  ,
+    borderRadius: 24,
+    borderWidth: 1,
+  },
+
+  shimmerTwo: {
+    width: "100%",
+    height: 75,
     borderRadius: 24,
     borderWidth: 1,
   },
@@ -581,9 +588,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     gap: 10,
   },
-
+ 
   AnalysticsTitle: {
-    fontSize: 14,
+    fontSize: 20,
     fontFamily: "Poppins-SemiBold",
     includeFontPadding: false,
   },
