@@ -55,19 +55,39 @@ const AppNavigator = ({ theme }) => {
           ...TransitionPresets.SlideFromRightIOS,
         }}
       >
-        <Stack.Screen name="Login">
+        <Stack.Screen
+          name="Login"
+          options={{
+            ...TransitionPresets.ModalSlideFromBottomIOS,
+          }}
+        >
           {(props) => <LoginScreen {...props} theme={theme} />}
         </Stack.Screen>
-        <Stack.Screen name="Signup">
+        <Stack.Screen
+          name="Signup"
+          options={{
+            ...TransitionPresets.ModalSlideFromBottomIOS,
+          }}
+        >
           {(props) => <SignupScreen {...props} theme={theme} />}
         </Stack.Screen>
-        <Stack.Screen name="ResetPassword">
+        <Stack.Screen
+          name="ResetPassword"
+          options={{
+            ...TransitionPresets.ModalSlideFromBottomIOS,
+          }}
+        >
           {(props) => <ResetPasswordScreen {...props} theme={theme} />}
         </Stack.Screen>
         <Stack.Screen name="EmailSent">
           {(props) => <EmailSentScreen {...props} theme={theme} />}
         </Stack.Screen>
-        <Stack.Screen name="Home">
+        <Stack.Screen
+          name="Home"
+          options={{
+            ...TransitionPresets.ModalSlideFromBottomIOS,
+          }}
+        >
           {(props) => <HomeScreen {...props} theme={theme} />}
         </Stack.Screen>
         <Stack.Screen
@@ -78,10 +98,20 @@ const AppNavigator = ({ theme }) => {
         >
           {(props) => <AddHabitScreen {...props} theme={theme} />}
         </Stack.Screen>
-        <Stack.Screen name="HabitDetail">
+        <Stack.Screen
+          name="HabitDetail"
+          options={{
+            ...TransitionPresets.ModalSlideFromBottomIOS,
+          }}
+        >
           {(props) => <HabitDetailScreen {...props} theme={theme} />}
         </Stack.Screen>
-        <Stack.Screen name="Settings">
+        <Stack.Screen
+          name="Settings"
+          options={{
+            ...TransitionPresets.ModalSlideFromBottomIOS,
+          }}
+        >
           {(props) => <SettingsScreen {...props} theme={theme} />}
         </Stack.Screen>
         <Stack.Screen name="FeatureRequest">

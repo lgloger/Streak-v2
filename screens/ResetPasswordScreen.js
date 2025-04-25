@@ -1,3 +1,5 @@
+import React from "react";
+import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
   View,
@@ -12,7 +14,7 @@ import {
 
 import { ResetPasswordViewModel } from "../js/authManager";
 
-const ResetPasswordScreen = ({ navigation }) => {
+const ResetPasswordScreen = ({ navigation, theme }) => {
   const { email, setEmail, handleResetPassword } =
     ResetPasswordViewModel(navigation);
 
@@ -22,35 +24,54 @@ const ResetPasswordScreen = ({ navigation }) => {
   });
 
   return (
-    <Container style={styles.container}>
+    <Container
+      style={[styles.container, { backgroundColor: theme.background }]}
+    >
       <View style={styles.headerContainer}>
-        <Text style={styles.headerTitle}>Reset Password</Text>
+        <Text style={[styles.headerTitle, { color: theme.headerText }]}>
+          Reset Password
+        </Text>
       </View>
       <View style={styles.mainContainer}>
-        <View style={styles.inputContainer}>
+        <View
+          style={[
+            styles.inputContainer,
+            {
+              backgroundColor: theme.secondary,
+              borderColor: theme.borderColor,
+            },
+          ]}
+        >
           <Image
             source={require("../assets/icons/email.png")}
-            style={styles.inputIcon}
+            style={[styles.inputIcon, { tintColor: theme.iconTint }]}
           />
           <TextInput
-            style={styles.input}
+            style={[styles.input, { color: theme.text }]}
             onChangeText={setEmail}
             value={email}
             placeholder="Email"
-            placeholderTextColor="#000000"
-            keyboardType="email-adress"
-            selectionColor="#FFFFFF"
-            cursorColor="#000000"
-            caretHidden={false}
+            placeholderTextColor={theme.secondaryText}
+            keyboardType="email-address"
+            selectionColor={theme.text}
+            cursorColor={theme.text}
           />
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
-            style={styles.continueButton}
+            style={[
+              styles.continueButton,
+              {
+                backgroundColor: theme.iconBackground,
+                borderColor: theme.borderColor,
+              },
+            ]}
             onPress={() => handleResetPassword()}
             activeOpacity={0.6}
           >
-            <Text style={styles.buttonText}>Reset</Text>
+            <Text style={[styles.buttonText, { color: theme.text }]}>
+              Reset
+            </Text>
           </TouchableOpacity>
         </View>
         <View style={styles.helpContainer}>
@@ -59,12 +80,13 @@ const ResetPasswordScreen = ({ navigation }) => {
             onPress={() => navigation.navigate("Login")}
             activeOpacity={0.6}
           >
-            <Text style={styles.helpText}>
+            <Text style={[styles.helpText, { color: theme.text }]}>
               Already have an account? Sign In
             </Text>
           </TouchableOpacity>
         </View>
       </View>
+      <StatusBar style={theme.background === "#1D1E20" ? "light" : "dark"} />
     </Container>
   );
 };
@@ -72,7 +94,6 @@ const ResetPasswordScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E8E8E8",
     gap: 10,
     paddingHorizontal: 20,
   },
@@ -92,7 +113,6 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 28,
     fontFamily: "Poppins-SemiBold",
-    color: "#000000",
     includeFontPadding: false,
   },
 
@@ -111,10 +131,10 @@ const styles = StyleSheet.create({
     maxWidth: 450,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 30,
+    borderRadius: 24,
     paddingHorizontal: 15,
     gap: 10,
+    borderWidth: 1,
   },
 
   inputIcon: {
@@ -126,7 +146,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 18,
     fontFamily: "Poppins-Medium",
-    color: "#000000",
     includeFontPadding: false,
   },
 
@@ -145,14 +164,13 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 30,
+    borderRadius: 24,
+    borderWidth: 1,
   },
 
   buttonText: {
     fontSize: 20,
     fontFamily: "Poppins-Medium",
-    color: "#000000",
     includeFontPadding: false,
   },
 
@@ -169,7 +187,6 @@ const styles = StyleSheet.create({
   helpText: {
     fontSize: 14,
     fontFamily: "Poppins-Medium",
-    color: "#000000",
     includeFontPadding: false,
     textAlign: "center",
     textDecorationLine: "underline",

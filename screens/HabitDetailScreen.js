@@ -99,7 +99,10 @@ const HabitDetailScreen = ({ route, navigation, theme }) => {
             ]}
           />
           <ShimmerPlaceHolder
-            style={[loadingStyles.shimmerTwo, { borderColor: theme.borderColor }]}
+            style={[
+              loadingStyles.shimmerTwo,
+              { borderColor: theme.borderColor },
+            ]}
             shimmerColors={[
               theme.background,
               theme.secondary,
@@ -137,21 +140,36 @@ const HabitDetailScreen = ({ route, navigation, theme }) => {
 
   const renderHabitActivities = () => {
     const daysInYear = getDaysInCurrentYear();
-    const daysPerRow = 7;
-    const rows = Math.ceil(daysInYear / daysPerRow);
+    const firstDayOfYear = new Date(new Date().getFullYear(), 0, 1).getDay(); // Get the day of the week for Jan 1
+    const daysPerColumn = 7; // Monday to Sunday
+    const columns = Math.ceil(
+      (daysInYear + (firstDayOfYear === 0 ? 6 : firstDayOfYear - 1)) /
+        daysPerColumn
+    );
 
-    return Array.from({ length: rows }).map((_, rowIndex) => (
-      <View key={rowIndex} style={styles.habitActivityRow}>
-        {Array.from({ length: daysPerRow }).map((_, dayIndex) => {
-          const dayOfYear = rowIndex * daysPerRow + dayIndex + 1;
-          if (dayOfYear > daysInYear) return null;
+    return Array.from({ length: columns }).map((_, columnIndex) => (
+      <View key={`column-${columnIndex}`} style={styles.habitActivityColumn}>
+        {Array.from({ length: daysPerColumn }).map((_, dayIndex) => {
+          const dayOfYear =
+            columnIndex * daysPerColumn +
+            dayIndex -
+            (firstDayOfYear === 0 ? 6 : firstDayOfYear - 1) +
+            1;
+          if (dayOfYear < 1 || dayOfYear > daysInYear) {
+            return (
+              <View
+                key={`placeholder-${columnIndex}-${dayIndex}`}
+                style={styles.habitActivityPlaceholder}
+              />
+            );
+          }
 
           const date = getDateForDay(dayOfYear);
           const isCompleted = habit.completedDates.includes(date);
 
           return (
             <View
-              key={dayOfYear}
+              key={`day-${columnIndex}-${dayIndex}`}
               style={[
                 styles.habitActivity,
                 isCompleted && { backgroundColor: habit.color },
@@ -243,6 +261,43 @@ const HabitDetailScreen = ({ route, navigation, theme }) => {
         ]}
       >
         <View style={styles.habitContainerActivityBtnCon}>
+          <View style={styles.habitContainerActivityDaysCon}>
+            <Text
+              style={[styles.habitContainerActivityDays, { color: theme.text }]}
+            >
+              Mo
+            </Text>
+            <Text
+              style={[styles.habitContainerActivityDays, { color: theme.text }]}
+            >
+              Di
+            </Text>
+            <Text
+              style={[styles.habitContainerActivityDays, { color: theme.text }]}
+            >
+              Mi
+            </Text>
+            <Text
+              style={[styles.habitContainerActivityDays, { color: theme.text }]}
+            >
+              Do
+            </Text>
+            <Text
+              style={[styles.habitContainerActivityDays, { color: theme.text }]}
+            >
+              Fr
+            </Text>
+            <Text
+              style={[styles.habitContainerActivityDays, { color: theme.text }]}
+            >
+              Sa
+            </Text>
+            <Text
+              style={[styles.habitContainerActivityDays, { color: theme.text }]}
+            >
+              So
+            </Text>
+          </View>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View style={styles.habitActivityCon}>
               {renderHabitActivities()}
@@ -336,7 +391,7 @@ const HabitDetailScreen = ({ route, navigation, theme }) => {
           </View>
         </View>
       </View>
-      <View
+      {/* <View
         style={[
           styles.habitContainer,
           { backgroundColor: theme.secondary, borderColor: theme.borderColor },
@@ -356,7 +411,7 @@ const HabitDetailScreen = ({ route, navigation, theme }) => {
             <ColorButton key={color} color={color} habitId={habitId} />
           ))}
         </View>
-      </View>
+      </View> */}
     </Container>
   );
 };
@@ -383,7 +438,7 @@ const loadingStyles = StyleSheet.create({
 
   shimmerOne: {
     width: "100%",
-    height: 178  ,
+    height: 178,
     borderRadius: 24,
     borderWidth: 1,
   },
@@ -460,6 +515,18 @@ const styles = StyleSheet.create({
     gap: 10,
   },
 
+  habitContainerActivityDaysCon: {
+    height: 103,
+    width: "auto",
+    alignItems: "flex-start",
+  },
+
+  habitContainerActivityDays: {
+    fontSize: 10.4,
+    fontFamily: "Poppins-Medium",
+    includeFontPadding: false,
+  },
+
   habitActivityCon: {
     height: "auto",
     width: "100%",
@@ -477,6 +544,19 @@ const styles = StyleSheet.create({
     width: 12,
     borderRadius: 4,
     borderWidth: 1,
+  },
+
+  habitActivityColumn: {
+    flexDirection: "column",
+    gap: 3,
+  },
+
+  habitActivityPlaceholder: {
+    height: 12,
+    width: 12,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: "transparent",
   },
 
   secondHeaderConButton: {
@@ -577,7 +657,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     gap: 10,
   },
- 
+
   AnalysticsTitle: {
     fontSize: 20,
     fontFamily: "Poppins-SemiBold",

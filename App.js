@@ -45,7 +45,6 @@ export default function App() {
     if (appReady && fontsLoaded) {
       try {
         await SplashScreen.hideAsync();
-        console.log("Splash Screen hidden!");
       } catch (error) {
         console.error("Error hiding Splash Screen:", error);
       }

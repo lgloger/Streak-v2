@@ -11,6 +11,7 @@ import { EmailAuthProvider } from "firebase/auth";
 import { auth, db } from "../js/firebaseConfig";
 import { doc, setDoc, deleteDoc } from "firebase/firestore";
 import { ToastAndroid } from "react-native";
+import { CommonActions } from "@react-navigation/native";
 
 const SigninViewModel = (navigation) => {
   const [email, setEmail] = useState("");
@@ -89,7 +90,12 @@ const SignOutViewModel = (navigation) => {
   const handleSignOut = async () => {
     try {
       await signOut(auth);
-      navigation.navigate("Login");
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "Login" }],
+        })
+      );
     } catch (error) {
       console.error(error);
     }

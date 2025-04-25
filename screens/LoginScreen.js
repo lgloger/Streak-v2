@@ -1,3 +1,4 @@
+import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
   View,
@@ -12,7 +13,7 @@ import {
 
 import { SigninViewModel } from "../js/authManager";
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = ({ navigation, theme }) => {
   const { email, setEmail, password, setPassword, handleSignin } =
     SigninViewModel(navigation);
 
@@ -22,53 +23,79 @@ const LoginScreen = ({ navigation }) => {
   });
 
   return (
-    <Container style={styles.container}>
+    <Container
+      style={[styles.container, { backgroundColor: theme.background }]}
+    >
       <View style={styles.headerContainer}>
-        <Text style={styles.headerTitle}>Sign In</Text>
+        <Text style={[styles.headerTitle, { color: theme.headerText }]}>
+          Sign In
+        </Text>
       </View>
       <View style={styles.mainContainer}>
-        <View style={styles.inputContainer}>
+        <View
+          style={[
+            styles.inputContainer,
+            {
+              backgroundColor: theme.secondary,
+              borderColor: theme.borderColor,
+            },
+          ]}
+        >
           <Image
             source={require("../assets/icons/email.png")}
-            style={styles.inputIcon}
+            style={[styles.inputIcon, { tintColor: theme.iconTint }]}
           />
           <TextInput
-            style={styles.input}
+            style={[styles.input, { color: theme.text }]}
             onChangeText={setEmail}
             value={email}
             placeholder="Email"
-            placeholderTextColor="#000000"
+            placeholderTextColor={theme.text}
             keyboardType="email-address"
-            selectionColor="#FFFFFF"
-            cursorColor="#000000"
-            caretHidden={false}
+            selectionColor={theme.text}
+            cursorColor={theme.text}
           />
         </View>
-        <View style={styles.inputContainer}>
+        <View
+          style={[
+            styles.inputContainer,
+            {
+              backgroundColor: theme.secondary,
+              borderColor: theme.borderColor,
+            },
+          ]}
+        >
           <Image
             source={require("../assets/icons/password.png")}
-            style={styles.inputIcon}
+            style={[styles.inputIcon, { tintColor: theme.iconTint }]}
           />
           <TextInput
-            style={styles.input}
+            style={[styles.input, { color: theme.text }]}
             onChangeText={setPassword}
             value={password}
             placeholder="Password"
-            placeholderTextColor="#000000"
-            keyboardType="password"
-            selectionColor="#FFFFFF"
-            cursorColor="#000000"
-            caretHidden={false}
+            placeholderTextColor={theme.text}
+            keyboardType="default"
+            selectionColor={theme.text}
+            cursorColor={theme.text}
             secureTextEntry
           />
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
-            style={styles.continueButton}
+            style={[
+              styles.continueButton,
+              {
+                backgroundColor: theme.iconBackground,
+                borderColor: theme.borderColor,
+              },
+            ]}
             onPress={() => handleSignin()}
             activeOpacity={0.6}
           >
-            <Text style={styles.buttonText}>Sign In</Text>
+            <Text style={[styles.buttonText, { color: theme.text }]}>
+              Sign In
+            </Text>
           </TouchableOpacity>
         </View>
         <View style={styles.helpContainer}>
@@ -77,17 +104,22 @@ const LoginScreen = ({ navigation }) => {
             onPress={() => navigation.navigate("Signup")}
             activeOpacity={0.6}
           >
-            <Text style={styles.helpText}>Create account</Text>
+            <Text style={[styles.helpText, { color: theme.text }]}>
+              Create account
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.helpButton}
             onPress={() => navigation.navigate("ResetPassword")}
             activeOpacity={0.6}
           >
-            <Text style={styles.helpText}>Forgot Password?</Text>
+            <Text style={[styles.helpText, { color: theme.text }]}>
+              Forgot Password?
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
+      <StatusBar style={theme.background === "#1D1E20" ? "light" : "dark"} />
     </Container>
   );
 };
@@ -95,7 +127,6 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E8E8E8",
     gap: 10,
     paddingHorizontal: 20,
   },
@@ -115,7 +146,6 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 28,
     fontFamily: "Poppins-SemiBold",
-    color: "#000000",
     includeFontPadding: false,
   },
 
@@ -134,10 +164,10 @@ const styles = StyleSheet.create({
     maxWidth: 450,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 30,
+    borderRadius: 24,
     paddingHorizontal: 15,
     gap: 10,
+    borderWidth: 1,
   },
 
   inputIcon: {
@@ -149,7 +179,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 18,
     fontFamily: "Poppins-Medium",
-    color: "#000000",
     includeFontPadding: false,
   },
 
@@ -168,14 +197,13 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 30,
+    borderRadius: 24,
+    borderWidth: 1,
   },
 
   buttonText: {
     fontSize: 20,
     fontFamily: "Poppins-Medium",
-    color: "#000000",
     includeFontPadding: false,
   },
 
@@ -192,7 +220,6 @@ const styles = StyleSheet.create({
   helpText: {
     fontSize: 14,
     fontFamily: "Poppins-Medium",
-    color: "#000000",
     includeFontPadding: false,
     textAlign: "center",
     textDecorationLine: "underline",
